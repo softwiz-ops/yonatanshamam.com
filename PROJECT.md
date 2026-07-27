@@ -97,6 +97,34 @@ not the other, and the split is enforced in `src/data/services.ts`:
 
 ## Settled
 
+**No client testimonials.** Decided 27 Jul 2026: the founder does not want them
+at this stage. That closes the question of whether the permitting clause covers
+a firm's own site or only ranking directories — it does not need asking. No
+testimonials module was ever built, so nothing was removed.
+
+What carries trust on this site instead: the previous legal positions, the
+admission date and degree, the named accessibility coordinator, a real Tel Aviv
+address, the substantive service content, and a visible LinkedIn profile. Worth
+noting that referral is still the dominant channel in Israeli commercial law —
+the site's job is to confirm a referral, not to build trust cold.
+
+**Nothing on this site refers to fees, in any form.** Decided 27 Jul 2026:
+"אל תרשום פשוט דברים שנוגעים לשכ״ט". So the second committee question is closed
+too — the answer is to write nothing, rather than to find out what phrasing
+would be permitted.
+
+This is stronger than it first sounds and it is easy to breach by accident. It
+rules out not only prices, but a note explaining why there are none, "no
+obligation", "at no charge", a free first call, and any structured-data
+`priceRange` or `offers`. `scripts/check-ethics.py` scans the built HTML for
+all of it.
+
+The single remaining fee reference on the site is inside the migrated terms of
+service — a defective document "יתוקן ללא תשלום נוסף". That is the founder's own
+drafting in a binding document rather than advertising copy, and removing it
+would strip a client protection, so it has not been touched. The checker reports
+it as REVIEW on every run.
+
 **One registration, two unconnected activities.** עוסק מורשה 302910187 operates
 both `משרד עו״ד יהונתן שמם` and the technology consultancy, from the same
 address. Asked whether that raises an additional-occupation question under the
@@ -320,24 +348,8 @@ Supplied since:
   header mark, favicons and a 1200×630 share card from them.
 - `og:image` now exists at 1200×630, 54KB.
 
-**Two questions for the Bar's ethics committee, in writing, before anything is
-built around them:**
-
-1. May client testimonials appear on the firm's own site, or only in ranking
-   directories? The permitting clause reads "המלצות, מכתבי תודה ודירוג
-   **במדריכי דירוג**", which one reading limits to directories. Until answered,
-   the testimonials section stays a removable module. The safe alternative is a
-   client logo wall with written consent plus a link to a Google Business
-   Profile.
-2. Is any wording near fees permitted at all — even "introductory call at no
-   charge"? This is not hypothetical: the first build carried an explanation of
-   *why* there is no pricing, and that explanation is itself a reference to
-   fees. It was removed. A permitted phrasing would let the page answer an
-   obvious visitor question instead of staying silent.
-
-*(A third question — whether one registration covering both the law practice
-and the technology consultancy raises an additional-occupation issue — was
-raised and closed. See "Settled" below.)*
+*(Both questions that stood open for the ethics committee were closed by the
+founder on 27 Jul 2026 — see "Settled".)*
 
 **Privacy — the contact form design depends on this.** Under Amendment 13, a
 database holding **only name, address and contact details** for ≤100,000 people

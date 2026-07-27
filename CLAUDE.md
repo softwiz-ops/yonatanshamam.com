@@ -65,9 +65,12 @@ the live response.
 The list of what a lawyer may advertise is a **closed list**. Anything not on
 it is forbidden.
 
-- **No reference to fees anywhere on the site.** No price page, no price list,
-  no "free initial consultation", no discounts, no success rates. Do not design
-  a packages table and do not put a price badge on a card.
+- **No reference to fees anywhere on the site, in any form.** Not a price, not
+  a range, not "from ₪", not a free consultation, not a discount, and **not an
+  explanation of why there are no prices** — that explanation is itself a
+  reference to fees, and it was caught and removed once already. Nothing in the
+  structured data either: no `priceRange`, no `offers`. Run
+  `python3 scripts/check-ethics.py` after every build.
   **What replaces it: transparency of scope and process** — what is included,
   the steps, the expected timeline, what the client must supply. That is the
   legally safe substitute and it is a primary module, not a footnote.
@@ -78,9 +81,10 @@ it is forbidden.
   which is the term the rules themselves use.
 - **No third-party advertising**, direct or indirect. No ad slots, no banners,
   and think hard before any third-party marketing widget. No pop-up ads.
-- **Testimonials are an open question** — see PROJECT.md. Until the Bar's ethics
-  committee answers in writing, the testimonials section must remain a module
-  that can be removed without breaking the page rhythm.
+- **No client testimonials.** Decided by the founder, 27 Jul 2026. Do not add a
+  testimonials section, a review carousel, or star ratings — and do not add
+  `aggregateRating` to the structured data, which is the same claim in another
+  form.
 
 ## Legal content
 

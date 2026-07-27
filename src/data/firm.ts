@@ -113,18 +113,21 @@ export const FIRM = {
    * declaration, and it must describe the premises as they actually are —
    * a declaration that overstates is worse than one that admits a gap.
    *
-   * Supplied by the founder on 27 Jul 2026. `null` means he has not stated it
-   * and it renders as a visible gap rather than an assumption; the building is
-   * a Tel Aviv high-rise so a lift certainly exists, but "certainly" is not a
-   * basis for a statement in a legal document.
+   * All six confirmed by the founder on 27 Jul 2026. `null` is still a valid
+   * value here and renders as a visible gap rather than an assumption — if the
+   * premises change, set the field back to null rather than guessing.
+   *
+   * Worth re-confirming before launch: "no parking" is recorded as the office
+   * having none. If the building itself has accessible parking, that is a
+   * different statement and belongs in the declaration.
    */
   physicalAccess: {
     parking: false,
     approach: true,
     toilets: true,
     meetingRooms: true,
-    entrance: null as boolean | null,
-    lift: null as boolean | null,
+    entrance: true as boolean | null,
+    lift: true as boolean | null,
   },
 } as const;
 
