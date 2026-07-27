@@ -101,15 +101,24 @@ def visible_text(markup: str) -> str:
     return html.unescape(TAGS.sub(" ", STRIP.sub(" ", markup)))
 
 
-def scope_approved() -> bool:
-    """Has the founder signed off the scope and timeline commitments?
+def no_delivery_promises() -> list[str]:
+    """The catalogue must carry no turnaround or process commitments.
 
-    They were drafted to market norms on his instruction, but they are still
-    statements about how HIS practice works — a turnaround he cannot meet is
-    misleading advertising. The site must not go public until he has read them.
+    Removed on 27 Jul 2026: "לא רוצה להציע שירותים מהירים כמו מפעל". This
+    checks the SOURCE rather than the rendered pages, because that is where a
+    promise would be reintroduced — and because the built HTML legitimately
+    contains time periods that are facts of law, not offers: the 30-day notice
+    to an employee, the five business days for an accessibility enquiry.
+
+    A promised turnaround is also the single easiest claim to breach, and a
+    breached promise in advertising is what the Bar's rules actually forbid.
     """
     src = (ROOT / "src" / "data" / "services.ts").read_text(encoding="utf-8")
-    return bool(re.search(r"SCOPE_APPROVED\s*=\s*true", src))
+    found = []
+    for field in ("timeline", "scope", "SHELF_TIMELINE", "FIRST_MEETING"):
+        if re.search(rf"^\s*(export const )?{field}\b", src, re.M):
+            found.append(field)
+    return found
 
 
 def cookies_section_accurate() -> tuple[bool, str]:
@@ -176,14 +185,14 @@ def main() -> None:
 
     print(f"scanned {len(pages)} page(s)")
 
-    if not scope_approved():
+    revived = no_delivery_promises()
+    if revived:
         print()
-        print("BLOCKING  the scope and timeline commitments on the nine service")
-        print("          pages were drafted to market norms and have NOT been")
-        print("          approved by the founder. He must read every `scope` and")
-        print("          `timeline` in src/data/services.ts, correct anything he")
-        print("          cannot stand behind, then set SCOPE_APPROVED = true.")
-        print("          Do not publish until then.")
+        print("BLOCKING  delivery commitments are back in src/data/services.ts:")
+        print(f"          {', '.join(revived)}")
+        print("          The catalogue carries no turnaround and no process")
+        print("          promises by decision of 27 Jul 2026. A timing a lawyer")
+        print("          cannot meet is misleading advertising.")
         hits += 1
 
     ok, why = cookies_section_accurate()

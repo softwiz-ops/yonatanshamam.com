@@ -12,13 +12,21 @@ const { service } = Astro.props;
 const category = CATEGORIES[service.category];
 const related = byCategory(service.category).filter((s) => s.slug !== service.slug).slice(0, 3);
 
-const waMessage = `אני מתעניין ב${service.title}`;
+const waMessage = `שלום, הגעתי מהאתר בנוגע ל${service.title}`;
 const primaryHref =
   service.primaryCta.type === 'calendar' ? FIRM.calendar : whatsappLink(waMessage);
 
-/* Service + FAQPage + BreadcrumbList. No `offers` node and no priceRange:
-   the Bar's rules forbid any reference to fees, and that includes structured
-   data. No aggregateRating either — there is nothing real to put in it. */
+const AUDIENCE = { private: 'אנשים פרטיים', business: 'עסקים וחברות', both: 'עסקים ואנשים פרטיים' };
+
+/*
+ * Service + FAQPage + BreadcrumbList.
+ *
+ * No `offers`, no priceRange, no aggregateRating. The first two are barred by
+ * the Bar's rules on fees, which apply to structured data exactly as they do to
+ * visible copy; the third would be a testimonial claim, which the founder ruled
+ * out. There is also no turnaround anywhere — that is deliberate, not an
+ * omission.
+ */
 const schema = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -29,6 +37,7 @@ const schema = {
       serviceType: category.title,
       provider: { '@id': `${Astro.site}#attorney` },
       areaServed: { '@type': 'Country', name: 'IL' },
+      audience: { '@type': 'Audience', audienceType: AUDIENCE[service.audience] },
       availableLanguage: FIRM.languages,
     },
     {
@@ -73,7 +82,7 @@ const schema = {
     <p class="summary">{service.summary}</p>
     <div class="cta-row">
       <a class="btn btn-primary" href={primaryHref}>{service.primaryCta.label}</a>
-      <a class="btn btn-ghost" href={whatsappLink(waMessage)}>שאלה מהירה בוואטסאפ</a>
+      <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
     </div>
   </div>
 
@@ -86,9 +95,8 @@ const schema = {
 
       <section class="block">
         <h2>מה המסמך מסדיר</h2>
-        {/* Deliberately "what the instrument regulates", not "what the service
-            includes". The first is general legal knowledge; the second would be
-            a commitment by this firm, and only the founder can make those. */}
+        {/* "What the instrument regulates" — general legal knowledge. Not
+            "what the service includes", which would be a firm commitment. */}
         <ul class="covers">
           {service.covers.map((c) => (
             <li>
@@ -101,38 +109,21 @@ const schema = {
 
       <section class="block">
         <h2>למה זה משנה</h2>
-        <p>{service.whyItMatters}</p>
+        <p class="matters">{service.whyItMatters}</p>
       </section>
 
       <section class="block">
-        <h2>היקף העבודה מול המשרד</h2>
-        {service.scope ? (
-          <div class="scope">
-            <div>
-              <h3>מה כלול</h3>
-              <ul class="ticks">
-                {service.scope.included.map((i) => (
-                  <li>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12l6 6L20 6"/></svg>
-                    <span>{i}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3>מה אינו כלול</h3>
-              {/* Stating the boundary is the part clients actually remember,
-                  and it is what stops a scope dispute later. */}
-              <ul class="crosses">
-                {service.scope.excluded.map((i) => <li><span>{i}</span></li>)}
-              </ul>
-            </div>
-          </div>
-        ) : (
-          <p class="gap">
-            <span class="todo">[[חסר: מה כלול בהתקשרות, מה מחוץ להיקף, כמה סבבי הערות]]</span>
-          </p>
-        )}
+        <h2>מה כדאי לשים לב אליו</h2>
+        {/* The section people actually read, and the one a generative engine
+            is most likely to quote. Concrete mistakes, not reassurance. */}
+        <ul class="watch">
+          {service.watchFor.map((w) => (
+            <li>
+              <b>{w.title}</b>
+              <span>{w.detail}</span>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section class="block">
@@ -142,12 +133,12 @@ const schema = {
 
       {related.length > 0 && (
         <section class="block">
-          <h2>שירותים קרובים</h2>
+          <h2>נושאים קרובים</h2>
           <div class="related">
             {related.map((r) => (
               <a class="rel" href={`/practice-areas/${r.slug}/`}>
                 <b>{r.shortTitle ?? r.title}</b>
-                <span>{r.summary.split('.')[0]}.</span>
+                <span>{r.summary}</span>
               </a>
             ))}
           </div>
@@ -157,30 +148,15 @@ const schema = {
 
     <aside class="aside">
       <div class="panel">
-        <h2>בקצרה</h2>
-        <ul class="facts">
-          <li><span class="k">תחום</span><span class="v">{category.title}</span></li>
-          <li>
-            <span class="k">לו״ז</span>
-            <span class="v">
-              {service.timeline
-                ? <bdi dir="ltr">{service.timeline}</bdi>
-                : <span class="todo">[[חסר]]</span>}
-            </span>
-          </li>
-          <li><span class="k">שפות</span><span class="v">{FIRM.languages.join(', ')}</span></li>
-        </ul>
-        <a class="btn btn-primary panel-btn" href={primaryHref}>{service.primaryCta.label}</a>
-        {/* No note explaining the absence of fee information: the explanation
-            would itself be a reference to fees. See PROJECT.md — open with the
-            ethics committee. */}
-      </div>
-
-      <div class="panel">
-        <h2>מעדיפים לדבר?</h2>
+        <h2>יש שאלה?</h2>
+        <p class="panel-lead">
+          אפשר לכתוב בוואטסאפ ולתאר במשפט אחד מה העניין. אם זה מתאים למשרד נמשיך
+          משם, ואם לא — אפנה אתכם הלאה.
+        </p>
+        <a class="btn btn-primary panel-btn" href={whatsappLink(waMessage)}>כתיבה בוואטסאפ</a>
+        <a class="btn btn-ghost panel-btn" href={FIRM.calendar}>תיאום פגישה ביומן</a>
         <ul class="facts">
           <li><span class="k">טלפון</span><span class="v"><bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi></span></li>
-          <li><span class="k">דוא״ל</span><span class="v"><bdi><a href={`mailto:${FIRM.email}`} dir="ltr">{FIRM.email}</a></bdi></span></li>
           <li><span class="k">שעות</span><span class="v">{FIRM.hours.days} <bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></span></li>
         </ul>
       </div>
@@ -192,7 +168,6 @@ const schema = {
   .crumbs { font-size: var(--fs-caption); color: var(--muted); padding-block: var(--s5); }
   .crumbs a { text-decoration: none; display: inline-block; padding-block: 4px; }
   .crumbs a:hover { text-decoration: underline; }
-  /* Breadcrumb separators are directional and flip; .chev handles that. */
   .sep { display: inline-block; margin-inline: var(--s2); }
 
   .lede { padding-block-end: var(--s7); }
@@ -224,6 +199,11 @@ const schema = {
   }
   .block > p { max-width: var(--measure); }
   .block > p + p { margin-block-start: var(--s4); }
+  .matters {
+    padding-inline-start: var(--s5);
+    border-inline-start: 3px solid var(--accent);
+    font-size: var(--fs-lead);
+  }
 
   .covers { display: grid; gap: var(--s3); }
   .covers li {
@@ -240,25 +220,13 @@ const schema = {
   .covers b { font-weight: 600; }
   .covers span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: 2px; }
 
-  .scope { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); }
-  .scope h3 { font-size: var(--fs-small); font-weight: 600; color: var(--muted); margin-block-end: var(--s3); }
-  .ticks li, .crosses li {
-    display: flex; gap: var(--s3); align-items: flex-start;
-    font-size: var(--fs-small); padding-block: var(--s2);
+  .watch { display: grid; gap: var(--s4); max-width: var(--measure); }
+  .watch li {
+    padding-inline-start: var(--s5);
+    border-inline-start: 2px solid var(--rule);
   }
-  .ticks svg { flex: none; color: var(--accent); margin-block-start: 4px; }
-  /* Not-included items are set in muted ink with an en-rule marker rather than
-     a red cross: a boundary is information, not a warning. */
-  .crosses li { color: var(--muted); padding-inline-start: var(--s4); position: relative; }
-  .crosses li::before { content: '–'; position: absolute; inset-inline-start: 0; }
-
-  .gap {
-    border: 1px dashed var(--line-control);
-    border-radius: var(--r-md);
-    padding: var(--s5);
-    max-width: var(--measure);
-  }
-  .gap-note { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
+  .watch b { display: block; font-weight: 600; }
+  .watch span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s1); }
 
   .related { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s3); }
   .rel {
@@ -280,27 +248,26 @@ const schema = {
     padding: var(--s5);
     box-shadow: var(--shadow-card);
   }
-  .panel h2 { font-size: var(--fs-small); font-weight: 600; margin-block-end: var(--s4); }
+  .panel h2 { font-size: var(--fs-title); font-weight: 600; }
+  .panel-lead { font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s3); }
+  .panel-btn { width: 100%; margin-block-start: var(--s3); }
+  .facts { margin-block-start: var(--s5); }
   .facts li {
     display: flex;
     justify-content: space-between;
     gap: var(--s3);
     font-size: var(--fs-small);
     padding-block: var(--s3);
-    border-block-end: 1px solid var(--rule);
+    border-block-start: 1px solid var(--rule);
   }
-  .facts li:last-child { border-block-end: 0; }
   .facts .k { color: var(--muted); }
   .facts .v { font-weight: 600; font-variant-numeric: tabular-nums; text-align: end; }
   .facts a { display: inline-block; padding-block: 4px; }
-  .panel-btn { width: 100%; margin-block-start: var(--s4); }
-  .panel-note { font-size: var(--fs-micro); color: var(--faint); margin-block-start: var(--s3); }
 
   @media (max-width: 940px) {
     .body-grid { grid-template-columns: 1fr; gap: var(--s7); }
     .aside { position: static; }
     .related { grid-template-columns: 1fr; }
-    .scope { grid-template-columns: 1fr; gap: var(--s6); }
   }
   @media (max-width: 700px) {
     .cta-row { flex-direction: column; align-items: stretch; }

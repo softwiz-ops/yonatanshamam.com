@@ -79,6 +79,41 @@ card grid create bidi boundary noise for no benefit. Mapped to:
 
 ---
 
+## The catalogue was rebuilt from scratch — 27 Jul 2026
+
+The founder rejected the whole content approach: "לא רוצה להציע שירותים מהירים
+כמו מפעל", not business-only, and start over. He is right on all three, and the
+first point also resolves the commitments problem — a promised turnaround was
+the one claim nobody could approve.
+
+**What died.** Every timeline. The scoping-then-draft process. The process rail
+component. The `/how-it-works/` page. The four step icons that illustrated it.
+The "חדשנות משפטית לעסקים שרצים קדימה" hero, which was business-only and
+speed-led. `SHELF_TIMELINE`, `FIRST_MEETING`, and every `scope` and `timeline`
+field. `scripts/check-ethics.py` now BLOCKS if any of them reappear in the
+source, which is where they would come back.
+
+**What replaced it.** Sixteen services in five families, each built around a
+query someone actually types. Depth is the whole strategy: what the instrument
+does, what goes wrong without it, and a "מה כדאי לשים לב אליו" section of
+concrete mistakes — that last one is what a generative engine can quote.
+
+**Positioning:** משפט בגובה העיניים. It is the only differentiator left once
+price and speed are both off the table, and it is true.
+
+## Two qualification limits that shape the catalogue
+
+Both confirmed by the founder, and both are the kind of thing that would be an
+ethics problem if guessed:
+
+- **He is not a notary.** That needs ten years' standing; he was admitted in
+  2019. So `affidavit` covers affidavits and signature witnessing, which any
+  lawyer may do, and the page states plainly when a notary IS required and that
+  the firm does not provide notarial services. Do not let it drift.
+- **He does not hold the Accountant General's certification** for a lasting
+  power of attorney (ייפוי כוח מתמשך), which only specifically trained lawyers
+  may draw up. It is absent from the catalogue by decision, not oversight.
+
 ## The line drawn through the service content
 
 The founder asked for the service pages to be filled in from whatever ranks,

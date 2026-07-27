@@ -23,7 +23,9 @@ export const FIRM = {
   name: 'עו״ד יהונתן שמם',
   /** The trade name. Not a separate legal entity — see `operator`. */
   legalName: 'משרד עו״ד יהונתן שמם',
-  tagline: 'משרד בוטיק למשפט מסחרי וטכנולוגיה',
+  // Broadened 27 Jul 2026: the practice covers private clients as well, and
+  // a commercial-and-technology line excluded most of the catalogue.
+  tagline: 'משרד עורכי דין לעסקים ולאנשים פרטיים',
 
   /**
    * The registered person behind the trade name.

@@ -1,37 +1,46 @@
 ---
 import Base from '../layouts/Base.astro';
 import ServiceCard from '../components/ServiceCard.astro';
-import ProcessRail from '../components/ProcessRail.astro';
 import Faq from '../components/Faq.astro';
+import Graphic from '../components/Graphic.astro';
 import { FIRM, whatsappLink } from '../data/firm.ts';
-import { CATEGORIES, byCategory, type Category } from '../data/services.ts';
+import { SERVICES } from '../data/services.ts';
 
-/** The five Q&As from the live site, verbatim. His wording, his voice. */
+/*
+ * Rewritten 27 Jul 2026. The previous home page led with speed and carried a
+ * four-step process rail. Both are gone at the founder's instruction — a law
+ * firm that advertises turnaround reads as a document mill, and the timings
+ * were commitments nobody had approved.
+ *
+ * What leads instead is what he chose: משפט בגובה העיניים. It is the only
+ * differentiator left once price and speed are both off the table, and it is
+ * also the right content strategy — pages that genuinely explain are what rank
+ * and what a generative engine can quote.
+ */
+
 const faqs = [
   {
-    q: 'האם השירות הוא אוטומטי או שיש עורך דין שבודק את המסמכים?',
-    a: 'אנחנו מאמינים בשילוב מנצח: טכנולוגיה חכמה ועריכה אנושית. המערכת הדיגיטלית שלנו אוספת מכם את המידע בצורה יעילה ומהירה, אך שום מסמך לא יוצא מהמשרד ללא בדיקה ואישור של עו״ד יהונתן שמם או צוות המשרד.',
+    q: 'מתי בכלל צריך עורך דין, ומתי אפשר להסתדר לבד?',
+    a: 'ככלל, כשיש מסמך שמחייב אתכם לאורך זמן, כשהסכום משמעותי ביחס אליכם, או כשהצד השני הוא מי שניסח את המסמך. חוזה שכירות, צוואה, עסקת דירה והסכם בין שותפים נכנסים לקטגוריה הזו כמעט תמיד. יש גם דברים שאפשר באמת לעשות לבד, ואם זה המצב אומר לכם את זה.',
   },
   {
-    q: 'כמה זמן לוקח לקבל מסמך מוכן?',
-    a: 'עבור מסמכים סטנדרטיים (כמו הסכמי סודיות, מכתבי התראה או תקנונים), המסמך לרוב יהיה מוכן תוך 24-48 שעות.',
+    q: 'אתם עובדים גם עם אנשים פרטיים, או רק עם עסקים?',
+    a: 'שניהם. חלק מהעבודה היא ליווי חברות ומיזמים, וחלק גדול הוא אנשים פרטיים: צוואות, ירושות, חוזי שכירות ועסקאות דירה. אלה קהלים שונים, אבל השאלה זהה — מה בדיוק כתוב במסמך, ומה זה אומר עליכם.',
   },
   {
-    q: 'האם אתם מטפלים גם במקרים מורכבים כמו עסקאות נדל״ן או תביעות?',
-    a: 'בהחלט. האתר מציג את "מוצרי המדף" שלנו לנוחותכם, אך המשרד מחזיק בניסיון עשיר בליווי עסקאות נדל״ן מורכבות.',
+    q: 'קיבלתי חוזה וביקשו שאחתום מהר. אפשר לשלוח לבדיקה?',
+    a: 'כן, וזה הזמן הנכון. לפני החתימה עדיין יש כוח מיקוח ואפשר לבקש שינויים; אחרי החתימה, סעיף בעייתי הוא כבר עובדה. לחץ לחתום מהר הוא בדרך כלל סיבה טובה יותר לבדוק, לא פחות.',
   },
   {
-    q: 'למה עדיף לשלוח מכתב התראה דרך עורך דין ולא לבד?',
-    a: 'מכתב על נייר לוגו רשמי של משרד עורכי דין משדר רצינות וכוח מרתיע שאין למכתב רגיל.',
+    q: 'אני לא בטוח שזה התחום שלכם. שווה לפנות?',
+    a: 'שווה. אם הנושא אינו בתחומי העיסוק של המשרד אומר זאת מיד ואפנה אתכם למי שכן מטפל בו. זה חוסך לכם זמן, וזו גם הדרך הנכונה לעבוד.',
   },
   {
-    q: 'מה קורה אם אני צריך שינויים מיוחדים בהסכם?',
-    a: 'אנחנו כאן בדיוק בשביל זה. השאלונים שלנו מכסים את רוב התרחישים, אך במידה ויש לכם דרישות ספציפיות, ניתן לציין זאת או לשוחח איתנו. בניגוד למחוללי מסמכים "טיפשים", אנחנו עורכי דין בשר ודם ויכולים להתאים את המסמך למידותיכם המדויקות.',
+    q: 'מה קורה בפנייה הראשונה?',
+    a: 'מדברים על מה שצריך: מה המסמך, מי הצד השני, ומה חשוב לכם שיקרה. בסוף השיחה תדעו מה האפשרויות ומה השלב הבא — גם אם המסקנה היא שאין צורך בעורך דין.',
   },
 ];
 
-/* These five Q&As already sat in the live site's markup with no FAQPage schema
-   wrapped around them — the single cheapest structured-data win available. */
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -42,90 +51,84 @@ const schema = {
   })),
 };
 
-const steps = [
-  { title: 'פנייה', detail: 'וואטסאפ, טלפון או פגישה ביומן. מספיק משפט אחד על מה שאתם צריכים.' },
-  { title: 'אפיון' },
-  { title: 'טיוטה', when: '24-48 שעות', detail: 'למסמכי מדף סטנדרטיים. לעבודות מורכבות הלו״ז נקבע באפיון.' },
-  { title: 'בדיקה וחתימה', detail: 'כל מסמך נבדק ומאושר בידי עורך דין לפני שהוא יוצא מהמשרד.' },
+/** The six with the most search intent behind them. */
+const FEATURED = [
+  'lease-agreement',
+  'will',
+  'demand-letter',
+  'contract-review',
+  'apartment-purchase',
+  'company-registration',
 ];
+const featured = FEATURED.map((slug) => SERVICES.find((s) => s.slug === slug)).filter(
+  (s): s is NonNullable<typeof s> => Boolean(s)
+);
 ---
 <Base
-  title="עו״ד יהונתן שמם | משפט מסחרי וטכנולוגיה, תל אביב"
-  description="משרד בוטיק למשפט מסחרי וטכנולוגיה בתל אביב. הסכמי מייסדים, רישום חברות, תקנוני אתרים, עסקאות נדל״ן ומכתבי התראה — עם עורך דין שבודק כל מסמך."
+  title="עו״ד יהונתן שמם | משפט בגובה העיניים, תל אביב"
+  description="משרד עורכי דין בתל אביב לעסקים ולאנשים פרטיים: חוזים, צוואות וירושה, נדל״ן ושכירות, הקמת חברות ומכתבי התראה. הסבר בשפה ברורה על מה שאתם חותמים עליו."
   schema={schema}
 >
   <section class="hero">
     <div class="wrap">
       <p class="eyebrow">משרד בוטיק · תל אביב</p>
-      {/* The live site renders this as "חדשנות משפטיתלעסקים" — a lost <br>
-          swallowed the space, and crawlers read it as one word. */}
-      <h1>חדשנות משפטית <strong>לעסקים שרצים קדימה</strong></h1>
+      <h1>משפט <strong>בגובה העיניים</strong></h1>
       <p class="sub">
-        מעטפת משפטית חכמה למיזמים, חברות ונדל״ן. השירותים שלנו מותאמים לקצב של
-        העולם החדש: זמין, שקוף ומדויק.
+        חוזים, צוואות, נדל״ן וליווי עסקי — לעסקים ולאנשים פרטיים. בלי ז׳רגון,
+        בלי לקבור את העיקר בהערת שוליים, ועם הסבר ברור על מה שאתם חותמים עליו.
       </p>
       <div class="cta-row">
-        <a class="btn btn-primary" href={FIRM.calendar}>תיאום פגישה ביומן</a>
-        <a class="btn btn-ghost" href={whatsappLink('הגעתי מהאתר ואני מתעניין ב-')}>דברו איתי בוואטסאפ</a>
-      </div>
-
-      <div class="rail-wrap">
-        <ProcessRail heading="איך זה עובד" steps={steps} />
+        <a class="btn btn-primary" href={whatsappLink('שלום, הגעתי מהאתר ורציתי לשאול לגבי')}>כתבו לי בוואטסאפ</a>
+        <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
       </div>
     </div>
   </section>
 
-  <section class="section" id="services">
+  <section class="section" id="featured">
     <div class="wrap">
       <div class="section-head">
-        <h2>תחומי עיסוק</h2>
+        <h2>הנושאים שהכי שואלים עליהם</h2>
         <p>
-          תשעה שירותים בשלוש קבוצות. לכל אחד עמוד משלו שמסביר מה המסמך מסדיר,
-          מה חשוב לדעת לפניו, ומה השלבים — כדי שתדעו למה אתם נכנסים לפני שאתם
-          פונים.
+          לכל נושא עמוד שמסביר מה המסמך מסדיר, מה קורה בלעדיו, ומה כדאי לשים לב
+          אליו — גם אם בסוף תחליטו לא לפנות.
         </p>
       </div>
-
-      {(Object.keys(CATEGORIES) as Category[]).map((key) => (
-        <div class="cat" id={key}>
-          <div class="cat-head">
-            <span class="n"><bdi dir="ltr">{CATEGORIES[key].n}</bdi></span>
-            <h3>{CATEGORIES[key].title}</h3>
-          </div>
-          <div class="cards">
-            {byCategory(key).map((s) => <ServiceCard service={s} />)}
-          </div>
-        </div>
-      ))}
+      <div class="cards">
+        {featured.map((s) => <ServiceCard service={s} />)}
+      </div>
+      <a class="all-link" href="/practice-areas/">
+        לכל תחומי העיסוק
+        <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
     </div>
   </section>
 
   <section class="diff">
     <div class="wrap">
-      <q>כך אתם מקבלים את המהירות של הדיגיטל עם הביטחון של משרד עורכי דין.</q>
+      <q>רוב האנשים לא חותמים על מה שהם לא מבינים. הם חותמים על מה שלא הוסבר להם.</q>
       <p class="diff-note">
-        בניגוד למחוללי מסמכים ״טיפשים״ — כאן יש עורך דין בשר ודם שבודק כל מסמך
-        לפני שהוא יוצא מהמשרד.
+        העבודה מתחילה בהסבר: מה המסמך עושה, מה הוא לא עושה, ואיפה הסיכון האמיתי.
+        אחרי זה קל יותר להחליט.
       </p>
     </div>
   </section>
 
-  {/* The audience split sits here and not in the hero: the positioning line is
-      the strongest asset on the page, and a fork above it would replace a
-      statement with a menu. */}
   <section class="section">
     <div class="wrap">
+      <Graphic name="divider-rule" class="divider" />
       <div class="section-head"><h2>מה מביא אתכם לכאן?</h2></div>
       <div class="forks">
-        <a class="fork" href="/practice-areas/#business">
-          <h3>עסק, חברה או מיזם</h3>
-          <p>הקמה, הסכמים בין שותפים, התקשרויות מול ספקים ולקוחות, תקנוני אתר ופרטיות, וניהול שוטף.</p>
-          <span class="go">לשירותים העסקיים <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <a class="fork" href="/practice-areas/#estate">
+          <Graphic name="cat-property" class="fork-art" />
+          <h3>עניין אישי</h3>
+          <p>צוואה, ירושה, חוזה שכירות, עסקת דירה, או חוזה שקיבלתם וצריך לקרוא לפני שחותמים.</p>
+          <span class="go">לנושאים האישיים <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
-        <a class="fork" href="/practice-areas/real-estate/">
-          <h3>עסקת נדל״ן</h3>
-          <p>רכישה או מכירה של דירה, מקבלן או יד-שנייה: בדיקות נאותות, ניהול מו״מ, מיסוי ורישום זכויות בטאבו.</p>
-          <span class="go">לליווי עסקאות נדל״ן <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <a class="fork" href="/practice-areas/#business">
+          <Graphic name="cat-business" class="fork-art" />
+          <h3>עסק, חברה או מיזם</h3>
+          <p>הקמת חברה, הסכם בין שותפים, התקשרויות מול ספקים ולקוחות, ותקנוני אתר ופרטיות.</p>
+          <span class="go">לנושאים העסקיים <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
         </a>
       </div>
     </div>
@@ -140,41 +143,47 @@ const steps = [
 </Base>
 
 <style>
-  .hero { padding-block: var(--s8) var(--s7); }
+  .hero { padding-block: var(--s9) var(--s8); }
   h1 {
     font-size: var(--fs-display);
-    font-weight: 400;
+    font-weight: 300;
     line-height: var(--lh-tight);
     letter-spacing: -0.015em;
     margin-block-start: var(--s5);
-    max-width: 20ch;
   }
   h1 strong { font-weight: 700; }
-  .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 48ch; margin-block-start: var(--s5); }
-  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s6); }
-  .rail-wrap { margin-block-start: var(--s8); }
-  .rail-wrap :global(.rail) { --rail-cols: 4; }
+  .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 52ch; margin-block-start: var(--s5); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s7); }
 
-  .cat { margin-block-start: var(--s7); }
-  .cat:first-of-type { margin-block-start: 0; }
-  .cat-head { display: flex; align-items: baseline; gap: var(--s3); margin-block-end: var(--s5); }
-  .cat-head h3 { font-size: var(--fs-title); font-weight: 600; }
-  .cat-head .n { font-size: var(--fs-caption); color: var(--faint); font-variant-numeric: tabular-nums; }
-  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s4); }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4); }
+  .all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    margin-block-start: var(--s6);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: var(--fs-small);
+    text-decoration: none;
+    padding-block: 6px;
+  }
+  .all-link:hover { text-decoration: underline; }
 
   .diff { background: var(--ink); color: #fff; }
   .diff :global(.wrap) { padding-block: var(--s9); }
   .diff q {
     display: block;
     quotes: none;
-    font-size: clamp(24px, 3.4vw, 40px);
+    font-size: clamp(23px, 3.2vw, 38px);
     font-weight: 300;
     line-height: 1.35;
     letter-spacing: -0.01em;
-    max-width: 24ch;
+    max-width: 26ch;
   }
   /* #b9beba on #1b1d1f measures 8.9:1 */
   .diff-note { color: #b9beba; margin-block-start: var(--s5); max-width: 50ch; font-size: var(--fs-small); }
+
+  .divider { width: 240px; color: var(--line-control); margin-block-end: var(--s6); }
 
   .forks { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
   .fork {
@@ -185,6 +194,7 @@ const steps = [
     text-decoration: none;
   }
   .fork:hover { border-color: var(--accent); }
+  .fork-art { width: 56px; height: 56px; color: var(--accent); margin-block-end: var(--s4); }
   .fork h3 { font-size: var(--fs-title); font-weight: 600; }
   .fork p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
   .fork .go {
@@ -197,11 +207,13 @@ const steps = [
     margin-block-start: var(--s5);
   }
 
-  @media (max-width: 940px) {
+  @media (max-width: 1000px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 760px) {
     .cards { grid-template-columns: 1fr; }
     .forks { grid-template-columns: 1fr; }
   }
   @media (max-width: 700px) {
+    .hero { padding-block: var(--s8) var(--s7); }
     .cta-row { flex-direction: column; align-items: stretch; }
   }
 </style>

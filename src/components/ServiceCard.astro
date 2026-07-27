@@ -3,6 +3,18 @@ import type { Service } from '../data/services.ts';
 
 interface Props { service: Service }
 const { service } = Astro.props;
+
+/*
+ * The card used to carry a turnaround time. It does not any more — the founder
+ * removed every timing promise from the site, and a card is exactly where one
+ * would creep back in. What replaces it is who the service is for, which is
+ * useful and is not a commitment.
+ */
+const AUDIENCE: Record<Service['audience'], string> = {
+  private: 'לאדם הפרטי',
+  business: 'לעסק',
+  both: 'לעסק ולפרט',
+};
 ---
 <a class="card" href={`/practice-areas/${service.slug}/`}>
   <div class="card-top">
@@ -11,15 +23,9 @@ const { service } = Astro.props;
   </div>
   <p>{service.summary}</p>
   <div class="card-foot">
-    <span class="meta">
-      {/* A range with an en dash reverses in RTL unless it is isolated —
-          24–48 renders as 48–24. Isolated here regardless of the dash used. */}
-      {service.timeline
-        ? <><bdi dir="ltr">{service.timeline}</bdi></>
-        : <span class="todo">[[חסר: לו״ז]]</span>}
-    </span>
+    <span class="meta">{AUDIENCE[service.audience]}</span>
     <span class="go">
-      פרטים
+      קראו עוד
       <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
     </span>
   </div>
@@ -74,7 +80,7 @@ const { service } = Astro.props;
     border-block-start: 1px solid var(--rule);
     font-size: var(--fs-caption);
   }
-  .meta { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .meta { color: var(--muted); }
   .go {
     margin-inline-start: auto;
     color: var(--accent);
