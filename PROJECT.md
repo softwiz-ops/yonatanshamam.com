@@ -95,6 +95,26 @@ not the other, and the split is enforced in `src/data/services.ts`:
   Copying a competitor's "up to 3 revision rounds" would invent an obligation he
   never agreed to. These render as visible `[[חסר]]` markers.
 
+## Settled
+
+**One registration, two unconnected activities.** עוסק מורשה 302910187 operates
+both `משרד עו״ד יהונתן שמם` and the technology consultancy, from the same
+address. Asked whether that raises an additional-occupation question under the
+Bar's rules, the founder — a lawyer, ruling on his own practice — confirmed on
+27 Jul 2026 that there is no issue and that the two services and activities are
+unconnected. Closed.
+
+**What that changed in the build.** An earlier draft of the about page called
+the combination "נקודת המוצא של המשרד ולא נספח לה". That asserts a link between
+the two services which, on the founder's own account, does not exist — and an
+inaccurate claim on a lawyer's site is an exposure rather than a copy nit. The
+paragraph was rewritten to describe a background that informs how he works,
+which is biography. The rule that follows from it:
+
+> Nothing on this site may present the legal service and the technology service
+> as a combined offering. No link to the technology company, no shared contact
+> form, no cross-selling, no wording implying the two are bought together.
+
 ## Identity facts, and where they came from
 
 Supplied by the founder or taken from the LinkedIn profile he provided:
@@ -273,8 +293,8 @@ dash is used.**
   `cropped-Google-Gemini-Image-Preview.png`.
 - An `og:image` at 1200×630. None exists.
 
-**Three questions for the Bar's ethics committee, in writing, before anything
-is built around them:**
+**Two questions for the Bar's ethics committee, in writing, before anything is
+built around them:**
 
 1. May client testimonials appear on the firm's own site, or only in ranking
    directories? The permitting clause reads "המלצות, מכתבי תודה ודירוג
@@ -288,23 +308,9 @@ is built around them:**
    fees. It was removed. A permitted phrasing would let the page answer an
    obvious visitor question instead of staying silent.
 
-3. **The law practice and the technology consultancy are one registration.**
-   Confirmed by the founder on 27 Jul 2026: עוסק מורשה 302910187 operates both
-   `משרד עו״ד יהונתן שמם` and `SoftWiz.io`, from the same address. Both sites
-   name the same registered person in their legal documents.
-
-   That fact, not the website, is what needs checking. The Bar's rules restrict
-   a lawyer from carrying on an additional occupation in a way that is
-   incompatible with the profession or that channels clients from the business
-   into the practice — and the whole positioning of this site rests on the two
-   being connected. The site is currently built conservatively: the technology
-   company appears as biography on the about page only, unlinked, with no
-   partner badges, no client counts and no call to action. But conservative
-   drafting does not answer the underlying question.
-
-   Until it is answered, do not add: a link to the technology company, a shared
-   contact form, any cross-selling between the two, or any wording implying the
-   legal service and the technology service are bought together.
+*(A third question — whether one registration covering both the law practice
+and the technology consultancy raises an additional-occupation issue — was
+raised and closed. See "Settled" below.)*
 
 **Privacy — the contact form design depends on this.** Under Amendment 13, a
 database holding **only name, address and contact details** for ≤100,000 people

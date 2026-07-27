@@ -14,10 +14,10 @@ import { FIRM } from '../data/firm.ts';
  * advertising for another business on a lawyer's site, which the rules forbid
  * outright; the others are unverifiable claims and self-aggrandisement.
  *
- * The technology company and the legal-tech venture appear as biography — they
- * are the whole basis of the positioning — but are named without links or
- * promotional framing, so this page describes a lawyer rather than selling
- * another company.
+ * The technology work is mentioned as background only, with no company name,
+ * no link and no promotional framing. The founder confirmed on 27 Jul 2026
+ * that the two activities are unconnected, so nothing here may present them as
+ * a combined offering — see PROJECT.md.
  */
 
 const schema = {
@@ -59,13 +59,20 @@ const schema = {
         התמחה במשרד ש. הררי בתחומי הנדל״ן ודיני החברות.
       </p>
 
+      {/*
+        This paragraph describes a BACKGROUND, not a combined offering.
+        The founder confirmed on 27 Jul 2026 that the law practice and the
+        technology consultancy are unconnected activities. An earlier draft
+        called the combination "נקודת המוצא של המשרד", which asserts a link
+        between the two services that he says does not exist — and on a
+        lawyer's site an inaccurate claim is an exposure, not a copy nit.
+        Keep this about how he works, never about what is sold together.
+      */}
       <p>
-        במקביל לעיסוקו המשפטי הוא מנהל חברת ייעוץ טכנולוגי העוסקת בהטמעת מערכות
-        CRM, אוטומציה עסקית ובינה מלאכותית לעסקים, ושותף מייסד במיזם דיגיטלי
-        לעולם המשפט. השילוב הזה הוא נקודת המוצא של המשרד ולא נספח לה: לקוח
-        שמנהל עסק דיגיטלי לא צריך להסביר לעורך הדין שלו מהי מערכת, מה עושה
-        אינטגרציה, או למה מדיניות פרטיות שלא תואמת את מה שהאתר באמת אוסף היא
-        חשיפה ולא פורמליות.
+        מחוץ לעיסוקו המשפטי הוא עוסק גם בעולם הטכנולוגיה. הרקע הזה ניכר באופן
+        שבו המשרד עובד: לקוח שמנהל עסק דיגיטלי לא צריך להסביר מהי מערכת, מה
+        עושה אינטגרציה, או למה מדיניות פרטיות שאינה תואמת את מה שהאתר באמת אוסף
+        היא חשיפה ולא פורמליות.
       </p>
 
       <p>
