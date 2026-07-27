@@ -70,7 +70,9 @@
     font-weight: 300;             /* the light end of the range does the "premium" work */
     line-height: var(--lh-tight);
     letter-spacing: -0.015em;     /* negative only, and only at display size */
-    max-width: 15ch;
+    /* 15ch was too tight for this 33-character line: text-wrap: balance
+       had no room and left a one-word second line. */
+    max-width: 20ch;
   }
   h1 strong { font-weight: 600; }
   .hero-sub {
