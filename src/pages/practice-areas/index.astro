@@ -1,14 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import ServiceCard from '../../components/ServiceCard.astro';
-import Graphic from '../../components/Graphic.astro';
-
-/** Only categories that have a drawing. The rest render without one. */
-const CAT_ART: Partial<Record<Category, string>> = {
-  contracts: 'cat-business',
-  business: 'cat-digital',
-  property: 'cat-property',
-};
+import ServiceIndex from '../../components/ServiceIndex.astro';
 import { CATEGORIES, byCategory, SERVICES, type Category } from '../../data/services.ts';
 
 const schema = {
@@ -40,19 +32,13 @@ const schema = {
     {(Object.keys(CATEGORIES) as Category[]).map((key) => (
       <section class="cat" id={key}>
         <div class="cat-head">
-          {/* Decorative, and only where a matching illustration exists —
-              there are five categories and three drawings, and an invented
-              mapping would put the wrong picture on the wrong section. */}
-          {CAT_ART[key] && <Graphic name={CAT_ART[key]!} class="cat-art" />}
           <div>
             <span class="n"><bdi dir="ltr">{CATEGORIES[key].n}</bdi></span>
             <h2>{CATEGORIES[key].title}</h2>
             <p>{CATEGORIES[key].blurb}</p>
           </div>
         </div>
-        <div class="cards">
-          {byCategory(key).map((s) => <ServiceCard service={s} />)}
-        </div>
+        <ServiceIndex services={byCategory(key)} />
       </section>
     ))}
   </div>
@@ -72,11 +58,9 @@ const schema = {
   .cats { padding-block-end: var(--s9); }
   .cat { margin-block-start: var(--s8); scroll-margin-top: 96px; }
   .cat-head { display: flex; align-items: center; gap: var(--s5); margin-block-end: var(--s5); }
-  .cat-art { width: 64px; height: 64px; flex: none; color: var(--accent); }
   .cat-head .n { display: block; margin-block-end: var(--s1); }
   .cat-head h2 { font-size: var(--fs-title); font-weight: 600; }
   .cat-head p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s1); }
   .cat-head .n { font-size: var(--fs-caption); color: var(--faint); font-variant-numeric: tabular-nums; }
-  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s4); }
-  @media (max-width: 940px) { .cards { grid-template-columns: 1fr; } }
+
 </style>

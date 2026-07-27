@@ -87,6 +87,16 @@ def main() -> None:
         shield.resize((w, h), Image.LANCZOS).save(out, optimize=True)
         print(f"  {out.name}  {w}x{h}")
 
+    # --- display mark ------------------------------------------------------
+    # The mark was only ever emitted at 34px tall, which is why it read as an
+    # afterthought. This is the version that can carry a page.
+    disp_h = 440
+    disp_w = max(1, round(shield.width * disp_h / shield.height))
+    shield.resize((disp_w, disp_h), Image.LANCZOS).save(
+        OUT / "logo-shield-display.png", optimize=True
+    )
+    print(f"  logo-shield-display.png  {disp_w}x{disp_h}")
+
     # --- favicons ----------------------------------------------------------
     # Square canvases, but the shield keeps its own proportions inside them.
     for size, name in ((32, "favicon-32.png"), (180, "apple-touch-icon.png")):

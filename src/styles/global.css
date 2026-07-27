@@ -65,14 +65,21 @@
   --accent-hover: #144b3b;
   --accent-wash: #edf5f1;
 
+  /* The scale was too timid — every step sat within a few pixels of the next,
+     which is what made the page read as generic. Hebrew has no capitals, no
+     italics and no small caps, so SIZE and WEIGHT are almost the entire
+     hierarchy toolkit. Using only a third of it wastes it.
+     Body stays at 17px; the display end now goes where it should. */
   --fs-micro: 12px;
   --fs-caption: 13px;
   --fs-small: 15px;
   --fs-body: 17px;
-  --fs-lead: 19px;
-  --fs-title: 21px;
-  --fs-section: clamp(26px, 3.2vw, 34px);
-  --fs-display: clamp(32px, 5.4vw, 56px);
+  --fs-lead: 21px;
+  --fs-title: 24px;
+  --fs-section: clamp(30px, 4.4vw, 46px);
+  --fs-display: clamp(44px, 8.5vw, 96px);
+  /* Marginal numerals. Large enough to be structure, not decoration. */
+  --fs-numeral: clamp(28px, 3.6vw, 44px);
 
   --lh-tight: 1.18;
   --lh-heading: 1.3;
@@ -90,9 +97,53 @@
 
   --shadow-card: 0 1px 2px rgba(27, 29, 31, .04), 0 8px 24px rgba(27, 29, 31, .05);
 
-  --container: 1120px;
+  --container: 1180px;
   --gutter: 24px;
-  --measure: 66ch;
+  --measure: 64ch;
+  /* The marginal rail that carries section numbers and labels. In RTL the
+     first grid column resolves to the right, which is where the eye starts. */
+  --rail: 148px;
+}
+
+/* ==========================================================================
+   Editorial layout primitives
+   Rules and whitespace do the structural work. Cards are used sparingly and
+   never as the default container — a grid of white cards with shadows is the
+   single most generic pattern on the web, and repeating it sixteen times is
+   what made this site forgettable.
+   ========================================================================== */
+
+.spread {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  gap: var(--s5) var(--s7);
+  align-items: start;
+}
+.spread > .rail-label {
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  color: var(--muted);
+  padding-block-start: var(--s2);
+  position: sticky;
+  top: 96px;
+}
+.numeral {
+  display: block;
+  font-size: var(--fs-numeral);
+  font-weight: 200;
+  line-height: 1;
+  /* --rule measured 1.22:1 here. These are visible text, not decoration, and
+     at 24px and above the threshold is 3:1 — so they use the control-border
+     token, which is measured at 3.15:1. Quiet, and legible. */
+  color: var(--line-control);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 860px) {
+  .spread { grid-template-columns: 1fr; gap: var(--s4); }
+  .spread > .rail-label { position: static; padding-block-start: 0; }
+  .numeral { display: inline-block; font-size: var(--fs-title); margin-inline-end: var(--s3); }
 }
 
 /* ==========================================================================
@@ -110,25 +161,31 @@
 /* Text size. The scale is overridden wholesale so the relationships between
    steps survive; scaling the root font alone would not move the fixed px
    tokens the design is built on. */
+/* Every step must be LARGER than the base it overrides. When the base display
+   size was widened these were left behind, and "large text" briefly made the
+   headings smaller than default. If the base scale changes again, change these
+   in the same edit. */
 :root[data-a11y-text='lg'] {
   --fs-micro: 14px;
   --fs-caption: 15px;
   --fs-small: 17px;
   --fs-body: 19px;
-  --fs-lead: 22px;
-  --fs-title: 24px;
-  --fs-section: clamp(30px, 3.6vw, 38px);
-  --fs-display: clamp(36px, 6vw, 62px);
+  --fs-lead: 24px;
+  --fs-title: 27px;
+  --fs-section: clamp(34px, 4.8vw, 50px);
+  --fs-display: clamp(48px, 9vw, 100px);
+  --fs-numeral: clamp(32px, 4vw, 48px);
 }
 :root[data-a11y-text='xl'] {
   --fs-micro: 16px;
   --fs-caption: 17px;
   --fs-small: 19px;
   --fs-body: 22px;
-  --fs-lead: 25px;
-  --fs-title: 27px;
-  --fs-section: clamp(33px, 4vw, 42px);
-  --fs-display: clamp(38px, 6.4vw, 66px);
+  --fs-lead: 27px;
+  --fs-title: 31px;
+  --fs-section: clamp(38px, 5.2vw, 54px);
+  --fs-display: clamp(52px, 9.5vw, 104px);
+  --fs-numeral: clamp(36px, 4.4vw, 52px);
 }
 
 /* High contrast. Every value here is measured against #ffffff:

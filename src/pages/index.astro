@@ -1,21 +1,24 @@
 ---
 import Base from '../layouts/Base.astro';
-import ServiceCard from '../components/ServiceCard.astro';
+import ServiceIndex from '../components/ServiceIndex.astro';
 import Faq from '../components/Faq.astro';
-import Graphic from '../components/Graphic.astro';
+import Icon from '../components/Icon.astro';
 import { FIRM, whatsappLink } from '../data/firm.ts';
-import { SERVICES } from '../data/services.ts';
+import { SERVICES, CATEGORIES, byCategory, type Category } from '../data/services.ts';
 
 /*
- * Rewritten 27 Jul 2026. The previous home page led with speed and carried a
- * four-step process rail. Both are gone at the founder's instruction — a law
- * firm that advertises turnaround reads as a document mill, and the timings
- * were commitments nobody had approved.
+ * Redesigned 27 Jul 2026, after the founder called the previous version generic
+ * and boring. He was right, and the diagnosis matters more than the fix: the
+ * page was a grid of white cards with shadows, which is the most-repeated
+ * container on the web, and the type scale was so narrow that nothing on the
+ * page had rank.
  *
- * What leads instead is what he chose: משפט בגובה העיניים. It is the only
- * differentiator left once price and speed are both off the table, and it is
- * also the right content strategy — pages that genuinely explain are what rank
- * and what a generative engine can quote.
+ * The treatment now is editorial. The real asset here is sixteen pages of long
+ * Hebrew explanation, so the site is set like a publication rather than a
+ * service brochure: hairline rules instead of card borders, a numbered index
+ * instead of a grid, a display size that actually uses the 200-800 weight range
+ * Hebrew leaves as almost its only hierarchy tool, and the mark given enough
+ * room to read as a mark.
  */
 
 const faqs = [
@@ -51,18 +54,14 @@ const schema = {
   })),
 };
 
-/** The six with the most search intent behind them. */
-const FEATURED = [
-  'lease-agreement',
-  'will',
-  'demand-letter',
-  'contract-review',
-  'apartment-purchase',
-  'company-registration',
-];
-const featured = FEATURED.map((slug) => SERVICES.find((s) => s.slug === slug)).filter(
-  (s): s is NonNullable<typeof s> => Boolean(s)
-);
+const ORDER: Category[] = ['contracts', 'estate', 'property', 'business', 'enforcement'];
+let running = 0;
+const groups = ORDER.map((key) => {
+  const items = byCategory(key);
+  const group = { key, items, offset: running };
+  running += items.length;
+  return group;
+});
 ---
 <Base
   title="עו״ד יהונתן שמם | משפט בגובה העיניים, תל אביב"
@@ -70,133 +69,204 @@ const featured = FEATURED.map((slug) => SERVICES.find((s) => s.slug === slug)).f
   schema={schema}
 >
   <section class="hero">
-    <div class="wrap">
-      <p class="eyebrow">משרד בוטיק · תל אביב</p>
-      <h1>משפט <strong>בגובה העיניים</strong></h1>
-      <p class="sub">
-        חוזים, צוואות, נדל״ן וליווי עסקי — לעסקים ולאנשים פרטיים. בלי ז׳רגון,
-        בלי לקבור את העיקר בהערת שוליים, ועם הסבר ברור על מה שאתם חותמים עליו.
-      </p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href={whatsappLink('שלום, הגעתי מהאתר ורציתי לשאול לגבי')}>כתבו לי בוואטסאפ</a>
-        <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+    <div class="wrap hero-in">
+      <div class="hero-copy">
+        <p class="eyebrow">משרד עורכי דין · תל אביב</p>
+        <h1>משפט<br /><strong>בגובה העיניים</strong></h1>
+        <p class="sub">
+          חוזים, צוואות, נדל״ן וליווי עסקי — לעסקים ולאנשים פרטיים.
+          בלי ז׳רגון, ועם הסבר ברור על מה שאתם חותמים עליו.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={whatsappLink('שלום, הגעתי מהאתר ורציתי לשאול לגבי')}>כתבו לי בוואטסאפ</a>
+          <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+        </div>
       </div>
+      {/* The mark, at a size where it reads as a mark. Decorative: the firm is
+          named in the header and in the h1 beside it. */}
+      <img class="hero-mark" src="/logo-shield-display.png" width="342" height="440" alt="" decoding="async" />
     </div>
   </section>
 
-  <section class="section" id="featured">
+  <section class="section" id="services">
     <div class="wrap">
-      <div class="section-head">
-        <h2>הנושאים שהכי שואלים עליהם</h2>
-        <p>
-          לכל נושא עמוד שמסביר מה המסמך מסדיר, מה קורה בלעדיו, ומה כדאי לשים לב
-          אליו — גם אם בסוף תחליטו לא לפנות.
-        </p>
+      <div class="spread">
+        <div class="rail-label">
+          <span class="numeral">01</span>
+          תחומי עיסוק
+        </div>
+        <div>
+          <h2 class="section-title">מה אפשר לעשות כאן</h2>
+          <p class="section-lead">
+            לכל נושא עמוד שמסביר מה המסמך מסדיר, מה קורה בלעדיו, ומה כדאי לשים
+            לב אליו — גם אם בסוף תחליטו לא לפנות.
+          </p>
+
+          {groups.map(({ key, items, offset }) => (
+            <div class="group">
+              <h3 class="group-title">
+                {CATEGORIES[key].title}
+                <span class="group-blurb">{CATEGORIES[key].blurb}</span>
+              </h3>
+              <ServiceIndex services={items} offset={offset} />
+            </div>
+          ))}
+        </div>
       </div>
-      <div class="cards">
-        {featured.map((s) => <ServiceCard service={s} />)}
-      </div>
-      <a class="all-link" href="/practice-areas/">
-        לכל תחומי העיסוק
-        <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
     </div>
   </section>
 
   <section class="diff">
     <div class="wrap">
-      <q>רוב האנשים לא חותמים על מה שהם לא מבינים. הם חותמים על מה שלא הוסבר להם.</q>
-      <p class="diff-note">
-        העבודה מתחילה בהסבר: מה המסמך עושה, מה הוא לא עושה, ואיפה הסיכון האמיתי.
-        אחרי זה קל יותר להחליט.
-      </p>
+      <div class="spread">
+        <div class="rail-label"><span class="numeral">02</span></div>
+        <div>
+          <q>רוב האנשים לא חותמים על מה שהם לא מבינים.<br />הם חותמים על מה שלא הוסבר להם.</q>
+          <p class="diff-note">
+            העבודה מתחילה בהסבר: מה המסמך עושה, מה הוא לא עושה, ואיפה הסיכון
+            האמיתי. אחרי זה קל יותר להחליט.
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
   <section class="section">
     <div class="wrap">
-      <Graphic name="divider-rule" class="divider" />
-      <div class="section-head"><h2>מה מביא אתכם לכאן?</h2></div>
-      <div class="forks">
-        <a class="fork" href="/practice-areas/#estate">
-          <Graphic name="cat-property" class="fork-art" />
-          <h3>עניין אישי</h3>
-          <p>צוואה, ירושה, חוזה שכירות, עסקת דירה, או חוזה שקיבלתם וצריך לקרוא לפני שחותמים.</p>
-          <span class="go">לנושאים האישיים <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
-        <a class="fork" href="/practice-areas/#business">
-          <Graphic name="cat-business" class="fork-art" />
-          <h3>עסק, חברה או מיזם</h3>
-          <p>הקמת חברה, הסכם בין שותפים, התקשרויות מול ספקים ולקוחות, ותקנוני אתר ופרטיות.</p>
-          <span class="go">לנושאים העסקיים <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        </a>
+      <div class="spread">
+        <div class="rail-label">
+          <span class="numeral">03</span>
+          למי זה מיועד
+        </div>
+        <div class="forks">
+          <a class="fork" href="/practice-areas/#estate">
+            <Icon name="scroll" class="fork-ico" />
+            <h3>עניין אישי</h3>
+            <p>צוואה, ירושה, חוזה שכירות, עסקת דירה, או חוזה שקיבלתם וצריך לקרוא לפני שחותמים.</p>
+            <span class="go">לנושאים האישיים <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+          <a class="fork" href="/practice-areas/#business">
+            <Icon name="buildings" class="fork-ico" />
+            <h3>עסק, חברה או מיזם</h3>
+            <p>הקמת חברה, הסכם בין שותפים, התקשרויות מול ספקים ולקוחות, ותקנוני אתר ופרטיות.</p>
+            <span class="go">לנושאים העסקיים <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
   <section class="section" id="faq">
     <div class="wrap">
-      <div class="section-head"><h2>שאלות נפוצות</h2></div>
-      <Faq items={faqs} />
+      <div class="spread">
+        <div class="rail-label">
+          <span class="numeral">04</span>
+          שאלות נפוצות
+        </div>
+        <Faq items={faqs} />
+      </div>
     </div>
   </section>
 </Base>
 
 <style>
-  .hero { padding-block: var(--s9) var(--s8); }
+  /* ---------- hero ---------- */
+  .hero { padding-block: clamp(48px, 8vw, 112px) var(--s9); }
+  .hero-in { display: flex; align-items: center; gap: var(--s8); }
+  .hero-copy { flex: 1; min-width: 0; }
+
   h1 {
     font-size: var(--fs-display);
-    font-weight: 300;
-    line-height: var(--lh-tight);
-    letter-spacing: -0.015em;
+    font-weight: 200;
+    line-height: 1.02;
+    letter-spacing: -0.03em;
     margin-block-start: var(--s5);
   }
   h1 strong { font-weight: 700; }
-  .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 52ch; margin-block-start: var(--s5); }
+  .sub {
+    font-size: var(--fs-lead);
+    color: var(--muted);
+    max-width: 44ch;
+    margin-block-start: var(--s6);
+    line-height: 1.6;
+  }
   .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s7); }
 
-  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4); }
-  .all-link {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--s2);
-    margin-block-start: var(--s6);
-    color: var(--accent);
-    font-weight: 600;
-    font-size: var(--fs-small);
-    text-decoration: none;
-    padding-block: 6px;
+  .hero-mark {
+    flex: none;
+    width: clamp(120px, 16vw, 210px);
+    height: auto;
+    /* The gold is the logo's alone and is never borrowed for anything else.
+       Held back so it sits behind the type rather than competing with it. */
+    opacity: .9;
   }
-  .all-link:hover { text-decoration: underline; }
 
+  /* ---------- sections ---------- */
+  .section-title {
+    font-size: var(--fs-section);
+    font-weight: 200;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+  .section-lead {
+    color: var(--muted);
+    max-width: 56ch;
+    margin-block: var(--s4) var(--s8);
+    font-size: var(--fs-lead);
+    line-height: 1.6;
+  }
+
+  .group { margin-block-end: var(--s8); }
+  .group:last-child { margin-block-end: 0; }
+  .group-title {
+    font-size: var(--fs-small);
+    font-weight: 700;
+    letter-spacing: .02em;
+    margin-block-end: var(--s4);
+  }
+  .group-blurb {
+    display: block;
+    font-size: var(--fs-caption);
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0;
+    margin-block-start: var(--s1);
+  }
+
+  /* ---------- differentiator ---------- */
   .diff { background: var(--ink); color: #fff; }
   .diff :global(.wrap) { padding-block: var(--s9); }
+  .diff :global(.rail-label) { color: #8d938f; }
+  /* #3a3f3c measured 1.57:1 on the ink band. 3:1 is the floor for text at
+     this size, and #666d68 is the lightest step that clears it. */
+  .diff :global(.numeral) { color: #666d68; }  /* 3.18:1 */
   .diff q {
     display: block;
     quotes: none;
-    font-size: clamp(23px, 3.2vw, 38px);
-    font-weight: 300;
-    line-height: 1.35;
-    letter-spacing: -0.01em;
-    max-width: 26ch;
+    font-size: clamp(26px, 4vw, 52px);
+    font-weight: 200;
+    line-height: 1.22;
+    letter-spacing: -0.025em;
   }
   /* #b9beba on #1b1d1f measures 8.9:1 */
-  .diff-note { color: #b9beba; margin-block-start: var(--s5); max-width: 50ch; font-size: var(--fs-small); }
+  .diff-note { color: #b9beba; margin-block-start: var(--s6); max-width: 48ch; font-size: var(--fs-small); }
 
-  .divider { width: 240px; color: var(--line-control); margin-block-end: var(--s6); }
-
-  .forks { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
+  /* ---------- forks ---------- */
+  .forks { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
   .fork {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--r-lg);
-    padding: var(--s6);
+    padding: var(--s6) var(--s6) var(--s6) 0;
     text-decoration: none;
+    border-block-start: 1px solid var(--ink);
   }
-  .fork:hover { border-color: var(--accent); }
-  .fork-art { width: 56px; height: 56px; color: var(--accent); margin-block-end: var(--s4); }
-  .fork h3 { font-size: var(--fs-title); font-weight: 600; }
+  .fork + .fork {
+    border-inline-start: 1px solid var(--rule);
+    padding-inline-start: var(--s6);
+    padding-inline-end: 0;
+  }
+  .fork-ico { width: 34px; height: 34px; color: var(--accent); }
+  .fork h3 { font-size: var(--fs-title); font-weight: 500; letter-spacing: -0.015em; margin-block-start: var(--s4); }
   .fork p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
+  .fork:hover h3 { color: var(--accent); }
   .fork .go {
     display: inline-flex;
     align-items: center;
@@ -207,13 +277,14 @@ const featured = FEATURED.map((slug) => SERVICES.find((s) => s.slug === slug)).f
     margin-block-start: var(--s5);
   }
 
-  @media (max-width: 1000px) { .cards { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 760px) {
-    .cards { grid-template-columns: 1fr; }
+  @media (max-width: 860px) {
+    .hero-in { flex-direction: column-reverse; align-items: flex-start; gap: var(--s6); }
+    .hero-mark { width: 96px; }
     .forks { grid-template-columns: 1fr; }
+    .fork { padding-inline: 0; }
+    .fork + .fork { border-inline-start: 0; padding-inline-start: 0; }
   }
   @media (max-width: 700px) {
-    .hero { padding-block: var(--s8) var(--s7); }
     .cta-row { flex-direction: column; align-items: stretch; }
   }
 </style>

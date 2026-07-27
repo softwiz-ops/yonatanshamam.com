@@ -1,0 +1,139 @@
+---
+import Icon from './Icon.astro';
+import type { Service } from '../data/services.ts';
+
+/**
+ * The service list, as an index rather than a card grid.
+ *
+ * A grid of white cards with shadows is the most generic container on the web,
+ * and repeating it sixteen times is what made this site forgettable. This is
+ * the same information set the way a legal document sets a list: numbered,
+ * ruled, and given room. It also scans far faster at sixteen items than a grid
+ * of equal-weight boxes does.
+ */
+
+interface Props {
+  services: Service[];
+  /** Where the numbering starts, so a page of sections keeps counting. */
+  offset?: number;
+}
+const { services, offset = 0 } = Astro.props;
+
+/** Phosphor names, chosen per topic. Decorative — every row is named in text. */
+const ICONS: Record<string, string> = {
+  'lease-agreement': 'key',
+  'employment-agreement': 'briefcase',
+  'freelancer-agreement': 'handshake',
+  nda: 'lock-simple',
+  'contract-review': 'magnifying-glass',
+  will: 'scroll',
+  'inheritance-order': 'stamp',
+  'estate-division': 'users-three',
+  'apartment-purchase': 'house-line',
+  'apartment-sale': 'house-line',
+  'company-registration': 'buildings',
+  'founders-agreement': 'graph',
+  'website-terms-and-privacy': 'shield-check',
+  'accessibility-statement': 'wheelchair',
+  'termination-hearing': 'gavel',
+  'demand-letter': 'envelope-simple',
+  affidavit: 'signature',
+};
+
+const AUDIENCE: Record<Service['audience'], string> = {
+  private: 'לאדם הפרטי',
+  business: 'לעסק',
+  both: 'לעסק ולפרט',
+};
+---
+<ol class="index">
+  {services.map((s, i) => (
+    <li>
+      <a href={`/practice-areas/${s.slug}/`}>
+        <span class="num"><bdi dir="ltr">{String(offset + i + 1).padStart(2, '0')}</bdi></span>
+        <span class="ico"><Icon name={ICONS[s.slug] ?? 'file-text'} /></span>
+        <span class="body">
+          <span class="head">
+            <span class="title">{s.shortTitle ?? s.title}</span>
+            {s.tag && <span class:list={['tag', s.tagAccent && 'tag-accent']}>{s.tag}</span>}
+          </span>
+          <span class="sum">{s.summary}</span>
+        </span>
+        <span class="aud">{AUDIENCE[s.audience]}</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .index { border-block-start: 1px solid var(--ink); }
+  .index li { border-block-end: 1px solid var(--rule); }
+
+  a {
+    display: grid;
+    grid-template-columns: 3.5rem 2rem minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--s5);
+    padding-block: var(--s5);
+    text-decoration: none;
+    transition: background-color .16s, padding-inline .16s;
+  }
+  a:hover { background: var(--surface); padding-inline: var(--s4); }
+  @media (prefers-reduced-motion: reduce) { a:hover { padding-inline: 0; } }
+
+  .num {
+    font-size: var(--fs-title);
+    font-weight: 200;
+    /* 3.15:1 — see the note on .numeral in global.css. */
+    color: var(--line-control);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  a:hover .num { color: var(--accent); }
+
+  .ico { width: 28px; height: 28px; color: var(--muted); }
+  a:hover .ico { color: var(--accent); }
+
+  .head { display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; }
+  .title {
+    font-size: var(--fs-title);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+  a:hover .title { color: var(--accent); }
+  .sum {
+    display: block;
+    font-size: var(--fs-small);
+    color: var(--muted);
+    margin-block-start: var(--s2);
+    max-width: 62ch;
+  }
+
+  .tag {
+    font-size: var(--fs-micro);
+    font-weight: 700;
+    white-space: nowrap;
+    border-radius: var(--r-pill);
+    padding: 2px 10px;
+    background: var(--page);
+    color: var(--muted);
+    border: 1px solid var(--rule);
+  }
+  .tag-accent {
+    background: var(--accent-wash);
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  .aud { font-size: var(--fs-caption); color: var(--faint); white-space: nowrap; }
+  /* Directional glyph — .chev in global.css flips it under RTL. */
+  .chev { color: var(--line-control); }
+  a:hover .chev { color: var(--accent); }
+
+  @media (max-width: 900px) {
+    a { grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: var(--s4); }
+    .ico, .aud { display: none; }
+  }
+</style>

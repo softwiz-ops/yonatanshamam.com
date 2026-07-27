@@ -1,0 +1,66 @@
+---
+/**
+ * Inline a Phosphor icon.
+ *
+ * Phosphor rather than Lucide: Lucide is on a very large share of the web right
+ * now and reads as generic, and Phosphor ships real stroke weights. `light` is
+ * the default here because the firm's mark is thin gold line art, and a heavier
+ * icon set beside it looks borrowed.
+ *
+ * Inlined, not <img>: an SVG loaded through <img> is an isolated document, so
+ * `currentColor` resolves against its own root (black) instead of the page.
+ * Verified in the browser — referenced that way every icon rendered black.
+ *
+ * import.meta.glob rather than node:fs: the Cloudflare adapter prerenders in
+ * the Workers runtime, which has no filesystem. Vite bakes the source in at
+ * bundle time.
+ *
+ * Only the weights actually used are globbed. Adding one costs the whole
+ * directory in the bundle graph, so add deliberately.
+ */
+const LIGHT = import.meta.glob<string>(
+  '../../node_modules/@phosphor-icons/core/assets/light/*.svg',
+  { eager: true, query: '?raw', import: 'default' }
+);
+const THIN = import.meta.glob<string>(
+  '../../node_modules/@phosphor-icons/core/assets/thin/*.svg',
+  { eager: true, query: '?raw', import: 'default' }
+);
+
+interface Props {
+  /** Phosphor name, kebab-case, without the weight suffix. e.g. "scroll". */
+  name: string;
+  weight?: 'light' | 'thin';
+  class?: string;
+  /**
+   * Decorative by default. Pass a label only when the icon is the sole carrier
+   * of meaning — which on this site it never should be.
+   */
+  label?: string;
+}
+
+const { name, weight = 'light', class: className, label } = Astro.props;
+
+const set = weight === 'thin' ? THIN : LIGHT;
+const key = `../../node_modules/@phosphor-icons/core/assets/${weight}/${name}-${weight}.svg`;
+const source = set[key];
+
+if (!source) {
+  // Fail the build rather than ship a hole where an icon should be.
+  throw new Error(`Icon not found: ${name} (${weight}).`);
+}
+
+const svg = source
+  .trim()
+  // Phosphor ships a fixed 256x256 width/height; strip it so CSS sizes it.
+  .replace(/\s(width|height)="[^"]*"/g, '')
+  .replace('<svg', label
+    ? `<svg role="img" aria-label="${label}"`
+    : '<svg aria-hidden="true" focusable="false"');
+---
+<span class:list={['icon', className]} set:html={svg} />
+
+<style>
+  .icon { display: inline-flex; flex: none; }
+  .icon :global(svg) { width: 100%; height: 100%; display: block; fill: currentColor; }
+</style>
