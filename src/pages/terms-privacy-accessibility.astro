@@ -39,6 +39,33 @@ const sections = [
   <div class="wrap lede">
     <h1>{frontmatter.title}</h1>
     <p class="updated">{frontmatter.updated}</p>
+
+    {/*
+      Rendered from src/data/firm.ts rather than written into the Markdown,
+      because migrate-legal.py overwrites that file and a hand-edit would be
+      lost on the next run.
+
+      The migrated document names only the trade name as "בעל מאגר המידע".
+      Amendment 13 expects the controller to be identified with real
+      particulars, so the registered person and registration number are stated
+      here, at the head of the document that makes the claim.
+    */}
+    <dl class="operator">
+      <dt>המפעיל ובעל מאגר המידע</dt>
+      <dd>
+        {FIRM.operator.person}, <bdi dir="ltr">{FIRM.operator.registration}</bdi>,
+        הפועל בשם המסחרי {FIRM.operator.tradeName}
+      </dd>
+      <dt>כתובת</dt>
+      <dd>{FIRM.address.full}</dd>
+      <dt>יצירת קשר</dt>
+      <dd>
+        <bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi>
+        {' · '}
+        <bdi><a href={`mailto:${FIRM.email}`} dir="ltr">{FIRM.email}</a></bdi>
+      </dd>
+    </dl>
+
     <nav class="jump" aria-label="ניווט במסמך">
       {sections.map((s) => <a href={`#${s.id}`}>{s.label}</a>)}
     </nav>
@@ -53,6 +80,26 @@ const sections = [
   .lede { padding-block: var(--s7) var(--s6); border-block-end: 1px solid var(--rule); }
   h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 400; letter-spacing: -0.015em; }
   .updated { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
+
+  .operator {
+    margin-block-start: var(--s5);
+    padding: var(--s5);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: var(--s2) var(--s5);
+    font-size: var(--fs-small);
+    max-width: 72ch;
+  }
+  .operator dt { color: var(--muted); }
+  .operator dd { margin: 0; }
+  .operator a { color: var(--accent); display: inline-block; padding-block: 3px; }
+  @media (max-width: 600px) {
+    .operator { grid-template-columns: 1fr; gap: var(--s1); }
+    .operator dd { margin-block-end: var(--s3); }
+  }
 
   .jump { display: flex; flex-wrap: wrap; gap: var(--s2); margin-block-start: var(--s5); }
   .jump a {

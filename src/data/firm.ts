@@ -21,8 +21,27 @@
 
 export const FIRM = {
   name: 'עו״ד יהונתן שמם',
+  /** The trade name. Not a separate legal entity — see `operator`. */
   legalName: 'משרד עו״ד יהונתן שמם',
   tagline: 'משרד בוטיק למשפט מסחרי וטכנולוגיה',
+
+  /**
+   * The registered person behind the trade name.
+   *
+   * Amendment 13 requires the controller to be identified with real
+   * particulars, and "משרד עו״ד יהונתן שמם" is a trade name rather than a
+   * registered entity. The migrated legal document names only the trade name,
+   * which is thinner than the obligation expects.
+   *
+   * Same registration as the technology consultancy — one עוסק מורשה operating
+   * under two trade names. That fact is what raises the additional-occupation
+   * question recorded in PROJECT.md.
+   */
+  operator: {
+    person: 'יהונתן שמם',
+    registration: 'עוסק מורשה מס׳ 302910187',
+    tradeName: 'משרד עו״ד יהונתן שמם',
+  },
 
   phone: {
     display: '054-244-8885',

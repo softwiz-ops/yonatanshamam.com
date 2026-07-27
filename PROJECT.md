@@ -273,8 +273,8 @@ dash is used.**
   `cropped-Google-Gemini-Image-Preview.png`.
 - An `og:image` at 1200×630. None exists.
 
-**Two questions for the Bar's ethics committee, in writing, before anything is
-built around them:**
+**Three questions for the Bar's ethics committee, in writing, before anything
+is built around them:**
 
 1. May client testimonials appear on the firm's own site, or only in ranking
    directories? The permitting clause reads "המלצות, מכתבי תודה ודירוג
@@ -283,7 +283,28 @@ built around them:**
    client logo wall with written consent plus a link to a Google Business
    Profile.
 2. Is any wording near fees permitted at all — even "introductory call at no
-   charge"?
+   charge"? This is not hypothetical: the first build carried an explanation of
+   *why* there is no pricing, and that explanation is itself a reference to
+   fees. It was removed. A permitted phrasing would let the page answer an
+   obvious visitor question instead of staying silent.
+
+3. **The law practice and the technology consultancy are one registration.**
+   Confirmed by the founder on 27 Jul 2026: עוסק מורשה 302910187 operates both
+   `משרד עו״ד יהונתן שמם` and `SoftWiz.io`, from the same address. Both sites
+   name the same registered person in their legal documents.
+
+   That fact, not the website, is what needs checking. The Bar's rules restrict
+   a lawyer from carrying on an additional occupation in a way that is
+   incompatible with the profession or that channels clients from the business
+   into the practice — and the whole positioning of this site rests on the two
+   being connected. The site is currently built conservatively: the technology
+   company appears as biography on the about page only, unlinked, with no
+   partner badges, no client counts and no call to action. But conservative
+   drafting does not answer the underlying question.
+
+   Until it is answered, do not add: a link to the technology company, a shared
+   contact form, any cross-selling between the two, or any wording implying the
+   legal service and the technology service are bought together.
 
 **Privacy — the contact form design depends on this.** Under Amendment 13, a
 database holding **only name, address and contact details** for ≤100,000 people
