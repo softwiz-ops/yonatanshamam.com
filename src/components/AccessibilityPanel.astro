@@ -1,0 +1,299 @@
+---
+/**
+ * Accessibility preferences panel.
+ *
+ * WHAT THIS IS NOT
+ *
+ * It is not an accessibility overlay. It does not inject ARIA, does not rewrite
+ * the DOM, does not "scan and fix" the page at runtime, and does not claim to
+ * deliver conformance. Those products cannot satisfy criteria that require human
+ * judgement, independent testing puts their real coverage at a fraction of the
+ * standard, and they interfere with the user's own screen reader. The FTC's
+ * final order against accessiBe in April 2025 was about exactly that claim.
+ *
+ * Regulation 35 requires two things: that the site itself conform to IS 5568 at
+ * level AA, and that an accessibility statement be displayed prominently. It
+ * does not require a toolbar. Conformance here is in the code; this panel is a
+ * genuine convenience on top of it, and the accessibility declaration must never
+ * cite it as the basis for conformance.
+ *
+ * WHAT IT DOES
+ *
+ * Sets data attributes on <html>. The site's own stylesheet honours them. Every
+ * preference maps to something the design already controls, so nothing is
+ * being overridden or fought with:
+ *
+ *   data-a11y-text="lg|xl"     raises the root font size; the whole type scale
+ *                              is relative, so everything moves together
+ *   data-a11y-contrast="high"  swaps the token values for a near-black ramp
+ *   data-a11y-links="underline" underlines every link, not just on hover
+ *   data-a11y-motion="off"     stops transitions, as prefers-reduced-motion does
+ *
+ * The preference is stored in localStorage: first-party, functional, no personal
+ * data, never transmitted. The cookies section of the legal document has to
+ * describe this accurately — see PROJECT.md.
+ */
+---
+<div class="a11y">
+  <button
+    type="button"
+    class="a11y-toggle"
+    aria-expanded="false"
+    aria-controls="a11y-panel"
+    id="a11y-toggle"
+  >
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <circle cx="12" cy="4.2" r="2.2" />
+      <path d="M20.5 7.4c.2.6-.1 1.2-.7 1.4l-4.4 1.3v3l2.3 6.7c.2.6-.1 1.3-.8 1.5-.6.2-1.3-.1-1.5-.8L13.2 15h-2.4l-2.2 6.5c-.2.7-.9 1-1.5.8-.7-.2-1-.9-.8-1.5l2.3-6.7v-3L4.2 8.8c-.6-.2-.9-.8-.7-1.4.2-.6.8-.9 1.4-.7l4.9 1.5h4.4l4.9-1.5c.6-.2 1.2.1 1.4.7z" />
+    </svg>
+    <span class="a11y-label">נגישות</span>
+  </button>
+
+  <div class="a11y-panel" id="a11y-panel" hidden>
+    <h2>העדפות נגישות</h2>
+
+    <fieldset>
+      <legend>גודל טקסט</legend>
+      <div class="opts" role="group">
+        <button type="button" data-set="text" data-value="" aria-pressed="true">רגיל</button>
+        <button type="button" data-set="text" data-value="lg" aria-pressed="false">גדול</button>
+        <button type="button" data-set="text" data-value="xl" aria-pressed="false">גדול מאוד</button>
+      </div>
+    </fieldset>
+
+    <ul class="switches">
+      <li>
+        <button type="button" data-toggle="contrast" data-value="high" aria-pressed="false">
+          <span>ניגודיות גבוהה</span>
+          <span class="state" aria-hidden="true"></span>
+        </button>
+      </li>
+      <li>
+        <button type="button" data-toggle="links" data-value="underline" aria-pressed="false">
+          <span>הדגשת קישורים</span>
+          <span class="state" aria-hidden="true"></span>
+        </button>
+      </li>
+      <li>
+        <button type="button" data-toggle="motion" data-value="off" aria-pressed="false">
+          <span>עצירת אנימציות</span>
+          <span class="state" aria-hidden="true"></span>
+        </button>
+      </li>
+    </ul>
+
+    <button type="button" class="a11y-reset" data-reset>איפוס להגדרות ברירת המחדל</button>
+
+    <p class="a11y-note">
+      ההעדפות נשמרות במכשיר שלכם בלבד ואינן נשלחות לאף גורם.
+      <a href="/terms-privacy-accessibility/#accessibility">להצהרת הנגישות המלאה</a>
+    </p>
+  </div>
+</div>
+
+<style>
+  /* Sits at the inline-end corner — the WhatsApp bar owns inline-start, and two
+     fixed controls on the same side would overlap on a phone. */
+  .a11y { position: fixed; inset-block-end: 20px; inset-inline-end: 20px; z-index: 60; }
+
+  .a11y-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    min-height: 48px;
+    padding: 12px 18px;
+    font: inherit;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line-control);
+    border-radius: var(--r-pill);
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(27, 29, 31, .1);
+  }
+  .a11y-toggle:hover { border-color: var(--ink); }
+  /* The figure is a person, not a directional glyph — never mirrored. */
+
+  .a11y-panel {
+    position: absolute;
+    inset-block-end: calc(100% + 10px);
+    inset-inline-end: 0;
+    width: min(300px, calc(100vw - 40px));
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    box-shadow: 0 12px 40px rgba(27, 29, 31, .16);
+    padding: var(--s5);
+    text-align: start;
+  }
+  .a11y-panel[hidden] { display: none; }
+  .a11y-panel h2 { font-size: var(--fs-small); font-weight: 600; margin-block-end: var(--s4); }
+
+  fieldset { border: 0; padding: 0; margin: 0 0 var(--s4); }
+  legend { font-size: var(--fs-caption); color: var(--muted); padding: 0; margin-block-end: var(--s2); }
+
+  .opts { display: flex; gap: var(--s2); }
+  .opts button {
+    flex: 1;
+    min-height: 44px;
+    font: inherit;
+    font-size: var(--fs-caption);
+    color: var(--ink);
+    background: var(--page);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-sm);
+    cursor: pointer;
+  }
+  .opts button[aria-pressed='true'] {
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .switches li { margin-block-end: var(--s2); }
+  .switches button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s3);
+    width: 100%;
+    min-height: 44px;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: var(--fs-caption);
+    color: var(--ink);
+    background: var(--page);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-sm);
+    cursor: pointer;
+    text-align: start;
+  }
+  /* State is carried by aria-pressed for assistive tech and by a filled mark
+     for sighted users — never by colour alone. */
+  .state {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--line-control);
+    border-radius: 4px;
+  }
+  .switches button[aria-pressed='true'] { border-color: var(--accent); }
+  .switches button[aria-pressed='true'] .state {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: inset 0 0 0 2px var(--surface), inset 0 0 0 6px var(--accent);
+  }
+
+  .a11y-reset {
+    width: 100%;
+    min-height: 44px;
+    margin-block-start: var(--s3);
+    font: inherit;
+    font-size: var(--fs-caption);
+    color: var(--muted);
+    background: none;
+    border: 1px solid var(--rule);
+    border-radius: var(--r-sm);
+    cursor: pointer;
+  }
+  .a11y-reset:hover { color: var(--ink); border-color: var(--line-control); }
+
+  .a11y-note {
+    font-size: var(--fs-micro);
+    color: var(--muted);
+    margin-block-start: var(--s4);
+    line-height: 1.6;
+  }
+  /* Inline in a sentence, so it inherits the line box and lands at 16px.
+     Padding lifts it past the 24px target minimum — and a link inside an
+     accessibility panel is the last one that should be hard to hit. */
+  .a11y-note a { color: var(--accent); display: inline-block; padding-block: 5px; }
+
+  @media (max-width: 700px) {
+    .a11y { inset-block-end: 16px; inset-inline-end: 16px; }
+    /* The WhatsApp bar goes full width on a phone, so this sits above it. */
+    .a11y { inset-block-end: 76px; }
+    .a11y-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+    .a11y-toggle { padding: 12px; }
+  }
+</style>
+
+<script>
+  (() => {
+    const KEY = 'a11y-prefs';
+    const root = document.documentElement;
+    const panel = document.getElementById('a11y-panel');
+    const toggle = document.getElementById('a11y-toggle');
+    if (!panel || !toggle) return;
+
+    type Prefs = { text?: string; contrast?: string; links?: string; motion?: string };
+
+    const read = (): Prefs => {
+      try {
+        return JSON.parse(localStorage.getItem(KEY) || '{}');
+      } catch {
+        // Private-browsing modes can throw on read. A broken preference must
+        // never take the page down with it.
+        return {};
+      }
+    };
+    const write = (p: Prefs) => {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(p));
+      } catch {
+        /* storage unavailable — the preference simply does not persist */
+      }
+    };
+
+    const apply = (p: Prefs) => {
+      for (const k of ['text', 'contrast', 'links', 'motion'] as const) {
+        const v = p[k];
+        if (v) root.setAttribute(`data-a11y-${k}`, v);
+        else root.removeAttribute(`data-a11y-${k}`);
+      }
+      panel.querySelectorAll<HTMLButtonElement>('[data-set]').forEach((b) => {
+        b.setAttribute('aria-pressed', String((p[b.dataset.set as keyof Prefs] || '') === b.dataset.value));
+      });
+      panel.querySelectorAll<HTMLButtonElement>('[data-toggle]').forEach((b) => {
+        b.setAttribute('aria-pressed', String(p[b.dataset.toggle as keyof Prefs] === b.dataset.value));
+      });
+    };
+
+    let prefs = read();
+    apply(prefs);
+
+    const setOpen = (open: boolean) => {
+      panel.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+    };
+
+    toggle.addEventListener('click', () => setOpen(panel.hidden));
+
+    panel.addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+      if (!b) return;
+      if (b.hasAttribute('data-reset')) prefs = {};
+      else if (b.dataset.set) prefs = { ...prefs, [b.dataset.set]: b.dataset.value || undefined };
+      else if (b.dataset.toggle) {
+        const k = b.dataset.toggle as keyof Prefs;
+        prefs = { ...prefs, [k]: prefs[k] === b.dataset.value ? undefined : b.dataset.value };
+      } else return;
+      apply(prefs);
+      write(prefs);
+    });
+
+    // Escape closes and returns focus to the trigger, per the disclosure pattern.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !panel.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!panel.hidden && !(e.target as HTMLElement).closest('.a11y')) setOpen(false);
+    });
+  })();
+</script>

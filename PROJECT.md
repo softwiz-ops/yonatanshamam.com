@@ -95,6 +95,31 @@ not the other, and the split is enforced in `src/data/services.ts`:
   Copying a competitor's "up to 3 revision rounds" would invent an obligation he
   never agreed to. These render as visible `[[חסר]]` markers.
 
+## The accessibility preferences panel
+
+Asked on 27 Jul 2026 for "an accessibility widget as required by law". The
+premise is wrong and the correction matters: **Regulation 35 requires the site
+itself to conform to IS 5568 at level AA, and an accessibility statement to be
+displayed prominently. It does not require a toolbar.** Overlays cannot satisfy
+criteria that need human judgement, and the FTC's final order against accessiBe
+in April 2025 was about claiming otherwise.
+
+What was built instead is a real preferences panel: text size in three steps,
+a high-contrast palette, link underlining, and motion off. It sets data
+attributes on `<html>` that the site's own stylesheet honours — so nothing is
+injected, nothing is overridden, and it cannot fight the user's screen reader.
+
+Verified in the browser: body text 17px to 22px at the largest step; ink to pure
+black and the page to pure white in high contrast, with the worst measured pair
+on the page at 7.41:1, which is AAA rather than AA; underlines applied to links
+but not to buttons; preferences persisted and cleared correctly. Keyboard: focus
+lands on the trigger, all eight controls are named and tabbable, the smallest
+target is 29px, and Escape closes the panel and returns focus to the trigger.
+
+The declaration lists the panel as an adaptation and then says, in terms, that
+conformance rests on the code and not on the panel. That sentence is load
+bearing — it is the difference between a convenience and a false claim.
+
 ## Settled
 
 **No client testimonials.** Decided 27 Jul 2026: the founder does not want them
@@ -350,6 +375,15 @@ Supplied since:
 
 *(Both questions that stood open for the ethics committee were closed by the
 founder on 27 Jul 2026 — see "Settled".)*
+
+**The Cookies section of the legal document is now blocking.** It declares
+Cookies, pixels, tracking technologies and targeted marketing. This build loads
+none of that — no analytics, no pixels, no third-party requests at all — and it
+now does use localStorage for the accessibility preferences, which the document
+does not mention. A privacy document that overstates is as wrong as one that
+understates, and Amendment 13 put the civil limitation period at seven years.
+`scripts/check-ethics.py` blocks until the section is rewritten to match. It is
+the founder's drafting, so he rewrites it.
 
 **Privacy — the contact form design depends on this.** Under Amendment 13, a
 database holding **only name, address and contact details** for ≤100,000 people

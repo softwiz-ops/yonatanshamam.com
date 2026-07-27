@@ -3,6 +3,7 @@ import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import WhatsAppBar from '../components/WhatsAppBar.astro';
+import AccessibilityPanel from '../components/AccessibilityPanel.astro';
 import { FIRM } from '../data/firm.ts';
 
 interface Props {
@@ -97,6 +98,7 @@ const attorney = {
   <a class="skip" href="#main">דילוג לתוכן</a>
   <SiteHeader />
   <WhatsAppBar message={waMessage} label={waLabel} />
+  <AccessibilityPanel />
   <main id="main">
     <slot />
   </main>

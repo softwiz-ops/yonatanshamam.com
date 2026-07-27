@@ -95,6 +95,77 @@
   --measure: 66ch;
 }
 
+/* ==========================================================================
+   Accessibility preferences.
+
+   Set by src/components/AccessibilityPanel.astro as data attributes on <html>.
+   These override token VALUES rather than patching individual rules, so every
+   component follows automatically and nothing has to know the panel exists.
+
+   This is a convenience layer. Conformance itself is in the markup and in the
+   measured contrast of the default palette — the panel is not, and must never
+   be described as, the basis for meeting IS 5568.
+   ========================================================================== */
+
+/* Text size. The scale is overridden wholesale so the relationships between
+   steps survive; scaling the root font alone would not move the fixed px
+   tokens the design is built on. */
+:root[data-a11y-text='lg'] {
+  --fs-micro: 14px;
+  --fs-caption: 15px;
+  --fs-small: 17px;
+  --fs-body: 19px;
+  --fs-lead: 22px;
+  --fs-title: 24px;
+  --fs-section: clamp(30px, 3.6vw, 38px);
+  --fs-display: clamp(36px, 6vw, 62px);
+}
+:root[data-a11y-text='xl'] {
+  --fs-micro: 16px;
+  --fs-caption: 17px;
+  --fs-small: 19px;
+  --fs-body: 22px;
+  --fs-lead: 25px;
+  --fs-title: 27px;
+  --fs-section: clamp(33px, 4vw, 42px);
+  --fs-display: clamp(38px, 6.4vw, 66px);
+}
+
+/* High contrast. Every value here is measured against #ffffff:
+   ink 21:1, muted 21:1, faint 13.38:1, accent 11.36:1, control border 10.12:1,
+   rule 6.53:1. All clear AAA for body text, not merely AA. */
+:root[data-a11y-contrast='high'] {
+  --page: #ffffff;
+  --surface: #ffffff;
+  --ink: #000000;
+  --muted: #000000;
+  --faint: #2c302e;
+  --rule: #595f5c;
+  --line-control: #3d4340;
+  --accent: #0f4234;
+  --accent-hover: #0a2e24;
+  --accent-wash: #ffffff;
+  --shadow-card: none;
+}
+:root[data-a11y-contrast='high'] .site-head { backdrop-filter: none; }
+:root[data-a11y-contrast='high'] * { text-shadow: none !important; }
+
+/* Underline every link, not only on hover. Buttons are excluded: they read as
+   controls already and an underline makes them look broken. */
+:root[data-a11y-links='underline'] a:not(.btn):not(.head-cta):not(.wa) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:root[data-a11y-motion='off'] *,
+:root[data-a11y-motion='off'] *::before,
+:root[data-a11y-motion='off'] *::after {
+  transition-duration: .01ms !important;
+  animation-duration: .01ms !important;
+  animation-iteration-count: 1 !important;
+  scroll-behavior: auto !important;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 
 html {

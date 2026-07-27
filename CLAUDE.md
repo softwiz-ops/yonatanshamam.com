@@ -103,6 +103,16 @@ it is forbidden.
 
 - Build **AA at the code level**. An overlay does not satisfy regulation 35 and
   the current declaration is false because of it.
+- **The preferences panel is not an overlay and must never become one.** It sets
+  data attributes on `<html>` that this stylesheet honours — text size, high
+  contrast, link underlines, motion off. It does not inject ARIA, does not
+  rewrite the DOM, and does not scan the page. The declaration says explicitly
+  that conformance rests on the code and not on the panel; do not soften that
+  sentence. Pointing at a widget as the basis for conformance is the claim the
+  FTC fined accessiBe a million dollars for.
+- **A toolbar is not required by law.** Regulation 35 requires the site itself
+  to conform and an accessibility statement to be displayed prominently. It
+  says nothing about a widget. The panel is a convenience, not compliance.
 - IS 5568 part 1 (September 2023) still adopts **WCAG 2.0** level AA, with
   Israeli changes. Design to WCAG 2.1 AA — it is a superset and there is no
   harm in clearing more than required.

@@ -66,8 +66,36 @@ const physicalAccess = `
 <p>ניתן לתאם מראש פגישה בסביבה נגישה, שירות בכתב או פגישה מרחוק.</p>
 `;
 
+/**
+ * The preferences panel, described accurately.
+ *
+ * Note the framing: it is listed as an addition, and the sentence after it says
+ * plainly that conformance rests on the code. An accessibility declaration that
+ * points at a widget as the basis for conformance is making the same claim the
+ * FTC fined accessiBe a million dollars for.
+ */
+// Anchored on the end of the adaptations list, so the new item is appended
+// inside the <ul> and the qualifying paragraph lands after it.
+const PANEL_ANCHOR = 'הימנעות מאנימציות והבהובים שעלולים לגרום לפרכוסים.</li>\n</ul>';
+const panelNote = `הימנעות מאנימציות והבהובים שעלולים לגרום לפרכוסים.</li>
+<li>פאנל העדפות נגישות: הגדלת טקסט, ניגודיות גבוהה, הדגשת קישורים ועצירת אנימציות. ההעדפות נשמרות במכשיר המשתמש בלבד ואינן נשלחות לאף גורם.</li>
+</ul>
+<p>הפאנל הוא תוספת נוחות בלבד. העמידה בתקן נשענת על מבנה האתר ועל הקוד שלו ולא על הפאנל, ואין בו כדי להחליף התאמת נגישות ברמת הקוד.</p>`;
+
 const ANCHOR = 'הנחיות גישה פיזית יסופקו בתיאום מוקדם.';
 let html = await compiledContent();
+
+if (html.includes(PANEL_ANCHOR)) {
+  // panelNote already restates the anchor text — it is a replacement for the
+  // whole matched run, not something appended to it.
+  html = html.replace(PANEL_ANCHOR, panelNote);
+} else {
+  throw new Error(
+    'legal.md no longer contains the adaptations-list anchor; the preferences ' +
+      'panel would go undeclared. Re-check migrate-legal.py output.'
+  );
+}
+
 if (html.includes(ANCHOR)) {
   html = html.replace(ANCHOR, ANCHOR + '</p>' + physicalAccess + '<p>');
 } else {

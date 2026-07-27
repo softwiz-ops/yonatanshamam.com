@@ -112,6 +112,38 @@ def scope_approved() -> bool:
     return bool(re.search(r"SCOPE_APPROVED\s*=\s*true", src))
 
 
+def cookies_section_accurate() -> tuple[bool, str]:
+    """Does the cookies section describe what this site actually does?
+
+    The migrated section declares Cookies, pixels, tracking technologies and
+    targeted marketing. This build loads none of that — no analytics, no
+    pixels, no third-party requests at all. It does now use localStorage for
+    the accessibility preferences, which is first-party, functional, holds no
+    personal data and is never transmitted, but the document says nothing
+    about it.
+
+    A privacy document that overstates is as wrong as one that understates, and
+    under Amendment 13 the civil limitation period is seven years.
+    """
+    page = DIST / "terms-privacy-accessibility" / "index.html"
+    if not page.exists():
+        return True, ""
+    text = visible_text(page.read_text(encoding="utf-8"))
+    claims_pixels = "פיקסלים" in text and "שיווק ממוקד" in text
+    mentions_local = "אחסון מקומי" in text or "localStorage" in text
+    if claims_pixels:
+        return False, (
+            "the cookies section still declares pixels and targeted marketing, "
+            "which this build does not use"
+        )
+    if not mentions_local:
+        return False, (
+            "the accessibility preferences are stored in localStorage and the "
+            "cookies section does not mention it"
+        )
+    return True, ""
+
+
 def main() -> None:
     if not DIST.exists():
         sys.exit(f"{DIST} not found — run `npm run build` first.")
@@ -152,6 +184,17 @@ def main() -> None:
         print("          `timeline` in src/data/services.ts, correct anything he")
         print("          cannot stand behind, then set SCOPE_APPROVED = true.")
         print("          Do not publish until then.")
+        hits += 1
+
+    ok, why = cookies_section_accurate()
+    if not ok:
+        print()
+        print("BLOCKING  the legal document does not match the site's behaviour:")
+        print(f"          {why}.")
+        print("          Rewrite the Cookies section of the source document to")
+        print("          describe what this build actually does — no analytics,")
+        print("          no pixels, no third-party requests, and localStorage")
+        print("          used only for the accessibility preferences.")
         hits += 1
 
     if reviews:
