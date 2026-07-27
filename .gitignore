@@ -1,0 +1,23 @@
+# Build output
+dist/
+.astro/
+# Wrangler's local dev state and cache (Cloudflare adapter)
+.wrangler/
+
+# Dependencies
+node_modules/
+
+# Secrets. Never commit these; set them in the Cloudflare Worker's
+# Variables & Secrets in production.
+.env
+.env.*
+!.env.example
+
+# Scraped copies of the live WordPress site, pulled by scripts/migrate-*.py.
+# Regenerable, and large.
+reference/scrape/
+
+# Per-machine Claude Code permission allowlist — personal, not project config.
+.claude/settings.local.json
+
+.DS_Store

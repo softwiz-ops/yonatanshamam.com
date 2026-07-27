@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>הסכם מייסדים לסטארטאפ | עו״ד יהונתן שמם</title>
+<meta name="description" content="ניסוח הסכם מייסדים: הסדרת מניות, Vesting, מנגנוני קבלת החלטות והעברת קניין רוחני לחברה. מה כלול, מה השלבים ומה נדרש מכם.">
+<link rel="stylesheet" href="tokens-a.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: 'Assistant', system-ui, sans-serif;
+    font-size: var(--fs-body); line-height: var(--lh-body); letter-spacing: 0;
+    color: var(--ink); background: var(--page); -webkit-font-smoothing: antialiased;
+  }
+  html { scrollbar-gutter: stable; }
+  h1, h2, h3, h4 { margin: 0; text-wrap: balance; line-height: var(--lh-heading); font-weight: 600; }
+  p { margin: 0; } ul { margin: 0; padding: 0; list-style: none; } a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: var(--r-sm); }
+
+  .wrap { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+
+  .site-head { border-block-end: 1px solid var(--rule); }
+  .head-in { display: flex; align-items: center; gap: var(--s5); height: 68px; }
+  .brand { font-weight: 600; white-space: nowrap; }
+  .brand span { display: block; font-size: var(--fs-micro); font-weight: 400; color: var(--muted); }
+  .head-cta {
+    margin-inline-start: auto; font-size: var(--fs-small); font-weight: 600;
+    text-decoration: none; border: 1px solid var(--line-control);
+    border-radius: var(--r-pill); padding: 7px 16px; white-space: nowrap;
+  }
+
+  /* Breadcrumb separators are directional and must flip. */
+  .crumbs { font-size: var(--fs-caption); color: var(--muted); padding-block: var(--s5); }
+  .crumbs a, .site-foot a, .facts a { display: inline-block; padding-block: 4px; }
+  .crumbs a { text-decoration: none; }
+  .crumbs a:hover { text-decoration: underline; }
+  .crumbs .sep { display: inline-block; margin-inline: var(--s2); }
+  .crumbs .sep:dir(rtl) { display: inline-block; transform: scaleX(-1); }
+
+  /* ---------- title block ---------- */
+  .lede { padding-block-end: var(--s8); border-block-end: 1px solid var(--rule); }
+  .kicker { font-size: var(--fs-caption); font-weight: 600; color: var(--accent); }
+  h1 {
+    font-size: clamp(30px, 4.6vw, 50px); font-weight: 300;
+    letter-spacing: -0.015em; line-height: var(--lh-tight);
+    margin-block-start: var(--s3); max-width: 18ch;
+  }
+  .lede p { font-size: var(--fs-lead); color: var(--muted); max-width: 54ch; margin-block-start: var(--s5); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s6); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: var(--s2);
+    font-size: var(--fs-small); font-weight: 600; text-decoration: none;
+    border-radius: var(--r-pill); padding: 13px 26px; min-height: 48px;
+    border: 1px solid transparent; transition: background-color .15s, border-color .15s;
+  }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: #17407f; }
+  .btn-ghost { border-color: var(--line-control); }
+  .btn-ghost:hover { border-color: var(--ink); }
+
+  /* ---------- two-column body ---------- */
+  .body-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--s9); align-items: start; padding-block: var(--s8);
+  }
+  .block { margin-block-end: var(--s8); }
+  .block:last-child { margin-block-end: 0; }
+  .block > h2 {
+    font-size: var(--fs-title); font-weight: 600; letter-spacing: -0.01em;
+    padding-block-end: var(--s3); border-block-end: 1px solid var(--ink);
+    margin-block-end: var(--s5);
+  }
+  .block p { max-width: var(--measure); }
+  .block p + p { margin-block-start: var(--s4); }
+
+  /* included list — the substance that replaces a price list */
+  .incl li {
+    display: flex; gap: var(--s3); align-items: flex-start;
+    padding-block: var(--s3); border-block-end: 1px solid var(--rule);
+  }
+  .incl li:last-child { border-block-end: 0; }
+  /* A check mark is not directional and must NOT be mirrored. */
+  .incl svg { flex: none; color: var(--accent); margin-block-start: 5px; }
+  .incl b { font-weight: 600; }
+  .incl span { color: var(--muted); font-size: var(--fs-small); display: block; }
+
+  .not-incl { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--r-md); padding: var(--s5); }
+  .not-incl h3 { font-size: var(--fs-small); font-weight: 600; margin-block-end: var(--s3); }
+  .not-incl li { color: var(--muted); font-size: var(--fs-small); padding-inline-start: var(--s4); position: relative; }
+  .not-incl li::before { content: '–'; position: absolute; inset-inline-start: 0; }
+
+  /* process spine */
+  .spine { position: relative; padding-inline-start: var(--s6); }
+  .spine::before {
+    content: ''; position: absolute; inset-block: 8px 8px;
+    inset-inline-start: 7px; width: 1px; background: var(--rule);
+  }
+  .spine li { position: relative; padding-block-end: var(--s6); }
+  .spine li:last-child { padding-block-end: 0; }
+  .spine li::before {
+    content: ''; position: absolute; inset-inline-start: calc(-1 * var(--s6) + 3px);
+    inset-block-start: 8px; width: 9px; height: 9px; border-radius: 50%;
+    background: var(--page); border: 2px solid var(--accent);
+  }
+  .spine h3 { font-size: var(--fs-body); font-weight: 600; }
+  .spine .when {
+    font-size: var(--fs-micro); font-weight: 600; color: var(--accent);
+    font-variant-numeric: tabular-nums; letter-spacing: 0;
+  }
+  .spine p { font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s2); }
+
+  /* ---------- sidebar ---------- */
+  .aside { position: sticky; top: var(--s5); display: grid; gap: var(--s5); }
+  .panel { border: 1px solid var(--rule); border-radius: var(--r-md); padding: var(--s5); }
+  .panel h3 { font-size: var(--fs-small); font-weight: 600; margin-block-end: var(--s4); }
+  .facts li {
+    display: flex; justify-content: space-between; gap: var(--s3);
+    font-size: var(--fs-small); padding-block: var(--s3);
+    border-block-end: 1px solid var(--rule);
+  }
+  .facts li:last-child { border-block-end: 0; }
+  .facts .k { color: var(--muted); }
+  .facts .v { font-weight: 600; font-variant-numeric: tabular-nums; text-align: end; }
+  .panel .btn { width: 100%; margin-block-start: var(--s4); }
+  .panel-note { font-size: var(--fs-micro); color: var(--faint); margin-block-start: var(--s3); }
+
+  .todo {
+    display: inline-block; font-size: var(--fs-micro); font-weight: 600;
+    color: #8a4b00; background: #fff4e5; border: 1px dashed #d9a066;
+    border-radius: var(--r-sm); padding: 1px 8px;
+  }
+
+  /* ---------- faq + related ---------- */
+  .qa { border-block-end: 1px solid var(--rule); }
+  .qa summary {
+    cursor: pointer; list-style: none; padding-block: var(--s5);
+    font-weight: 600; display: flex; gap: var(--s4); min-height: 44px;
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after { content: '+'; margin-inline-start: auto; color: var(--accent); font-size: 22px; font-weight: 400; }
+  .qa[open] summary::after { content: '–'; }
+  .qa p { padding-block-end: var(--s5); color: var(--muted); }
+
+  .related { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4); }
+  .rel-card {
+    border: 1px solid var(--rule); border-radius: var(--r-md);
+    padding: var(--s5); text-decoration: none; transition: border-color .15s;
+  }
+  .rel-card:hover { border-color: var(--line-control); }
+  .rel-card b { display: block; font-weight: 600; }
+  .rel-card span { display: block; font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s2); }
+
+  .site-foot { border-block-start: 1px solid var(--rule); padding-block: var(--s7); font-size: var(--fs-small); color: var(--muted); }
+  .foot-legal { color: var(--faint); font-size: var(--fs-caption); max-width: 72ch; margin-block-start: var(--s4); }
+  .site-foot a { color: var(--muted); }
+
+  .wa {
+    position: fixed; inset-block-end: 20px; inset-inline-start: 20px; z-index: 50;
+    display: inline-flex; align-items: center; gap: var(--s3);
+    background: var(--ink); color: #fff; text-decoration: none;
+    border-radius: var(--r-pill); padding: 12px 20px; min-height: 48px;
+    font-size: var(--fs-small); font-weight: 600; box-shadow: 0 6px 24px rgba(0,0,0,.18);
+  }
+  .wa:hover { background: var(--accent); }
+
+  @media (max-width: 940px) {
+    .body-grid { grid-template-columns: 1fr; gap: var(--s7); }
+    .aside { position: static; }
+    .related { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .cta-row { flex-direction: column; align-items: stretch; }
+    body { padding-block-end: 84px; }
+    .wa { inset-inline: 16px; inset-block-end: 16px; justify-content: center; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-head">
+  <div class="wrap head-in">
+    <div class="brand">עו״ד יהונתן שמם<span>משפט מסחרי וטכנולוגיה</span></div>
+    <a class="head-cta" href="https://calendar.app.google/LU3N8tPLz71vscQ68">תיאום פגישה</a>
+  </div>
+</header>
+
+<!-- Placed straight after the header, not at the end of the document.
+     It is position:fixed so the DOM slot does not move it visually, but
+     at the end of the body a keyboard user had to traverse the entire
+     page to reach the primary conversion path. -->
+<a class="wa" href="https://wa.me/972542448885?text=%D7%90%D7%A0%D7%99%20%D7%9E%D7%AA%D7%A2%D7%A0%D7%99%D7%99%D7%9F%20%D7%91%D7%94%D7%A1%D7%9B%D7%9D%20%D7%9E%D7%99%D7%99%D7%A1%D7%93%D7%99%D7%9D">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2z"/></svg>
+  שאלה על הסכם מייסדים
+</a>
+
+<div class="wrap">
+  <nav class="crumbs" aria-label="מיקום בעמוד">
+    <a href="a-home.html">ראשי</a><span class="sep">›</span><a href="a-home.html#services">תחומי עיסוק</a><span class="sep">›</span>חברות, שותפויות ועסקים
+  </nav>
+</div>
+
+<main>
+  <div class="wrap">
+    <div class="lede">
+      <p class="kicker">חברות, שותפויות ועסקים</p>
+      <h1>הסכם מייסדים</h1>
+      <p>המסמך החשוב ביותר לסטארטאפ. הסדרת מניות, Vesting, קבלת החלטות וקניין רוחני בין השותפים למניעת סכסוכים.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://calendar.app.google/LU3N8tPLz71vscQ68">תיאום שיחת אפיון</a>
+        <a class="btn btn-ghost" href="https://wa.me/972542448885?text=%D7%90%D7%A0%D7%99%20%D7%9E%D7%AA%D7%A2%D7%A0%D7%99%D7%99%D7%9F%20%D7%91%D7%94%D7%A1%D7%9B%D7%9D%20%D7%9E%D7%99%D7%99%D7%A1%D7%93%D7%99%D7%9D">שאלה מהירה בוואטסאפ</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap body-grid">
+    <div>
+
+      <section class="block">
+        <h2>מה כלול</h2>
+        <ul class="incl">
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l6 6L20 6"/></svg>
+            <div><b>הסדרת מניות בין המייסדים</b><span>מי מחזיק כמה, ומה קורה להחזקה כשנכנס משקיע.</span></div>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l6 6L20 6"/></svg>
+            <div><b>מנגנון Vesting</b><span>הבשלת מניות לאורך זמן, כולל מה קורה למייסד שעוזב מוקדם.</span></div>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l6 6L20 6"/></svg>
+            <div><b>קבלת החלטות</b><span>אילו החלטות דורשות הסכמה של כולם, ואיך יוצאים ממבוי סתום.</span></div>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l6 6L20 6"/></svg>
+            <div><b>קניין רוחני</b><span>העברת הקוד, המותג וכל מה שנוצר לפני ההקמה — לבעלות החברה.</span></div>
+          </li>
+          <li>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 12l6 6L20 6"/></svg>
+            <div><b>בדיקה ואישור של עורך דין</b><span>שום מסמך לא יוצא מהמשרד בלי בדיקה ואישור של עו״ד יהונתן שמם או צוות המשרד.</span></div>
+          </li>
+        </ul>
+        <div class="not-incl" style="margin-block-start:var(--s5)">
+          <h3>מה לא כלול בשירות הזה</h3>
+          <ul>
+            <li><span class="todo">[[חסר: מה מוגדר מחוץ להיקף — למשל רישום החברה עצמו, הסכמי עובדים, סבב גיוס]]</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="block">
+        <h2>איך זה עובד</h2>
+        <ul class="spine">
+          <li>
+            <p class="when">שלב 1</p>
+            <h3>שיחת אפיון</h3>
+            <p><span class="todo">[[חסר: אורך השיחה, ומה בדיוק עולה בה]]</span></p>
+          </li>
+          <li>
+            <p class="when">שלב 2</p>
+            <h3>שאלון</h3>
+            <p>אתם ממלאים את הפרטים שהמסמך צריך. השאלונים מכסים את רוב התרחישים, ואם יש דרישה ספציפית אפשר לציין אותה שם.</p>
+          </li>
+          <li>
+            <p class="when">שלב 3</p>
+            <h3>טיוטה</h3>
+            <p><span class="todo">[[חסר: לו״ז לטיוטת הסכם מייסדים. <bdi dir="ltr">24–48</bdi> שעות מתייחס למסמכי מדף בלבד, והסכם מייסדים כנראה לא אחד מהם]]</span></p>
+          </li>
+          <li>
+            <p class="when">שלב 4</p>
+            <h3>סבב הערות</h3>
+            <p><span class="todo">[[חסר: כמה סבבי תיקונים כלולים]]</span></p>
+          </li>
+          <li>
+            <p class="when">שלב 5</p>
+            <h3>חתימה</h3>
+            <p><span class="todo">[[חסר: איך נחתם — דיגיטלי או פיזי]]</span></p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2>מה נדרש מכם</h2>
+        <p><span class="todo">[[חסר: רשימת המידע והמסמכים שהלקוח צריך להביא]]</span></p>
+      </section>
+
+      <section class="block">
+        <h2>שאלות נפוצות</h2>
+        <details class="qa" open>
+          <summary>האם השירות הוא אוטומטי או שיש עורך דין שבודק את המסמכים?</summary>
+          <p>אנחנו מאמינים בשילוב מנצח: טכנולוגיה חכמה ועריכה אנושית. המערכת הדיגיטלית שלנו אוספת מכם את המידע בצורה יעילה ומהירה, אך שום מסמך לא יוצא מהמשרד ללא בדיקה ואישור של עו״ד יהונתן שמם או צוות המשרד.</p>
+        </details>
+        <details class="qa">
+          <summary>מה קורה אם אני צריך שינויים מיוחדים בהסכם?</summary>
+          <p>אנחנו כאן בדיוק בשביל זה. השאלונים שלנו מכסים את רוב התרחישים, אך במידה ויש לכם דרישות ספציפיות, ניתן לציין זאת או לשוחח איתנו. בניגוד למחוללי מסמכים ״טיפשים״, אנחנו עורכי דין בשר ודם ויכולים להתאים את המסמך למידותיכם המדויקות.</p>
+        </details>
+      </section>
+
+      <section class="block">
+        <h2>שירותים קרובים</h2>
+        <div class="related">
+          <a class="rel-card" href="#"><b>רישום חברה בע״מ</b><span>הקמה מלאה מול רשם החברות, כולל תקנון התאגדות.</span></a>
+          <a class="rel-card" href="#"><b>הסכם סודיות (NDA)</b><span>הגנה על הרעיון לפני פגישות עם משקיעים או עובדים.</span></a>
+          <a class="rel-card" href="#"><b>הסכם פרילנסר</b><span>התקשרות מול ספקים חיצוניים, כולל העברת קניין רוחני.</span></a>
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="aside">
+      <div class="panel">
+        <h3>בקצרה</h3>
+        <ul class="facts">
+          <li><span class="k">תחום</span><span class="v">חברות ושותפויות</span></li>
+          <li><span class="k">מתאים ל־</span><span class="v"><span class="todo">[[חסר]]</span></span></li>
+          <li><span class="k">לו״ז</span><span class="v"><span class="todo">[[חסר]]</span></span></li>
+          <!-- "בעברית או באנגלית" appears in the source copy for the NDA, not
+               for the founders agreement. Carrying it across would be an
+               invented claim, so it stays open. -->
+          <li><span class="k">שפה</span><span class="v"><span class="todo">[[חסר]]</span></span></li>
+        </ul>
+        <a class="btn btn-primary" href="https://calendar.app.google/LU3N8tPLz71vscQ68">תיאום שיחת אפיון</a>
+        <p class="panel-note">אין באתר זה מידע על שכר טרחה. כללי לשכת עורכי הדין אוסרים על פרסומו.</p>
+      </div>
+
+      <div class="panel">
+        <h3>מעדיפים לדבר?</h3>
+        <ul class="facts">
+          <li><span class="k">טלפון</span><span class="v"><bdi><a href="tel:+972542448885" dir="ltr">054-244-8885</a></bdi></span></li>
+          <li><span class="k">דוא״ל</span><span class="v"><bdi><a href="mailto:yonatan@shamam.net" dir="ltr">yonatan@shamam.net</a></bdi></span></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <a href="a-home.html#services">תחומי עיסוק</a> ·
+    <a href="/terms-privacy-accessibility/#terms">תנאי שימוש</a> ·
+    <a href="/terms-privacy-accessibility/#privacy">מדיניות פרטיות</a> ·
+    <a href="/terms-privacy-accessibility/#accessibility">הצהרת נגישות</a>
+    <p class="foot-legal">האמור באתר זה אינו מהווה ייעוץ משפטי ואינו תחליף לו. גלישה באתר, פנייה דרך טופס יצירת קשר או שליחת דוא״ל אינם יוצרים יחסי עורך־דין לקוח.</p>
+  </div>
+</footer>
+
+
+</body>
+</html>

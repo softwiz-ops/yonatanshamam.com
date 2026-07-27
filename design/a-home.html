@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>עו״ד יהונתן שמם | משפט מסחרי וטכנולוגיה, תל אביב</title>
+<link rel="stylesheet" href="tokens-a.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: 'Assistant', system-ui, sans-serif;
+    font-size: var(--fs-body);
+    font-weight: 400;
+    line-height: var(--lh-body);
+    /* Tracking stays at 0 in body copy. Positive tracking on Hebrew text reads
+       as amateur; the sector leaders all set 0 or normal. */
+    letter-spacing: 0;
+    color: var(--ink);
+    background: var(--page);
+    -webkit-font-smoothing: antialiased;
+  }
+  html { scrollbar-gutter: stable; }
+  h1, h2, h3, h4 { margin: 0; text-wrap: balance; line-height: var(--lh-heading); font-weight: 600; }
+  p { margin: 0; }
+  ul { margin: 0; padding: 0; list-style: none; }
+  a { color: inherit; }
+
+  /* Focus is never removed, only replaced. The ring is the accent at 7.76:1,
+     offset so it reads against both the page and a card. */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: var(--r-sm);
+  }
+
+  .wrap { max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+  .rule { border: 0; border-block-start: 1px solid var(--rule); margin: 0; }
+
+  /* ---------- header ---------- */
+  .site-head {
+    position: sticky; top: 0; z-index: 40;
+    background: color-mix(in srgb, var(--page) 88%, transparent);
+    backdrop-filter: blur(10px);
+    border-block-end: 1px solid var(--rule);
+  }
+  .head-in { display: flex; align-items: center; gap: var(--s5); height: 68px; }
+  .brand { font-weight: 600; font-size: var(--fs-body); letter-spacing: -0.01em; white-space: nowrap; }
+  .brand span { display: block; font-size: var(--fs-micro); font-weight: 400; color: var(--muted); letter-spacing: 0; }
+  .nav { display: flex; gap: var(--s5); margin-inline-start: auto; font-size: var(--fs-small); color: var(--muted); }
+  .nav a { text-decoration: none; padding-block: var(--s2); }
+  .nav a:hover { color: var(--ink); }
+  .head-cta {
+    font-size: var(--fs-small); font-weight: 600; text-decoration: none;
+    border: 1px solid var(--line-control); border-radius: var(--r-pill);
+    padding: 7px 16px; white-space: nowrap;
+  }
+  .head-cta:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ---------- hero ---------- */
+  .hero { padding-block: clamp(56px, 9vw, 128px) var(--s8); }
+  .eyebrow {
+    font-size: var(--fs-caption); color: var(--muted); font-weight: 600;
+    display: flex; align-items: center; gap: var(--s3); margin-block-end: var(--s5);
+  }
+  .eyebrow::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+  h1 {
+    font-size: var(--fs-display);
+    font-weight: 300;             /* the light end of the range does the "premium" work */
+    line-height: var(--lh-tight);
+    letter-spacing: -0.015em;     /* negative only, and only at display size */
+    max-width: 15ch;
+  }
+  h1 strong { font-weight: 600; }
+  .hero-sub {
+    font-size: var(--fs-lead); color: var(--muted);
+    max-width: 46ch; margin-block-start: var(--s5);
+  }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s7); }
+  .btn {
+    display: inline-flex; align-items: center; gap: var(--s2);
+    font-size: var(--fs-small); font-weight: 600; text-decoration: none;
+    border-radius: var(--r-pill); padding: 13px 26px;
+    /* 48px min target on the primary actions — comfortably over the 44px floor */
+    min-height: 48px;
+    border: 1px solid transparent;
+    transition: background-color .15s, border-color .15s, color .15s;
+  }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: #17407f; }
+  .btn-ghost { border-color: var(--line-control); color: var(--ink); }
+  .btn-ghost:hover { border-color: var(--ink); }
+  .btn svg { flex: none; }
+
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: var(--s5) var(--s7);
+    margin-block-start: var(--s8); padding-block-start: var(--s5);
+    border-block-start: 1px solid var(--rule);
+    font-size: var(--fs-caption); color: var(--muted);
+  }
+  .hero-meta b { display: block; color: var(--ink); font-weight: 600; font-size: var(--fs-small); }
+
+  /* ---------- section frame ---------- */
+  .section { padding-block: var(--s9); }
+  .section-head { margin-block-end: var(--s7); }
+  .section-head h2 {
+    font-size: var(--fs-section); font-weight: 300; letter-spacing: -0.01em; max-width: 20ch;
+  }
+  .section-head p { color: var(--muted); max-width: 52ch; margin-block-start: var(--s4); }
+
+  /* ---------- catalogue: an index, not a card wall ---------- */
+  .cat { margin-block-end: var(--s8); }
+  .cat:last-child { margin-block-end: 0; }
+  .cat-label {
+    display: flex; align-items: baseline; gap: var(--s3);
+    font-size: var(--fs-caption); font-weight: 600; color: var(--muted);
+    padding-block-end: var(--s3); border-block-end: 1px solid var(--ink);
+    margin-block-end: var(--s2);
+  }
+  .cat-label .n { font-size: var(--fs-micro); color: var(--faint); font-weight: 400; }
+
+  .svc {
+    display: grid;
+    /* Explicit column placement does NOT auto-flip in RTL, so the order here is
+       written in reading order and the grid follows dir. No row-reverse. */
+    grid-template-columns: 1fr minmax(0, 1.5fr) auto;
+    gap: var(--s5);
+    align-items: start;
+    padding-block: var(--s5);
+    border-block-end: 1px solid var(--rule);
+    text-decoration: none;
+    transition: background-color .15s;
+  }
+  .svc:hover { background: var(--surface); }
+  .svc:hover .svc-title { color: var(--accent); }
+  .svc-title {
+    font-size: var(--fs-title); font-weight: 500; letter-spacing: -0.01em;
+    display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap;
+    transition: color .15s;
+  }
+  .tag {
+    font-size: var(--fs-micro); font-weight: 600; letter-spacing: 0;
+    border: 1px solid var(--rule); border-radius: var(--r-pill);
+    padding: 2px 10px; color: var(--muted); background: var(--page);
+    white-space: nowrap;
+  }
+  .tag-accent { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); background: var(--accent-wash); }
+  .svc-desc { color: var(--muted); font-size: var(--fs-small); max-width: 54ch; }
+  .svc-go {
+    font-size: var(--fs-small); font-weight: 600; color: var(--accent);
+    display: inline-flex; align-items: center; gap: var(--s2); white-space: nowrap;
+    align-self: center;
+  }
+  /* Directional chevrons flip; icons like search, check and close do not. */
+  .svc-go svg:dir(rtl) { transform: scaleX(-1); }
+
+  /* ---------- differentiator ---------- */
+  .diff { background: var(--surface); border-block: 1px solid var(--rule); }
+  .diff .wrap { padding-block: var(--s9); }
+  .diff q {
+    display: block; quotes: none;
+    font-size: clamp(24px, 3.4vw, 40px); font-weight: 300;
+    line-height: 1.3; letter-spacing: -0.01em; max-width: 24ch;
+  }
+  .diff-note { margin-block-start: var(--s5); color: var(--muted); max-width: 48ch; font-size: var(--fs-small); }
+
+  /* ---------- process: what replaces a price page ---------- */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--s5); counter-reset: step; }
+  .step { padding-block-start: var(--s4); border-block-start: 2px solid var(--ink); counter-increment: step; }
+  .step::before {
+    content: counter(step); display: block;
+    font-size: var(--fs-micro); font-weight: 600; color: var(--accent);
+    /* tabular figures come from the layered digit subset */
+    font-variant-numeric: tabular-nums;
+    margin-block-end: var(--s3);
+  }
+  .step h3 { font-size: var(--fs-body); font-weight: 600; }
+  .step p { font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s2); }
+
+  /* ---------- faq ---------- */
+  .faq { max-width: var(--measure); }
+  .qa { border-block-end: 1px solid var(--rule); }
+  .qa summary {
+    cursor: pointer; list-style: none; padding-block: var(--s5);
+    font-size: var(--fs-body); font-weight: 600;
+    display: flex; gap: var(--s4); align-items: flex-start;
+    min-height: 44px;
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+  .qa summary::after {
+    content: '+'; margin-inline-start: auto; color: var(--accent);
+    font-weight: 400; font-size: 22px; line-height: 1; flex: none;
+  }
+  .qa[open] summary::after { content: '–'; }
+  .qa p { padding-block-end: var(--s5); color: var(--muted); max-width: 62ch; }
+
+  /* ---------- missing-content marker ---------- */
+  .todo {
+    display: inline-block; font-size: var(--fs-micro); font-weight: 600;
+    color: #8a4b00; background: #fff4e5; border: 1px dashed #d9a066;
+    border-radius: var(--r-sm); padding: 1px 8px; letter-spacing: 0;
+  }
+
+  /* ---------- footer ---------- */
+  .site-foot { border-block-start: 1px solid var(--rule); padding-block: var(--s8) var(--s6); font-size: var(--fs-small); }
+  .foot-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: var(--s7); }
+  .foot-grid h2 { font-size: var(--fs-caption); color: var(--muted); font-weight: 600; margin-block-end: var(--s4); }
+  .foot-grid li { margin-block-end: var(--s3); }
+  /* Inline list links inherit the line box and land at ~19px tall. Padding
+     lifts them past the 24px target minimum without changing the layout. */
+  .foot-grid a, .nav a { display: inline-block; padding-block: 4px; }
+  .foot-grid a { text-decoration: none; color: var(--muted); }
+  .foot-grid a:hover { color: var(--ink); text-decoration: underline; }
+  .foot-legal {
+    margin-block-start: var(--s8); padding-block-start: var(--s5);
+    border-block-start: 1px solid var(--rule);
+    color: var(--faint); font-size: var(--fs-caption); max-width: 72ch;
+  }
+
+  /* ---------- sticky WhatsApp ---------- */
+  .wa {
+    position: fixed; inset-block-end: 20px; inset-inline-start: 20px; z-index: 50;
+    display: inline-flex; align-items: center; gap: var(--s3);
+    background: var(--ink); color: #fff; text-decoration: none;
+    border-radius: var(--r-pill); padding: 12px 20px; min-height: 48px;
+    font-size: var(--fs-small); font-weight: 600;
+    box-shadow: 0 6px 24px rgba(0,0,0,.18);
+  }
+  .wa:hover { background: var(--accent); }
+
+  @media (max-width: 900px) {
+    .steps { grid-template-columns: repeat(2, 1fr); }
+    .foot-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 700px) {
+    .nav { display: none; }
+    .hero { padding-block: var(--s8) var(--s7); }
+    h1 { max-width: none; }
+    .section { padding-block: var(--s8); }
+    .svc { grid-template-columns: 1fr; gap: var(--s3); }
+    .svc-go { align-self: start; }
+    .steps { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: 1fr; gap: var(--s6); }
+    /* Ragged CTA widths read as sloppy at this width; full-bleed also makes
+       both targets trivially thumb-reachable. */
+    .cta-row { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+    .wa { inset-inline: 16px; inset-block-end: 16px; justify-content: center; }
+    /* The sticky bar is fixed, so without this it permanently covers the last
+       ~70px of the footer — including the "no lawyer-client relationship"
+       disclaimer, which is the one line that must stay readable. */
+    body { padding-block-end: 84px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<a class="btn-skip" href="#main" style="position:absolute;inset-inline-start:-9999px;top:0;background:var(--ink);color:#fff;padding:10px 16px;z-index:100" onfocus="this.style.insetInlineStart='0'" onblur="this.style.insetInlineStart='-9999px'">דילוג לתוכן</a>
+
+<header class="site-head">
+  <div class="wrap head-in">
+    <div class="brand">עו״ד יהונתן שמם<span>משפט מסחרי וטכנולוגיה</span></div>
+    <nav class="nav" aria-label="ראשי">
+      <a href="#services">תחומי עיסוק</a>
+      <a href="#process">איך זה עובד</a>
+      <a href="#about">אודות</a>
+      <a href="#faq">שאלות נפוצות</a>
+    </nav>
+    <a class="head-cta" href="https://calendar.app.google/LU3N8tPLz71vscQ68">תיאום פגישה</a>
+  </div>
+</header>
+
+<!-- Placed straight after the header, not at the end of the document.
+     It is position:fixed so the DOM slot does not move it visually, but
+     at the end of the body a keyboard user had to traverse the entire
+     page to reach the primary conversion path. -->
+<a class="wa" href="https://wa.me/972542448885?text=%D7%94%D7%92%D7%A2%D7%AA%D7%99%20%D7%9E%D7%94%D7%90%D7%AA%D7%A8%20%D7%95%D7%90%D7%A0%D7%99%20%D7%9E%D7%AA%D7%A2%D7%A0%D7%99%D7%99%D7%9F%20%D7%91-">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23a8.23 8.23 0 0 1 0 16.47z"/></svg>
+  דברו איתי בוואטסאפ
+</a>
+
+<main id="main">
+
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">משרד בוטיק · תל אביב</p>
+      <h1>חדשנות משפטית <strong>לעסקים שרצים קדימה</strong></h1>
+      <p class="hero-sub">מעטפת משפטית חכמה למיזמים, חברות ונדל״ן. השירותים שלנו מותאמים לקצב של העולם החדש: זמין, שקוף ומדויק.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://calendar.app.google/LU3N8tPLz71vscQ68">
+          תיאום פגישה ביומן
+        </a>
+        <a class="btn btn-ghost" href="https://wa.me/972542448885">
+          דברו איתי בוואטסאפ
+        </a>
+      </div>
+      <div class="hero-meta">
+        <div><b>מסמכי מדף</b>מוכנים תוך <bdi dir="ltr">24–48</bdi> שעות</div>
+        <div><b>כל מסמך נבדק</b>בידי עורך דין, לא רק מערכת</div>
+        <div><b>תל אביב</b><span class="todo">[[חסר: כתובת רחוב]]</span></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>תחומי עיסוק</h2>
+        <p>תשעה שירותים בשלוש קבוצות. לכל אחד עמוד משלו עם ההיקף המלא, השלבים והלו״ז — כדי שתדעו בדיוק מה אתם מקבלים לפני שאתם פונים.</p>
+      </div>
+
+      <div class="cat">
+        <div class="cat-label"><span class="n">01</span> חברות, שותפויות ועסקים</div>
+
+        <a class="svc" href="#">
+          <div class="svc-title">רישום חברה בע״מ <span class="tag">בסיס</span></div>
+          <div class="svc-desc">הקמת חברה מא׳ ועד ת׳ מול רשם החברות. כולל ניסוח תקנון התאגדות, הצהרת דירקטורים וקבלת תעודת התאגדות דיגיטלית.</div>
+          <div class="svc-go">התחל רישום <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+
+        <a class="svc" href="a-service.html">
+          <div class="svc-title">הסכם מייסדים (Founders) <span class="tag tag-accent">פופולרי</span></div>
+          <div class="svc-desc">המסמך החשוב ביותר לסטארטאפ. הסדרת מניות, Vesting, קבלת החלטות וקניין רוחני בין השותפים למניעת סכסוכים.</div>
+          <div class="svc-go">תיאום שיחת אפיון <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+
+        <a class="svc" href="#">
+          <div class="svc-title">הסכם סודיות (NDA)</div>
+          <div class="svc-desc">הגנה על הרעיון והמידע העסקי שלכם לפני פגישות עם משקיעים, עובדים או ספקים. מסמך מהודק בעברית או באנגלית.</div>
+          <div class="svc-go">הזמנת הסכם <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+
+        <a class="svc" href="#">
+          <div class="svc-title">הסכם פרילנסר / הזמנת שירותים</div>
+          <div class="svc-desc">הסכם התקשרות מול ספקים חיצוניים או לקוחות. מגדיר בבירור את התמורה, הלו״ז והעברת זכויות הקניין הרוחני.</div>
+          <div class="svc-go">לפרטים נוספים <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+      </div>
+
+      <div class="cat">
+        <div class="cat-label"><span class="n">02</span> אינטרנט, אפליקציות ופרטיות</div>
+
+        <a class="svc" href="#">
+          <div class="svc-title">תקנון ומדיניות פרטיות <span class="tag">נדרש</span></div>
+          <div class="svc-desc">חבילת הגנה לאתרי איקומרס, תדמית ואפליקציות. ניסוח Terms of Use &amp; Privacy Policy מותאם לרגולציה.</div>
+          <div class="svc-go">קבלת הצעת מחיר <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+
+        <a class="svc" href="#">
+          <div class="svc-title">הצהרת נגישות לאתר <span class="tag">חובה חוקית</span></div>
+          <div class="svc-desc">ניסוח הצהרת נגישות תקנית לאתר האינטרנט שלכם, למניעת חשיפה לתביעות וקנסות מיותרים.</div>
+          <div class="svc-go">הכנת הצהרה <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+      </div>
+
+      <div class="cat">
+        <div class="cat-label"><span class="n">03</span> נדל״ן, עבודה וניהול שוטף</div>
+
+        <a class="svc" href="#">
+          <div class="svc-title">ערכת שימוע וסיום העסקה</div>
+          <div class="svc-desc">ניהול הליך פיטורים בצורה חוקית ובטוחה. כולל מכתב זימון לשימוע, פרוטוקול והנחיות למעסיק.</div>
+          <div class="svc-go">רכישת הערכה <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+
+        <a class="svc" href="#">
+          <div class="svc-title">עסקאות נדל״ן (מכר/רכישה)</div>
+          <div class="svc-desc">ליווי מקיף ברכישת דירה מקבלן או יד־שנייה. בדיקות נאותות, ניהול מו״מ ורישום זכויות בטאבו.</div>
+          <div class="svc-go">קביעת פגישה <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+
+        <a class="svc" href="#">
+          <div class="svc-title">מכתב התראה מעורך דין <span class="tag tag-accent">דחוף</span></div>
+          <div class="svc-desc">חייבים לכם כסף? הפרו חוזה? הפקת מכתב התראה רשמי ותקיף על נייר פירמה של המשרד.</div>
+          <div class="svc-go">פנייה להוצאת מכתב <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="diff">
+    <div class="wrap">
+      <q>כך אתם מקבלים את המהירות של הדיגיטל עם הביטחון של משרד עורכי דין.</q>
+      <p class="diff-note">בניגוד למחוללי מסמכים ״טיפשים״ — כאן יש עורך דין בשר ודם שבודק כל מסמך לפני שהוא יוצא מהמשרד.</p>
+    </div>
+  </section>
+
+  <section class="section" id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>איך זה עובד</h2>
+        <p>אין באתר הזה מחירון — כללי לשכת עורכי הדין אוסרים על פרסום שכר טרחה. מה שכן אפשר, וחשוב יותר, הוא לדעת מראש בדיוק מה התהליך.</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <h3>פנייה</h3>
+          <p>וואטסאפ, טלפון או פגישה ביומן. מספיק משפט אחד על מה שאתם צריכים.</p>
+        </div>
+        <div class="step">
+          <h3>אפיון</h3>
+          <p><span class="todo">[[חסר: מה קורה בשיחה הראשונה, וכמה זמן היא]]</span></p>
+        </div>
+        <div class="step">
+          <h3>טיוטה</h3>
+          <p>מסמכי מדף סטנדרטיים מוכנים לרוב תוך <bdi dir="ltr">24–48</bdi> שעות.</p>
+        </div>
+        <div class="step">
+          <h3>בדיקה וחתימה</h3>
+          <p>כל מסמך עובר בדיקה ואישור של עו״ד יהונתן שמם או צוות המשרד לפני שהוא יוצא.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>אודות המשרד</h2>
+      </div>
+      <p style="max-width:var(--measure);font-size:var(--fs-lead)">משרד בוטיק למשפט מסחרי וטכנולוגיה. אנו מאמינים במתן שירות משפטי בגובה העיניים, בשקיפות מלאה ובמהירות שמשדרת את האינטרס העסקי של הלקוח.</p>
+      <p style="margin-block-start:var(--s5);color:var(--muted);max-width:var(--measure)">
+        <span class="todo">[[חסר: ביוגרפיה]]</span>
+        <span class="todo">[[חסר: השכלה]]</span>
+        <span class="todo">[[חסר: תאריך הסמכה]]</span>
+        <span class="todo">[[חסר: מספר רישיון]]</span>
+        <span class="todo">[[חסר: שפות]]</span>
+        <span class="todo">[[חסר: תפקידים קודמים]]</span>
+      </p>
+    </div>
+  </section>
+
+  <hr class="rule">
+
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="section-head"><h2>שאלות נפוצות</h2></div>
+      <div class="faq">
+        <details class="qa" open>
+          <summary>האם השירות הוא אוטומטי או שיש עורך דין שבודק את המסמכים?</summary>
+          <p>אנחנו מאמינים בשילוב מנצח: טכנולוגיה חכמה ועריכה אנושית. המערכת הדיגיטלית שלנו אוספת מכם את המידע בצורה יעילה ומהירה, אך שום מסמך לא יוצא מהמשרד ללא בדיקה ואישור של עו״ד יהונתן שמם או צוות המשרד.</p>
+        </details>
+        <details class="qa">
+          <summary>כמה זמן לוקח לקבל מסמך מוכן?</summary>
+          <p>עבור מסמכים סטנדרטיים (כמו הסכמי סודיות, מכתבי התראה או תקנונים), המסמך לרוב יהיה מוכן תוך <bdi dir="ltr">24-48</bdi> שעות.</p>
+        </details>
+        <details class="qa">
+          <summary>האם אתם מטפלים גם במקרים מורכבים כמו עסקאות נדל״ן או תביעות?</summary>
+          <p>בהחלט. האתר מציג את ״מוצרי המדף״ שלנו לנוחותכם, אך המשרד מחזיק בניסיון עשיר בליווי עסקאות נדל״ן מורכבות.</p>
+        </details>
+        <details class="qa">
+          <summary>למה עדיף לשלוח מכתב התראה דרך עורך דין ולא לבד?</summary>
+          <p>מכתב על נייר לוגו רשמי של משרד עורכי דין משדר רצינות וכוח מרתיע שאין למכתב רגיל.</p>
+        </details>
+        <details class="qa">
+          <summary>מה קורה אם אני צריך שינויים מיוחדים בהסכם?</summary>
+          <p>אנחנו כאן בדיוק בשביל זה. השאלונים שלנו מכסים את רוב התרחישים, אך במידה ויש לכם דרישות ספציפיות, ניתן לציין זאת או לשוחח איתנו. בניגוד למחוללי מסמכים ״טיפשים״, אנחנו עורכי דין בשר ודם ויכולים להתאים את המסמך למידותיכם המדויקות.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="brand" style="margin-block-end:var(--s4)">עו״ד יהונתן שמם<span>משרד בוטיק למשפט מסחרי וטכנולוגיה</span></div>
+        <ul>
+          <li>טלפון: <bdi><a href="tel:+972542448885" dir="ltr">054-244-8885</a></bdi></li>
+          <li>דוא״ל: <bdi><a href="mailto:yonatan@shamam.net" dir="ltr">yonatan@shamam.net</a></bdi></li>
+          <li>תל אביב — מגדלי הארבעה</li>
+          <li><span class="todo">[[חסר: כתובת מלאה + שעות פעילות]]</span></li>
+        </ul>
+      </div>
+      <div>
+        <h2>תחומי עיסוק</h2>
+        <ul>
+          <li><a href="#services">חברות, שותפויות ועסקים</a></li>
+          <li><a href="#services">אינטרנט, אפליקציות ופרטיות</a></li>
+          <li><a href="#services">נדל״ן, עבודה וניהול שוטף</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>מידע משפטי</h2>
+        <ul>
+          <!-- The four anchors exist on the live page today and every footer
+               link points at the top of it instead. Fixed here. -->
+          <li><a href="/terms-privacy-accessibility/#terms">תנאי שימוש</a></li>
+          <li><a href="/terms-privacy-accessibility/#privacy">מדיניות פרטיות</a></li>
+          <li><a href="/terms-privacy-accessibility/#accessibility">הצהרת נגישות</a></li>
+          <li><a href="/terms-privacy-accessibility/#cookies">מדיניות Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="foot-legal">
+      האמור באתר זה אינו מהווה ייעוץ משפטי ואינו תחליף לו. גלישה באתר, פנייה דרך טופס יצירת קשר או שליחת דוא״ל אינם יוצרים יחסי עורך־דין לקוח.
+    </p>
+  </div>
+</footer>
+
+
+</body>
+</html>

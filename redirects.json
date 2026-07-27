@@ -1,0 +1,86 @@
+{
+  "/privacy-policy/": {
+    "status": 301,
+    "destination": "/terms-privacy-accessibility/"
+  },
+  "/מכתב-התראה-מעורך-דין-מדריך-מקצועי-למי-ש/": {
+    "status": 301,
+    "destination": "/articles/demand-letter-guide/"
+  },
+  "/blog/": {
+    "status": 301,
+    "destination": "/articles/"
+  },
+  "/sample-page/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/practice-items/advisor-program/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/practice-items/online-coaching/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/practice-items/public-speaking/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/practice-items/mentoring/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/practice-items/1t1-consulting/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/practice-items/training-coach/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/testimonials-list/testimonial-1/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/testimonials-list/testimonial-2/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/testimonials-list/testimonial-3/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/testimonials-list/testimonial-4/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/section-builder/footer-1/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/section-builder/footer-2/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/section-builder/footer-3/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/section-builder/footer-4/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/section-builder/footer-5/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/category/uncategorized/": {
+    "status": 410,
+    "destination": "/"
+  },
+  "/התמודדות-רגשית-ובירוקרטית-מול-ביטוח-ל/": {
+    "status": 410,
+    "destination": "/"
+  }
+}
