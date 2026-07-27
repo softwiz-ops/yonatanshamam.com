@@ -120,6 +120,49 @@ The declaration lists the panel as an adaptation and then says, in terms, that
 conformance rests on the code and not on the panel. That sentence is load
 bearing — it is the difference between a convenience and a false claim.
 
+## The legal documents were re-authored, not migrated
+
+Done 27 Jul 2026 at the founder's request. `src/content/pages/legal.md` is now
+a source document under version control; `scripts/migrate-legal.py` writes the
+original to `reference/legal-original.md` for comparison and must never write
+to `src/` again.
+
+**Why they had to be rewritten rather than patched.** The migrated text made
+two false statements about this build: it declared Cookies, pixels, tracking
+technologies and targeted marketing that do not exist here, and its
+accessibility section said only that access instructions would be supplied on
+request. A privacy document that overstates is as wrong as one that
+understates, and Amendment 13 put the civil limitation period at seven years.
+
+**Every factual claim was checked against the built site before it was
+written**, not after:
+
+| Checked | Result |
+|---|---|
+| Cookies | none, on any page |
+| Third-party requests | zero — every request is same-origin |
+| Fonts | self-hosted; nothing from Google Fonts |
+| Analytics / pixels / tag managers | none |
+| Service workers, sessionStorage, IndexedDB | none |
+| localStorage | one key, `a11y-prefs`, written only if the user changes an accessibility preference |
+
+That posture is unusually clean, and the privacy policy now says so plainly
+instead of hedging.
+
+**Research the text rests on:** Amendment 13 in force 14 Aug 2025; the Privacy
+Protection Authority's final position paper on consent, 25 Feb 2026; the
+section 11 notice duty; Regulation 35 and IS 5568 at level AA.
+
+**Three things the new text deliberately does NOT claim.** The migrated
+declaration asserted support for NVDA, JAWS and VoiceOver. No screen-reader
+testing has been done, so that claim was removed rather than repeated — it now
+reads as a gap. Firefox and Safari are likewise marked untested. And the email
+processor is named as missing rather than guessed.
+
+**One fee reference was resolved rather than flagged.** The terms said a
+defective document "יתוקן ללא תשלום נוסף". The clause now reads "יתוקן בידי
+המשרד" — the client protection survives, the reference to payment does not.
+
 ## Settled
 
 **No client testimonials.** Decided 27 Jul 2026: the founder does not want them
@@ -375,15 +418,6 @@ Supplied since:
 
 *(Both questions that stood open for the ethics committee were closed by the
 founder on 27 Jul 2026 — see "Settled".)*
-
-**The Cookies section of the legal document is now blocking.** It declares
-Cookies, pixels, tracking technologies and targeted marketing. This build loads
-none of that — no analytics, no pixels, no third-party requests at all — and it
-now does use localStorage for the accessibility preferences, which the document
-does not mention. A privacy document that overstates is as wrong as one that
-understates, and Amendment 13 put the civil limitation period at seven years.
-`scripts/check-ethics.py` blocks until the section is rewritten to match. It is
-the founder's drafting, so he rewrites it.
 
 **Privacy — the contact form design depends on this.** Under Amendment 13, a
 database holding **only name, address and contact details** for ≤100,000 people
