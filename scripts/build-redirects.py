@@ -24,6 +24,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "redirects.json"
+# 410 is not a redirect status, and Astro's `redirects` config only accepts
+# 301/302/303/307/308. The gone URLs therefore live in their own file and are
+# served by src/middleware.ts instead.
+OUT_GONE = ROOT / "gone.json"
 
 # --- 301: real content that moved -------------------------------------------
 MOVED = {
@@ -69,16 +73,17 @@ GONE = [
 
 
 def main() -> None:
-    redirects: dict[str, object] = {}
-    for src, dest in MOVED.items():
-        redirects[src] = {"status": 301, "destination": dest}
-    for src in GONE:
-        redirects[src] = {"status": 410, "destination": "/"}
-
+    redirects = {
+        src: {"status": 301, "destination": dest} for src, dest in MOVED.items()
+    }
     OUT.write_text(
         json.dumps(redirects, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
-    print(f"wrote {OUT.name}: {len(MOVED)} moved (301), {len(GONE)} gone (410)")
+    OUT_GONE.write_text(
+        json.dumps(sorted(GONE), ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+    print(f"wrote {OUT.name}: {len(MOVED)} moved (301)")
+    print(f"wrote {OUT_GONE.name}: {len(GONE)} gone (410)")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,67 @@
+---
+/**
+ * The signature element of this design.
+ *
+ * The Bar's rules forbid publishing anything about fees, so transparency of
+ * scope and process is the only substitute available — which is why it is the
+ * organising system here rather than a module tucked inside one.
+ *
+ * Steps whose content the founder has not yet supplied render with a muted top
+ * rule and a visible [[חסר]] marker, rather than being filled with something
+ * plausible. A guessed timeline is a commitment he never made.
+ */
+interface Step {
+  title: string;
+  detail?: string;
+  when?: string;
+}
+interface Props {
+  heading: string;
+  steps: Step[];
+}
+const { heading, steps } = Astro.props;
+---
+<h2 class="rail-title">{heading}</h2>
+<ol class="rail">
+  {steps.map((step, i) => (
+    <li class:list={['rail-step', !step.detail && 'open']}>
+      <span class="n">שלב <bdi dir="ltr">{i + 1}</bdi></span>
+      <h3>{step.title}</h3>
+      {step.when && <p class="when"><bdi dir="ltr">{step.when}</bdi></p>}
+      {step.detail
+        ? <p>{step.detail}</p>
+        : <p><span class="todo">[[חסר: פירוט השלב]]</span></p>}
+    </li>
+  ))}
+</ol>
+
+<style>
+  .rail-title {
+    font-size: var(--fs-caption);
+    font-weight: 600;
+    color: var(--muted);
+    margin-block-end: var(--s5);
+  }
+  .rail {
+    display: grid;
+    grid-template-columns: repeat(var(--rail-cols, 5), 1fr);
+    gap: var(--s4);
+  }
+  .rail-step {
+    padding-block-start: var(--s4);
+    border-block-start: 2px solid var(--accent);
+  }
+  .rail-step.open { border-block-start-color: var(--rule); }
+  .n {
+    font-size: var(--fs-micro);
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .rail-step h3 { font-size: var(--fs-body); font-weight: 600; margin-block-start: var(--s2); }
+  .rail-step p { font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s2); }
+  .when { font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+
+  @media (max-width: 1000px) { .rail { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 700px) { .rail { grid-template-columns: 1fr; } }
+</style>

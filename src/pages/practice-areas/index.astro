@@ -1,0 +1,68 @@
+---
+import Base from '../../layouts/Base.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import { CATEGORIES, byCategory, SERVICES, type Category } from '../../data/services.ts';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  itemListElement: SERVICES.map((s, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: s.title,
+    url: `${Astro.site}practice-areas/${s.slug}/`,
+  })),
+};
+---
+<Base
+  title="תחומי עיסוק | עו״ד יהונתן שמם"
+  description="תחומי העיסוק של המשרד: הקמת חברות והסכמי מייסדים, הסכמי סודיות והתקשרויות, תקנוני אתרים ומדיניות פרטיות, עסקאות נדל״ן, שימוע ומכתבי התראה."
+  schema={schema}
+>
+  <div class="wrap lede">
+    <p class="eyebrow">תחומי עיסוק</p>
+    <h1>תשעה שירותים, שלוש קבוצות</h1>
+    <p class="sub">
+      לכל שירות עמוד משלו שמסביר מה המסמך מסדיר, מה חשוב לדעת לפניו, ומה
+      השלבים — כדי שתדעו למה אתם נכנסים לפני שאתם פונים.
+    </p>
+  </div>
+
+  <div class="wrap cats">
+    {(Object.keys(CATEGORIES) as Category[]).map((key) => (
+      <section class="cat" id={key}>
+        <div class="cat-head">
+          <span class="n"><bdi dir="ltr">{CATEGORIES[key].n}</bdi></span>
+          <div>
+            <h2>{CATEGORIES[key].title}</h2>
+            <p>{CATEGORIES[key].blurb}</p>
+          </div>
+        </div>
+        <div class="cards">
+          {byCategory(key).map((s) => <ServiceCard service={s} />)}
+        </div>
+      </section>
+    ))}
+  </div>
+</Base>
+
+<style>
+  .lede { padding-block: var(--s7) var(--s6); }
+  h1 {
+    font-size: clamp(30px, 4.4vw, 48px);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: var(--lh-tight);
+    margin-block-start: var(--s4);
+  }
+  .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 58ch; margin-block-start: var(--s5); }
+
+  .cats { padding-block-end: var(--s9); }
+  .cat { margin-block-start: var(--s8); scroll-margin-top: 96px; }
+  .cat-head { display: flex; align-items: baseline; gap: var(--s4); margin-block-end: var(--s5); }
+  .cat-head h2 { font-size: var(--fs-title); font-weight: 600; }
+  .cat-head p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s1); }
+  .cat-head .n { font-size: var(--fs-caption); color: var(--faint); font-variant-numeric: tabular-nums; }
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s4); }
+  @media (max-width: 940px) { .cards { grid-template-columns: 1fr; } }
+</style>

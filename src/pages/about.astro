@@ -1,0 +1,181 @@
+---
+import Base from '../layouts/Base.astro';
+import { FIRM } from '../data/firm.ts';
+
+/*
+ * Everything on this page was checked against the Bar's closed list of what a
+ * lawyer may publish. Permitted and used here: being a lawyer, date of
+ * admission, PREVIOUS LEGAL POSITIONS, languages, areas of practice, address
+ * and contact details, office hours.
+ *
+ * Deliberately absent, from a LinkedIn profile that contains all of it:
+ * partner tier badges ("Elite Circle Platinum"), client counts ("dozens of
+ * SMBs"), and self-praise ("we punch above our weight"). The first would be
+ * advertising for another business on a lawyer's site, which the rules forbid
+ * outright; the others are unverifiable claims and self-aggrandisement.
+ *
+ * The technology company and the legal-tech venture appear as biography — they
+ * are the whole basis of the positioning — but are named without links or
+ * promotional framing, so this page describes a lawyer rather than selling
+ * another company.
+ */
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: FIRM.name,
+  jobTitle: 'עורך דין',
+  worksFor: { '@id': `${Astro.site}#attorney` },
+  knowsLanguage: FIRM.languages,
+  sameAs: [FIRM.linkedin],
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${FIRM.address.building}, ${FIRM.address.street}`,
+    addressLocality: FIRM.address.city,
+    addressCountry: FIRM.address.country,
+  },
+};
+---
+<Base
+  title="אודות | עו״ד יהונתן שמם"
+  description="עו״ד יהונתן שמם — משרד בוטיק למשפט מסחרי וטכנולוגיה בתל אביב. הוסמך ב-2019, עבד בגולדפרב זליגמן, ועוסק בליווי חברות, מיזמים ועסקאות נדל״ן."
+  schema={schema}
+>
+  <div class="wrap lede">
+    <p class="eyebrow">אודות</p>
+    <h1>עורך דין בהכשרתו, יזם בניסיונו</h1>
+  </div>
+
+  <div class="wrap grid">
+    <div class="prose">
+      <p class="lead">
+        משרד בוטיק למשפט מסחרי וטכנולוגיה. אנו מאמינים במתן שירות משפטי בגובה
+        העיניים, בשקיפות מלאה ובמהירות שמשדרת את האינטרס העסקי של הלקוח.
+      </p>
+
+      <p>
+        עו״ד יהונתן שמם הוסמך כעורך דין בשנת <bdi dir="ltr">{FIRM.admittedYear}</bdi>.
+        את שנותיו הראשונות במקצוע עשה כעורך דין במשרד גולדפרב זליגמן, ולפני כן
+        התמחה במשרד ש. הררי בתחומי הנדל״ן ודיני החברות.
+      </p>
+
+      <p>
+        במקביל לעיסוקו המשפטי הוא מנהל חברת ייעוץ טכנולוגי העוסקת בהטמעת מערכות
+        CRM, אוטומציה עסקית ובינה מלאכותית לעסקים, ושותף מייסד במיזם דיגיטלי
+        לעולם המשפט. השילוב הזה הוא נקודת המוצא של המשרד ולא נספח לה: לקוח
+        שמנהל עסק דיגיטלי לא צריך להסביר לעורך הדין שלו מהי מערכת, מה עושה
+        אינטגרציה, או למה מדיניות פרטיות שלא תואמת את מה שהאתר באמת אוסף היא
+        חשיפה ולא פורמליות.
+      </p>
+
+      <p>
+        בצד המשפטי, המשרד מלווה יזמים, עצמאים ועסקים צומחים במשפט המסחרי
+        ובנדל״ן — מהקמת החברה והסדרת היחסים בין השותפים, דרך ההתקשרויות מול
+        ספקים ולקוחות, ועד עסקאות מקרקעין וטיפול בהפרות.
+      </p>
+
+      <h2>שיטת העבודה</h2>
+      <p>
+        השאלונים והכלים הדיגיטליים של המשרד אוספים את המידע ביעילות ומקצרים את
+        הדרך לטיוטה. הם לא מחליפים את עורך הדין: שום מסמך לא יוצא מהמשרד ללא
+        בדיקה ואישור של עו״ד יהונתן שמם או צוות המשרד. זו ההבחנה בין מחולל
+        מסמכים לבין משרד שמשתמש בטכנולוגיה.
+      </p>
+
+      <h2>השכלה</h2>
+      <p>
+        <span class="todo">[[חסר: תואר, מוסד ושנה]]</span>
+        <span class="gap-note">
+          תארים אקדמיים מותרים בפרסום ומחזקים את העמוד. הם לא הופיעו במידע
+          שהתקבל, ולכן לא הושלמו כאן.
+        </span>
+      </p>
+    </div>
+
+    <aside class="aside">
+      <div class="panel">
+        <h2>פרטי המשרד</h2>
+        <ul class="facts">
+          <li><span class="k">הסמכה</span><span class="v"><bdi dir="ltr">{FIRM.admittedYear}</bdi></span></li>
+          <li><span class="k">שפות</span><span class="v">{FIRM.languages.join(', ')}</span></li>
+          <li><span class="k">כתובת</span><span class="v">{FIRM.address.full}</span></li>
+          <li><span class="k">שעות</span><span class="v">{FIRM.hours.days}<br /><bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></span></li>
+          <li><span class="k">טלפון</span><span class="v"><bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi></span></li>
+          <li><span class="k">LinkedIn</span><span class="v"><a href={FIRM.linkedin} rel="me">פרופיל</a></span></li>
+        </ul>
+      </div>
+
+      <div class="panel">
+        <h2>תפקידים משפטיים קודמים</h2>
+        <ul class="roles">
+          {FIRM.previousRoles.map((r) => (
+            <li>
+              <b>{r.org}</b>
+              <span>
+                {r.role} · <bdi dir="ltr">{r.from}–{r.to}</bdi>
+                {r.areas && <><br />{r.areas}</>}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .lede { padding-block: var(--s7) var(--s6); }
+  h1 {
+    font-size: clamp(30px, 4.4vw, 48px);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: var(--lh-tight);
+    margin-block-start: var(--s4);
+    max-width: 20ch;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--s8);
+    align-items: start;
+    padding-block-end: var(--s9);
+  }
+
+  .prose { max-width: var(--measure); }
+  .prose p { margin-block-end: var(--s5); }
+  .lead { font-size: var(--fs-lead); color: var(--muted); }
+  .prose h2 {
+    font-size: var(--fs-title);
+    font-weight: 600;
+    margin-block: var(--s7) var(--s4);
+  }
+  .gap-note { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
+
+  .aside { position: sticky; top: 96px; display: grid; gap: var(--s4); }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    padding: var(--s5);
+    box-shadow: var(--shadow-card);
+  }
+  .panel h2 { font-size: var(--fs-small); font-weight: 600; margin-block-end: var(--s4); }
+  .facts li, .roles li {
+    font-size: var(--fs-small);
+    padding-block: var(--s3);
+    border-block-end: 1px solid var(--rule);
+  }
+  .facts li { display: flex; justify-content: space-between; gap: var(--s4); }
+  .facts li:last-child, .roles li:last-child { border-block-end: 0; }
+  .facts .k { color: var(--muted); flex: none; }
+  .facts .v { font-weight: 600; text-align: end; }
+  .facts a { display: inline-block; padding-block: 4px; }
+  .roles b { display: block; font-weight: 600; }
+  .roles span { display: block; color: var(--muted); font-size: var(--fs-caption); margin-block-start: 2px; }
+
+  @media (max-width: 940px) {
+    .grid { grid-template-columns: 1fr; gap: var(--s7); }
+    .aside { position: static; }
+  }
+</style>

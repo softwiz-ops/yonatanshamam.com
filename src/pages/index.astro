@@ -1,0 +1,207 @@
+---
+import Base from '../layouts/Base.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import ProcessRail from '../components/ProcessRail.astro';
+import Faq from '../components/Faq.astro';
+import { FIRM, whatsappLink } from '../data/firm.ts';
+import { CATEGORIES, byCategory, type Category } from '../data/services.ts';
+
+/** The five Q&As from the live site, verbatim. His wording, his voice. */
+const faqs = [
+  {
+    q: 'האם השירות הוא אוטומטי או שיש עורך דין שבודק את המסמכים?',
+    a: 'אנחנו מאמינים בשילוב מנצח: טכנולוגיה חכמה ועריכה אנושית. המערכת הדיגיטלית שלנו אוספת מכם את המידע בצורה יעילה ומהירה, אך שום מסמך לא יוצא מהמשרד ללא בדיקה ואישור של עו״ד יהונתן שמם או צוות המשרד.',
+  },
+  {
+    q: 'כמה זמן לוקח לקבל מסמך מוכן?',
+    a: 'עבור מסמכים סטנדרטיים (כמו הסכמי סודיות, מכתבי התראה או תקנונים), המסמך לרוב יהיה מוכן תוך 24-48 שעות.',
+  },
+  {
+    q: 'האם אתם מטפלים גם במקרים מורכבים כמו עסקאות נדל״ן או תביעות?',
+    a: 'בהחלט. האתר מציג את "מוצרי המדף" שלנו לנוחותכם, אך המשרד מחזיק בניסיון עשיר בליווי עסקאות נדל״ן מורכבות.',
+  },
+  {
+    q: 'למה עדיף לשלוח מכתב התראה דרך עורך דין ולא לבד?',
+    a: 'מכתב על נייר לוגו רשמי של משרד עורכי דין משדר רצינות וכוח מרתיע שאין למכתב רגיל.',
+  },
+  {
+    q: 'מה קורה אם אני צריך שינויים מיוחדים בהסכם?',
+    a: 'אנחנו כאן בדיוק בשביל זה. השאלונים שלנו מכסים את רוב התרחישים, אך במידה ויש לכם דרישות ספציפיות, ניתן לציין זאת או לשוחח איתנו. בניגוד למחוללי מסמכים "טיפשים", אנחנו עורכי דין בשר ודם ויכולים להתאים את המסמך למידותיכם המדויקות.',
+  },
+];
+
+/* These five Q&As already sat in the live site's markup with no FAQPage schema
+   wrapped around them — the single cheapest structured-data win available. */
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const steps = [
+  { title: 'פנייה', detail: 'וואטסאפ, טלפון או פגישה ביומן. מספיק משפט אחד על מה שאתם צריכים.' },
+  { title: 'אפיון' },
+  { title: 'טיוטה', when: '24-48 שעות', detail: 'למסמכי מדף סטנדרטיים. לעבודות מורכבות הלו״ז נקבע באפיון.' },
+  { title: 'בדיקה וחתימה', detail: 'כל מסמך נבדק ומאושר בידי עורך דין לפני שהוא יוצא מהמשרד.' },
+];
+---
+<Base
+  title="עו״ד יהונתן שמם | משפט מסחרי וטכנולוגיה, תל אביב"
+  description="משרד בוטיק למשפט מסחרי וטכנולוגיה בתל אביב. הסכמי מייסדים, רישום חברות, תקנוני אתרים, עסקאות נדל״ן ומכתבי התראה — עם עורך דין שבודק כל מסמך."
+  schema={schema}
+>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">משרד בוטיק · תל אביב</p>
+      {/* The live site renders this as "חדשנות משפטיתלעסקים" — a lost <br>
+          swallowed the space, and crawlers read it as one word. */}
+      <h1>חדשנות משפטית <strong>לעסקים שרצים קדימה</strong></h1>
+      <p class="sub">
+        מעטפת משפטית חכמה למיזמים, חברות ונדל״ן. השירותים שלנו מותאמים לקצב של
+        העולם החדש: זמין, שקוף ומדויק.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+        <a class="btn btn-ghost" href={whatsappLink('הגעתי מהאתר ואני מתעניין ב-')}>דברו איתי בוואטסאפ</a>
+      </div>
+
+      <div class="rail-wrap">
+        <ProcessRail heading="איך זה עובד" steps={steps} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>תחומי עיסוק</h2>
+        <p>
+          תשעה שירותים בשלוש קבוצות. לכל אחד עמוד משלו שמסביר מה המסמך מסדיר,
+          מה חשוב לדעת לפניו, ומה השלבים — כדי שתדעו למה אתם נכנסים לפני שאתם
+          פונים.
+        </p>
+      </div>
+
+      {(Object.keys(CATEGORIES) as Category[]).map((key) => (
+        <div class="cat" id={key}>
+          <div class="cat-head">
+            <span class="n"><bdi dir="ltr">{CATEGORIES[key].n}</bdi></span>
+            <h3>{CATEGORIES[key].title}</h3>
+          </div>
+          <div class="cards">
+            {byCategory(key).map((s) => <ServiceCard service={s} />)}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="diff">
+    <div class="wrap">
+      <q>כך אתם מקבלים את המהירות של הדיגיטל עם הביטחון של משרד עורכי דין.</q>
+      <p class="diff-note">
+        בניגוד למחוללי מסמכים ״טיפשים״ — כאן יש עורך דין בשר ודם שבודק כל מסמך
+        לפני שהוא יוצא מהמשרד.
+      </p>
+    </div>
+  </section>
+
+  {/* The audience split sits here and not in the hero: the positioning line is
+      the strongest asset on the page, and a fork above it would replace a
+      statement with a menu. */}
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head"><h2>מה מביא אתכם לכאן?</h2></div>
+      <div class="forks">
+        <a class="fork" href="/practice-areas/#business">
+          <h3>עסק, חברה או מיזם</h3>
+          <p>הקמה, הסכמים בין שותפים, התקשרויות מול ספקים ולקוחות, תקנוני אתר ופרטיות, וניהול שוטף.</p>
+          <span class="go">לשירותים העסקיים <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+        <a class="fork" href="/practice-areas/real-estate/">
+          <h3>עסקת נדל״ן</h3>
+          <p>רכישה או מכירה של דירה, מקבלן או יד-שנייה: בדיקות נאותות, ניהול מו״מ, מיסוי ורישום זכויות בטאבו.</p>
+          <span class="go">לליווי עסקאות נדל״ן <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="faq">
+    <div class="wrap">
+      <div class="section-head"><h2>שאלות נפוצות</h2></div>
+      <Faq items={faqs} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: var(--s8) var(--s7); }
+  h1 {
+    font-size: var(--fs-display);
+    font-weight: 400;
+    line-height: var(--lh-tight);
+    letter-spacing: -0.015em;
+    margin-block-start: var(--s5);
+    max-width: 20ch;
+  }
+  h1 strong { font-weight: 700; }
+  .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 48ch; margin-block-start: var(--s5); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s6); }
+  .rail-wrap { margin-block-start: var(--s8); }
+  .rail-wrap :global(.rail) { --rail-cols: 4; }
+
+  .cat { margin-block-start: var(--s7); }
+  .cat:first-of-type { margin-block-start: 0; }
+  .cat-head { display: flex; align-items: baseline; gap: var(--s3); margin-block-end: var(--s5); }
+  .cat-head h3 { font-size: var(--fs-title); font-weight: 600; }
+  .cat-head .n { font-size: var(--fs-caption); color: var(--faint); font-variant-numeric: tabular-nums; }
+  .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--s4); }
+
+  .diff { background: var(--ink); color: #fff; }
+  .diff :global(.wrap) { padding-block: var(--s9); }
+  .diff q {
+    display: block;
+    quotes: none;
+    font-size: clamp(24px, 3.4vw, 40px);
+    font-weight: 300;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    max-width: 24ch;
+  }
+  /* #b9beba on #1b1d1f measures 8.9:1 */
+  .diff-note { color: #b9beba; margin-block-start: var(--s5); max-width: 50ch; font-size: var(--fs-small); }
+
+  .forks { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
+  .fork {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    padding: var(--s6);
+    text-decoration: none;
+  }
+  .fork:hover { border-color: var(--accent); }
+  .fork h3 { font-size: var(--fs-title); font-weight: 600; }
+  .fork p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
+  .fork .go {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: var(--fs-small);
+    margin-block-start: var(--s5);
+  }
+
+  @media (max-width: 940px) {
+    .cards { grid-template-columns: 1fr; }
+    .forks { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .cta-row { flex-direction: column; align-items: stretch; }
+  }
+</style>

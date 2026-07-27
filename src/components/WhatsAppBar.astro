@@ -1,0 +1,51 @@
+---
+import { FIRM, whatsappLink } from '../data/firm.ts';
+
+interface Props {
+  message?: string;
+  label?: string;
+}
+const { message, label = 'דברו איתי בוואטסאפ' } = Astro.props;
+const href = whatsappLink(message);
+---
+{/*
+  Rendered right after the header rather than at the end of the document. It is
+  position:fixed so the DOM slot does not move it visually, but at the end of
+  the body a keyboard user had to traverse the entire page to reach the primary
+  conversion path. Here it lands sixth in tab order.
+*/}
+<a class="wa" href={href} data-service={message ? '' : undefined}>
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 18.15h-.01a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.22 8.22 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23a8.23 8.23 0 0 1 0 16.47z"/>
+  </svg>
+  {label}
+</a>
+
+<style>
+  .wa {
+    position: fixed;
+    inset-block-end: 20px;
+    inset-inline-start: 20px;
+    z-index: 50;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s3);
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    border-radius: var(--r-pill);
+    padding: 13px 22px;
+    min-height: 48px;
+    font-size: var(--fs-small);
+    font-weight: 600;
+    box-shadow: 0 8px 28px rgba(26, 94, 74, .28);
+    transition: background-color .15s;
+  }
+  .wa:hover { background: var(--accent-hover); }
+  /* The WhatsApp glyph is a real-world object, not a directional arrow —
+     it must not be mirrored. */
+
+  @media (max-width: 700px) {
+    .wa { inset-inline: 16px; inset-block-end: 16px; justify-content: center; }
+  }
+</style>

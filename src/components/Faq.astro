@@ -1,0 +1,50 @@
+---
+interface Props {
+  items: { q: string; a: string }[];
+  /** Open the first item by default — it is the most-read answer. */
+  openFirst?: boolean;
+}
+const { items, openFirst = true } = Astro.props;
+---
+<div class="faq">
+  {items.map((item, i) => (
+    <details class="qa" open={openFirst && i === 0}>
+      <summary>{item.q}</summary>
+      <p>{item.a}</p>
+    </details>
+  ))}
+</div>
+
+<style>
+  .faq { max-width: var(--measure); }
+  .qa {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    margin-block-end: var(--s3);
+  }
+  .qa summary {
+    cursor: pointer;
+    list-style: none;
+    padding: var(--s5);
+    font-weight: 600;
+    display: flex;
+    gap: var(--s4);
+    align-items: flex-start;
+    min-height: 44px;
+  }
+  .qa summary::-webkit-details-marker { display: none; }
+  /* A plus/minus, not a chevron: it signals expand/collapse rather than
+     direction, so it must not be mirrored in RTL. */
+  .qa summary::after {
+    content: '+';
+    margin-inline-start: auto;
+    color: var(--accent);
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1;
+    flex: none;
+  }
+  .qa[open] summary::after { content: '–'; }
+  .qa p { padding: 0 var(--s5) var(--s5); color: var(--muted); }
+</style>

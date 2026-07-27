@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import { FIRM } from '../data/firm.ts';
+import { Content, frontmatter } from '../content/pages/legal.md';
+
+/*
+ * Four binding documents on one page, migrated from the live site by
+ * scripts/migrate-legal.py. Roughly 1,485 words of real Hebrew legal drafting,
+ * updated February 2026 and already carrying the Amendment 13 changes.
+ *
+ * The four anchors — #terms #privacy #accessibility #cookies — are load
+ * bearing: the footer links point at them, and on the live site every one of
+ * those links pointed at the top of the page instead. Do not rename them.
+ *
+ * The URL is no longer /privacy-policy/. The document is terms + privacy +
+ * accessibility + cookies, and burying an accessibility declaration under a
+ * privacy URL works against Regulation 35, which expects it to be prominent
+ * and findable. The old URL 301s here.
+ *
+ * TWO STATEMENTS IN THIS DOCUMENT ARE NOT YET TRUE OF THIS SITE:
+ *   1. It claims IS 5568 AA and WCAG 2.1 AA. On the live WordPress site that
+ *      rests on an accessibility overlay, which does not deliver it. This
+ *      rebuild is built to AA in code, which is what makes the claim true —
+ *      but it must be re-verified before launch.
+ *   2. The cookies section declares pixels and targeted marketing. This build
+ *      loads no analytics and no pixels at all. That section has to be
+ *      rewritten to match actual behaviour before launch, or the document is
+ *      false in the other direction.
+ */
+
+const sections = [
+  { id: 'terms', label: 'תנאי שימוש' },
+  { id: 'privacy', label: 'מדיניות פרטיות' },
+  { id: 'accessibility', label: 'הצהרת נגישות' },
+  { id: 'cookies', label: 'מדיניות Cookies' },
+];
+---
+<Base title={`${frontmatter.title} | ${FIRM.name}`} description={frontmatter.description}>
+  <div class="wrap lede">
+    <h1>{frontmatter.title}</h1>
+    <p class="updated">{frontmatter.updated}</p>
+    <nav class="jump" aria-label="ניווט במסמך">
+      {sections.map((s) => <a href={`#${s.id}`}>{s.label}</a>)}
+    </nav>
+  </div>
+
+  <div class="wrap doc">
+    <Content />
+  </div>
+</Base>
+
+<style>
+  .lede { padding-block: var(--s7) var(--s6); border-block-end: 1px solid var(--rule); }
+  h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 400; letter-spacing: -0.015em; }
+  .updated { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
+
+  .jump { display: flex; flex-wrap: wrap; gap: var(--s2); margin-block-start: var(--s5); }
+  .jump a {
+    font-size: var(--fs-caption);
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--accent);
+    background: var(--accent-wash);
+    border-radius: var(--r-pill);
+    padding: 7px 14px;
+  }
+  .jump a:hover { background: var(--accent); color: var(--accent-ink); }
+
+  .doc { padding-block: var(--s7) var(--s9); max-width: 76ch; }
+
+  /* The migrated Markdown carries its own anchors as empty spans; give them
+     scroll offset so the sticky header does not cover the heading. */
+  .doc :global(span[id]) { display: block; scroll-margin-top: 96px; }
+  .doc :global(h2) {
+    font-size: var(--fs-section);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-block: var(--s8) var(--s5);
+    padding-block-end: var(--s3);
+    border-block-end: 1px solid var(--rule);
+  }
+  .doc :global(h2:first-of-type) { margin-block-start: 0; }
+  .doc :global(h3) { font-size: var(--fs-title); font-weight: 600; margin-block: var(--s6) var(--s3); }
+  .doc :global(p) { margin-block-end: var(--s4); }
+  .doc :global(ul), .doc :global(ol) { margin-block-end: var(--s5); padding-inline-start: var(--s5); }
+  .doc :global(li) { margin-block-end: var(--s2); list-style: disc; }
+  .doc :global(ol li) { list-style: decimal; }
+  /* Links inside the migrated prose — phone, email, external references —
+     inherit the line box and land at ~23px tall, under the 24px target
+     minimum. Padding lifts them without disturbing the paragraph rhythm. */
+  .doc :global(a) { color: var(--accent); display: inline-block; padding-block: 3px; }
+  .doc :global(strong) { font-weight: 600; }
+</style>

@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import ProcessRail from '../components/ProcessRail.astro';
+import { FIRM, whatsappLink } from '../data/firm.ts';
+
+/*
+ * This page exists because there cannot be a pricing page.
+ *
+ * The Bar's rules put every reference to fees off limits, so the substitute is
+ * transparency about scope and process. That makes this a primary page, not a
+ * footnote — and it is also the standalone, linkable asset that the per-service
+ * process module cannot be.
+ *
+ * The steps below are only as specific as the founder has actually confirmed.
+ * Anything he has not stated renders as a visible gap.
+ */
+
+const steps = [
+  { title: 'פנייה', detail: 'וואטסאפ, טלפון או פגישה ביומן. מספיק משפט אחד על מה שאתם צריכים.' },
+  { title: 'אפיון' },
+  { title: 'שאלון', detail: 'איסוף הפרטים שהמסמך צריך. השאלונים מכסים את רוב התרחישים, ואם יש דרישה ספציפית אפשר לציין אותה שם.' },
+  { title: 'טיוטה', when: '24-48 שעות', detail: 'למסמכי מדף סטנדרטיים. בעבודות מורכבות הלו״ז נקבע באפיון.' },
+  { title: 'בדיקה וחתימה', detail: 'כל מסמך נבדק ומאושר בידי עורך דין לפני שהוא יוצא מהמשרד.' },
+];
+---
+<Base
+  title="איך זה עובד | עו״ד יהונתן שמם"
+  description="התהליך מול המשרד, מהפנייה ועד החתימה: אפיון, שאלון, טיוטה ובדיקה של עורך דין. מה צפוי בכל שלב ומה נדרש מכם."
+>
+  {/* This page carries no explanation of *why* there is no pricing. Saying
+      "the rules forbid publishing fees" is itself a reference to fees, and the
+      permitted free text is defined as text "שאינו כולל כל התייחסות לשכר
+      הטרחה". Whether any wording near fees is allowed at all is one of the two
+      questions open with the Bar's ethics committee — see PROJECT.md. Until it
+      is answered, the page states what IS here and explains nothing. */}
+  <div class="wrap lede">
+    <p class="eyebrow">איך זה עובד</p>
+    <h1>מה קורה מרגע הפנייה</h1>
+    <p class="sub">
+      חמישה שלבים, מההודעה הראשונה ועד המסמך החתום. כדאי לדעת מראש מה התהליך,
+      כמה זמן הוא לוקח, ומה נדרש מכם בכל שלב.
+    </p>
+  </div>
+
+  <div class="wrap rail-wrap">
+    <ProcessRail heading="חמישה שלבים" steps={steps} />
+  </div>
+
+  <div class="wrap blocks">
+    <section class="block">
+      <h2>מה נדרש מכם</h2>
+      <p class="gap">
+        <span class="todo">[[חסר: אילו פרטים ומסמכים הלקוח צריך להביא, ומתי]]</span>
+      </p>
+    </section>
+
+    <section class="block">
+      <h2>מה קורה בפגישה הראשונה</h2>
+      <p class="gap">
+        <span class="todo">[[חסר: אורך הפגישה, מה עולה בה, ומה יוצאים איתו]]</span>
+      </p>
+    </section>
+
+    <section class="block">
+      <h2>מתי זה לא מתאים</h2>
+      <p>
+        המשרד עוסק במשפט מסחרי ובנדל״ן. פנייה שאינה בתחומים האלה תופנה הלאה
+        במקום להתקבל — זה חוסך לכם זמן, וזו גם הדרך הנכונה לעבוד.
+      </p>
+    </section>
+
+    <div class="cta-block">
+      <h2>מוכנים להתחיל?</h2>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+        <a class="btn btn-ghost" href={whatsappLink('הגעתי מעמוד התהליך ואני מתעניין ב-')}>שאלה בוואטסאפ</a>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .lede { padding-block: var(--s7) var(--s6); }
+  h1 {
+    font-size: clamp(30px, 4.4vw, 48px);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: var(--lh-tight);
+    margin-block-start: var(--s4);
+    max-width: 20ch;
+  }
+  .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 56ch; margin-block-start: var(--s5); }
+
+  .rail-wrap {
+    padding-block: var(--s7);
+    border-block: 1px solid var(--rule);
+  }
+  .blocks { padding-block: var(--s8) var(--s9); max-width: var(--measure); }
+  .block { margin-block-end: var(--s7); }
+  .block h2 { font-size: var(--fs-title); font-weight: 600; margin-block-end: var(--s4); }
+  .gap { border: 1px dashed var(--line-control); border-radius: var(--r-md); padding: var(--s5); }
+
+  .cta-block {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    padding: var(--s6);
+  }
+  .cta-block h2 { font-size: var(--fs-title); font-weight: 600; margin-block-end: var(--s5); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); }
+  @media (max-width: 700px) { .cta-row { flex-direction: column; align-items: stretch; } }
+</style>

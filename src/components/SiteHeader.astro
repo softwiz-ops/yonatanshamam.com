@@ -1,0 +1,73 @@
+---
+import { FIRM } from '../data/firm.ts';
+---
+<header class="site-head">
+  <div class="wrap head-in">
+    <a class="brand" href="/">
+      {FIRM.name}
+      <span>{FIRM.tagline}</span>
+    </a>
+    <nav class="nav" aria-label="ניווט ראשי">
+      <a href="/practice-areas/">תחומי עיסוק</a>
+      <a href="/how-it-works/">איך זה עובד</a>
+      <a href="/about/">אודות</a>
+      <a href="/contact/">צור קשר</a>
+    </nav>
+    <a class="head-cta" href={FIRM.calendar}>תיאום פגישה</a>
+  </div>
+</header>
+
+<style>
+  .site-head {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--page) 90%, transparent);
+    backdrop-filter: blur(10px);
+    border-block-end: 1px solid var(--rule);
+  }
+  .head-in { display: flex; align-items: center; gap: var(--s5); min-height: 72px; }
+
+  .brand {
+    font-weight: 600;
+    white-space: nowrap;
+    text-decoration: none;
+    line-height: 1.25;
+    padding-block: var(--s2);
+  }
+  .brand span {
+    display: block;
+    font-size: var(--fs-micro);
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .nav {
+    display: flex;
+    gap: var(--s5);
+    margin-inline-start: auto;
+    font-size: var(--fs-small);
+    color: var(--muted);
+  }
+  /* Inline nav links inherit the line box and land at ~19px tall; padding
+     lifts them past the 24px target minimum without changing the layout. */
+  .nav a { text-decoration: none; display: inline-block; padding-block: 6px; }
+  .nav a:hover { color: var(--accent); }
+
+  .head-cta {
+    font-size: var(--fs-small);
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--accent);
+    color: var(--accent-ink);
+    border-radius: var(--r-pill);
+    padding: 10px 18px;
+    white-space: nowrap;
+  }
+  .head-cta:hover { background: var(--accent-hover); }
+
+  @media (max-width: 820px) {
+    .nav { display: none; }
+    .head-cta { margin-inline-start: auto; }
+  }
+</style>

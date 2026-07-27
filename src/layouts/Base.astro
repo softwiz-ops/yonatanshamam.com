@@ -1,0 +1,95 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import WhatsAppBar from '../components/WhatsAppBar.astro';
+import { FIRM } from '../data/firm.ts';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Extra JSON-LD for this page, on top of the site-wide Attorney graph. */
+  schema?: object;
+  /** Pre-filled WhatsApp message for the sticky bar on this page. */
+  waMessage?: string;
+  waLabel?: string;
+}
+
+const { title, description, schema, waMessage, waLabel } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+
+/**
+ * The Attorney graph.
+ *
+ * Every field here is a fact from src/data/firm.ts. Nothing is invented — in
+ * particular there is no aggregateRating, no priceRange and no award. A
+ * fabricated rating is both a schema violation and, on a lawyer's site, an
+ * advertising-rules problem.
+ *
+ * priceRange is deliberately absent even though Google likes it: the Bar's
+ * rules forbid any reference to fees, and that includes structured data.
+ */
+const attorney = {
+  '@context': 'https://schema.org',
+  '@type': 'Attorney',
+  '@id': `${Astro.site}#attorney`,
+  name: FIRM.legalName,
+  description: FIRM.tagline,
+  url: Astro.site?.href,
+  telephone: FIRM.phone.tel,
+  email: FIRM.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: `${FIRM.address.building}, ${FIRM.address.street}`,
+    addressLocality: FIRM.address.city,
+    addressCountry: FIRM.address.country,
+  },
+  areaServed: { '@type': 'Country', name: 'IL' },
+  availableLanguage: FIRM.languages,
+  openingHours: FIRM.hours.schema,
+  sameAs: [FIRM.linkedin],
+  founder: {
+    '@type': 'Person',
+    name: FIRM.name,
+    jobTitle: 'עורך דין',
+    knowsLanguage: FIRM.languages,
+    sameAs: [FIRM.linkedin],
+  },
+};
+---
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="canonical" href={canonical} />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+
+  <!-- website, not article. The live WordPress site has this wrong on the home
+       page, which is part of why the share card renders badly. -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:locale" content="he_IL" />
+  <meta property="og:site_name" content={FIRM.legalName} />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- Preloaded because the Hebrew subset is on the critical path for every
+       glyph above the fold. 7.3KB. -->
+  <link rel="preload" href="/fonts/assistant-hebrew.woff2" as="font" type="font/woff2" crossorigin />
+
+  <script type="application/ld+json" set:html={JSON.stringify(attorney)} />
+  {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+</head>
+<body>
+  <a class="skip" href="#main">דילוג לתוכן</a>
+  <SiteHeader />
+  <WhatsAppBar message={waMessage} label={waLabel} />
+  <main id="main">
+    <slot />
+  </main>
+  <SiteFooter />
+</body>
+</html>

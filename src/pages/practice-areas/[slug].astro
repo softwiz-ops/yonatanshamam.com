@@ -1,0 +1,280 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import { FIRM, whatsappLink } from '../../data/firm.ts';
+import { SERVICES, CATEGORIES, byCategory } from '../../data/services.ts';
+
+export function getStaticPaths() {
+  return SERVICES.map((service) => ({ params: { slug: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props;
+const category = CATEGORIES[service.category];
+const related = byCategory(service.category).filter((s) => s.slug !== service.slug).slice(0, 3);
+
+const waMessage = `אני מתעניין ב${service.title}`;
+const primaryHref =
+  service.primaryCta.type === 'calendar' ? FIRM.calendar : whatsappLink(waMessage);
+
+/* Service + FAQPage + BreadcrumbList. No `offers` node and no priceRange:
+   the Bar's rules forbid any reference to fees, and that includes structured
+   data. No aggregateRating either — there is nothing real to put in it. */
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Service',
+      name: service.title,
+      description: service.seoDescription,
+      serviceType: category.title,
+      provider: { '@id': `${Astro.site}#attorney` },
+      areaServed: { '@type': 'Country', name: 'IL' },
+      availableLanguage: FIRM.languages,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: service.faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.q,
+        acceptedAnswer: { '@type': 'Answer', text: f.a },
+      })),
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'ראשי', item: `${Astro.site}` },
+        { '@type': 'ListItem', position: 2, name: 'תחומי עיסוק', item: `${Astro.site}practice-areas/` },
+        { '@type': 'ListItem', position: 3, name: service.title },
+      ],
+    },
+  ],
+};
+---
+<Base
+  title={service.seoTitle}
+  description={service.seoDescription}
+  schema={schema}
+  waMessage={waMessage}
+  waLabel={`שאלה על ${service.shortTitle ?? service.title}`}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="מיקום בעמוד">
+      <a href="/">ראשי</a>
+      <span class="sep chev" aria-hidden="true">›</span>
+      <a href="/practice-areas/">תחומי עיסוק</a>
+      <span class="sep chev" aria-hidden="true">›</span>
+      <span>{service.shortTitle ?? service.title}</span>
+    </nav>
+  </div>
+
+  <div class="wrap lede">
+    <p class="eyebrow">{category.title}</p>
+    <h1>{service.title}</h1>
+    <p class="summary">{service.summary}</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href={primaryHref}>{service.primaryCta.label}</a>
+      <a class="btn btn-ghost" href={whatsappLink(waMessage)}>שאלה מהירה בוואטסאפ</a>
+    </div>
+  </div>
+
+  <div class="wrap body-grid">
+    <div>
+      <section class="block">
+        <h2>מה חשוב לדעת</h2>
+        {service.intro.map((p) => <p>{p}</p>)}
+      </section>
+
+      <section class="block">
+        <h2>מה המסמך מסדיר</h2>
+        {/* Deliberately "what the instrument regulates", not "what the service
+            includes". The first is general legal knowledge; the second would be
+            a commitment by this firm, and only the founder can make those. */}
+        <ul class="covers">
+          {service.covers.map((c) => (
+            <li>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12l6 6L20 6"/></svg>
+              <div><b>{c.title}</b><span>{c.detail}</span></div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="block">
+        <h2>למה זה משנה</h2>
+        <p>{service.whyItMatters}</p>
+      </section>
+
+      <section class="block">
+        <h2>היקף העבודה מול המשרד</h2>
+        {service.scope ? (
+          <ul class="covers">
+            {service.scope.included.map((i) => <li><span>{i}</span></li>)}
+          </ul>
+        ) : (
+          <p class="gap">
+            <span class="todo">[[חסר: מה כלול בהתקשרות, מה מחוץ להיקף, כמה סבבי הערות, ומה נדרש מהלקוח]]</span>
+            <span class="gap-note">
+              הפרטים האלה הם התחייבות של המשרד ולכן אינם נכתבים על סמך אתרים אחרים.
+            </span>
+          </p>
+        )}
+      </section>
+
+      <section class="block">
+        <h2>שאלות נפוצות</h2>
+        <Faq items={service.faqs} />
+      </section>
+
+      {related.length > 0 && (
+        <section class="block">
+          <h2>שירותים קרובים</h2>
+          <div class="related">
+            {related.map((r) => (
+              <a class="rel" href={`/practice-areas/${r.slug}/`}>
+                <b>{r.shortTitle ?? r.title}</b>
+                <span>{r.summary.split('.')[0]}.</span>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+
+    <aside class="aside">
+      <div class="panel">
+        <h2>בקצרה</h2>
+        <ul class="facts">
+          <li><span class="k">תחום</span><span class="v">{category.title}</span></li>
+          <li>
+            <span class="k">לו״ז</span>
+            <span class="v">
+              {service.timeline
+                ? <bdi dir="ltr">{service.timeline}</bdi>
+                : <span class="todo">[[חסר]]</span>}
+            </span>
+          </li>
+          <li><span class="k">שפות</span><span class="v">{FIRM.languages.join(', ')}</span></li>
+        </ul>
+        <a class="btn btn-primary panel-btn" href={primaryHref}>{service.primaryCta.label}</a>
+        {/* No note explaining the absence of fee information: the explanation
+            would itself be a reference to fees. See PROJECT.md — open with the
+            ethics committee. */}
+      </div>
+
+      <div class="panel">
+        <h2>מעדיפים לדבר?</h2>
+        <ul class="facts">
+          <li><span class="k">טלפון</span><span class="v"><bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi></span></li>
+          <li><span class="k">דוא״ל</span><span class="v"><bdi><a href={`mailto:${FIRM.email}`} dir="ltr">{FIRM.email}</a></bdi></span></li>
+          <li><span class="k">שעות</span><span class="v">{FIRM.hours.days} <bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></span></li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .crumbs { font-size: var(--fs-caption); color: var(--muted); padding-block: var(--s5); }
+  .crumbs a { text-decoration: none; display: inline-block; padding-block: 4px; }
+  .crumbs a:hover { text-decoration: underline; }
+  /* Breadcrumb separators are directional and flip; .chev handles that. */
+  .sep { display: inline-block; margin-inline: var(--s2); }
+
+  .lede { padding-block-end: var(--s7); }
+  h1 {
+    font-size: clamp(30px, 4.4vw, 48px);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: var(--lh-tight);
+    margin-block-start: var(--s4);
+    max-width: 18ch;
+  }
+  .summary { font-size: var(--fs-lead); color: var(--muted); max-width: 54ch; margin-block-start: var(--s5); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s6); }
+
+  .body-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: var(--s8);
+    align-items: start;
+    padding-block: var(--s7) var(--s9);
+  }
+  .block { margin-block-end: var(--s8); }
+  .block:last-child { margin-block-end: 0; }
+  .block > h2 {
+    font-size: var(--fs-section);
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    margin-block-end: var(--s5);
+  }
+  .block > p { max-width: var(--measure); }
+  .block > p + p { margin-block-start: var(--s4); }
+
+  .covers { display: grid; gap: var(--s3); }
+  .covers li {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    padding: var(--s4) var(--s5);
+    display: flex;
+    gap: var(--s4);
+    align-items: flex-start;
+  }
+  /* A check mark is not directional and must never be mirrored. */
+  .covers svg { flex: none; color: var(--accent); margin-block-start: 6px; }
+  .covers b { font-weight: 600; }
+  .covers span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: 2px; }
+
+  .gap {
+    border: 1px dashed var(--line-control);
+    border-radius: var(--r-md);
+    padding: var(--s5);
+    max-width: var(--measure);
+  }
+  .gap-note { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
+
+  .related { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s3); }
+  .rel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    padding: var(--s5);
+    text-decoration: none;
+  }
+  .rel:hover { border-color: var(--accent); }
+  .rel b { display: block; }
+  .rel span { display: block; font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s2); }
+
+  .aside { position: sticky; top: 96px; display: grid; gap: var(--s4); }
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    padding: var(--s5);
+    box-shadow: var(--shadow-card);
+  }
+  .panel h2 { font-size: var(--fs-small); font-weight: 600; margin-block-end: var(--s4); }
+  .facts li {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s3);
+    font-size: var(--fs-small);
+    padding-block: var(--s3);
+    border-block-end: 1px solid var(--rule);
+  }
+  .facts li:last-child { border-block-end: 0; }
+  .facts .k { color: var(--muted); }
+  .facts .v { font-weight: 600; font-variant-numeric: tabular-nums; text-align: end; }
+  .facts a { display: inline-block; padding-block: 4px; }
+  .panel-btn { width: 100%; margin-block-start: var(--s4); }
+  .panel-note { font-size: var(--fs-micro); color: var(--faint); margin-block-start: var(--s3); }
+
+  @media (max-width: 940px) {
+    .body-grid { grid-template-columns: 1fr; gap: var(--s7); }
+    .aside { position: static; }
+    .related { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 700px) {
+    .cta-row { flex-direction: column; align-items: stretch; }
+  }
+</style>

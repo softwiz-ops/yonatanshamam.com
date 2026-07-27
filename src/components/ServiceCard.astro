@@ -1,0 +1,86 @@
+---
+import type { Service } from '../data/services.ts';
+
+interface Props { service: Service }
+const { service } = Astro.props;
+---
+<a class="card" href={`/practice-areas/${service.slug}/`}>
+  <div class="card-top">
+    <h3>{service.shortTitle ?? service.title}</h3>
+    {service.tag && <span class:list={['tag', service.tagAccent && 'tag-accent']}>{service.tag}</span>}
+  </div>
+  <p>{service.summary}</p>
+  <div class="card-foot">
+    <span class="meta">
+      {/* A range with an en dash reverses in RTL unless it is isolated —
+          24–48 renders as 48–24. Isolated here regardless of the dash used. */}
+      {service.timeline
+        ? <><bdi dir="ltr">{service.timeline}</bdi></>
+        : <span class="todo">[[חסר: לו״ז]]</span>}
+    </span>
+    <span class="go">
+      פרטים
+      <svg class="chev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </span>
+  </div>
+</a>
+
+<style>
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-lg);
+    padding: var(--s5);
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    transition: box-shadow .18s, border-color .18s, transform .18s;
+  }
+  .card:hover {
+    box-shadow: var(--shadow-card);
+    border-color: var(--line-control);
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) { .card:hover { transform: none; } }
+
+  .card-top { display: flex; align-items: flex-start; gap: var(--s3); }
+  .card h3 { font-size: var(--fs-title); font-weight: 600; letter-spacing: -0.01em; }
+
+  .tag {
+    font-size: var(--fs-micro);
+    font-weight: 700;
+    white-space: nowrap;
+    border-radius: var(--r-pill);
+    padding: 3px 10px;
+    background: var(--page);
+    color: var(--muted);
+    border: 1px solid var(--rule);
+    margin-inline-start: auto;
+  }
+  .tag-accent {
+    background: var(--accent-wash);
+    color: var(--accent);
+    border-color: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+
+  .card p { font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s3); flex: 1; }
+
+  .card-foot {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
+    margin-block-start: var(--s5);
+    padding-block-start: var(--s4);
+    border-block-start: 1px solid var(--rule);
+    font-size: var(--fs-caption);
+  }
+  .meta { color: var(--muted); font-variant-numeric: tabular-nums; }
+  .go {
+    margin-inline-start: auto;
+    color: var(--accent);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+  }
+</style>

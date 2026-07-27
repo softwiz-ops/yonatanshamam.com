@@ -2,7 +2,10 @@
 import { defineConfig, sessionDrivers } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import cloudflare from '@astrojs/cloudflare';
-import redirects from './redirects.json' with { type: 'json' };
+// The JSON import widens `status` to `number`; Astro wants the literal union.
+/** @type {import('astro').AstroUserConfig['redirects']} */
+import redirectsJson from './redirects.json' with { type: 'json' };
+const redirects = /** @type {any} */ (redirectsJson);
 
 export default defineConfig({
   // Non-www, matching the canonical the live WordPress site already serves on
@@ -20,8 +23,13 @@ export default defineConfig({
 
   // Nothing here uses sessions. Left unset, the Cloudflare adapter assumes
   // KV-backed sessions and emits a SESSION binding with no namespace id, which
-  // fails the deploy until an unused KV namespace exists.
-  session: { driver: sessionDrivers.memory() },
+  // fails the deploy until an unused KV namespace exists. An in-memory store
+  // needs no Cloudflare resource and is never read.
+  //
+  // The cast is needed because this Astro version ships `memory` and `null` at
+  // runtime but omits both from the sessionDrivers type. Verified present:
+  //   node -e "import('astro/config').then(m=>console.log(Object.keys(m.sessionDrivers)))"
+  session: { driver: /** @type {any} */ (sessionDrivers).memory() },
 
   trailingSlash: 'always',
   build: { format: 'directory' },

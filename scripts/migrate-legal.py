@@ -184,14 +184,23 @@ def main() -> None:
     if len(found) != len(SECTIONS):
         sys.exit(f"Expected {len(SECTIONS)} sections, extracted {len(found)}: {found}")
 
+    # Quote every value. The "updated" line contains ": " inside its text
+    # ("עודכן לאחרונה: פברואר 2026"), which an unquoted YAML scalar parses as a
+    # mapping and the frontmatter then fails to load.
+    def q(v: str) -> str:
+        return '"' + v.replace('"', '\\"') + '"'
+
     front = [
         "---",
-        f"title: {title}",
-        "description: תנאי השימוש, מדיניות הפרטיות, הצהרת הנגישות ומדיניות ה-Cookies של משרד עו״ד יהונתן שמם.",
+        f"title: {q(title)}",
+        "description: " + q(
+            "תנאי השימוש, מדיניות הפרטיות, הצהרת הנגישות ומדיניות ה-Cookies "
+            "של משרד עו״ד יהונתן שמם."
+        ),
         # The live URL, so build-redirects.py can emit the 301. The new path is
         # Hebrew-free and describes all four documents, not just privacy.
-        "legacyPath: /privacy-policy/",
-        f"updated: {updated}" if updated else "",
+        "legacyPath: " + q("/privacy-policy/"),
+        f"updated: {q(updated)}" if updated else "",
         "---",
         "",
     ]

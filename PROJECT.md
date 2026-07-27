@@ -13,8 +13,9 @@ Elementor on Cloudways to a static Astro site on Cloudflare Workers.
 Hebrew only, RTL native. The order of priorities the founder set is: **leads
 first, positioning second, SEO third.**
 
-**Status: design phase. Two directions built and audited; awaiting a choice.**
-Nothing is deployed.
+**Status: direction B chosen and built.** 15 pages generate, all checks pass,
+nothing is deployed. The gaps that remain are content the founder owes, not
+engineering.
 
 ---
 
@@ -57,6 +58,11 @@ replace a statement with a menu. The three existing categories already do most
 of the separating; the real-estate path gets its own service page, tone, and
 conversion route (calendar rather than WhatsApp).
 
+**Direction B, "מסלול", chosen 27 Jul 2026.** The bet: the process is the
+product. Since the Bar's rules keep fees off the site entirely, transparency of
+scope and process is the only substitute available, so it is the organising
+system rather than a module inside one.
+
 **Free font track.** Assistant only, self-hosted. Herzog Fox & Neeman — the
 largest firm in Israel — runs Assistant from Google Fonts at 18px body, so a
 carefully executed free stack meets the sector norm at zero cost.
@@ -72,6 +78,63 @@ card grid create bidi boundary noise for no benefit. Mapped to:
 `בסיס`, `פופולרי`, `נדרש`, `חובה חוקית`, `דחוף`.
 
 ---
+
+## The line drawn through the service content
+
+The founder asked for the service pages to be filled in from whatever ranks,
+using the firms in the top results. That works for one half of the content and
+not the other, and the split is enforced in `src/data/services.ts`:
+
+- **What the legal instrument is and what it regulates** — what a founders
+  agreement covers, what the Companies Registrar requires, what Regulation 35
+  demands. General legal knowledge. Accurate, defensible, and it is what
+  actually ranks. Written.
+- **What this firm commits to** — how many revision rounds, how long a draft
+  takes, what falls outside the engagement. Factual claims about this practice.
+  Only the founder can make them, and advertising by a lawyer must not mislead.
+  Copying a competitor's "up to 3 revision rounds" would invent an obligation he
+  never agreed to. These render as visible `[[חסר]]` markers.
+
+## Identity facts, and where they came from
+
+Supplied by the founder or taken from the LinkedIn profile he provided:
+
+| Fact | Value |
+|---|---|
+| Address | מגדלי אלון, יגאל אלון 94, תל אביב |
+| Hours | ראשון–חמישי, 09:00–19:00 |
+| Admitted | 2019 |
+| Languages | עברית, אנגלית |
+| Previous legal roles | גולדפרב זליגמן (2019–2022); מתמחה, ש. הררי (2018–2019) |
+| Licence number | not required — the founder's decision |
+| Education | still missing |
+
+**The address on the live site is wrong.** It says מגדלי הארבעה; the move to
+Alon Towers is documented on the founder's own LinkedIn. Corrected here.
+
+**What was deliberately left off the about page**, though it is all on the
+LinkedIn profile: partner tier badges ("Elite Circle Platinum"), client counts
+("dozens of SMBs"), and self-praise ("we punch above our weight"). The first
+would be advertising for another business on a lawyer's site, which the rules
+forbid outright. The technology company and the legal-tech venture appear as
+biography — they are the entire basis of the positioning — but unlinked and
+without promotional framing.
+
+## The fee-explanation problem
+
+The first build carried lines like "אין באתר מחירון — כללי לשכת עורכי הדין
+אוסרים על פרסום שכר טרחה". `scripts/check-ethics.py` flagged them, correctly:
+the permitted free text is defined as text "שאינו כולל כל התייחסות לשכר הטרחה",
+and an explanation of why fees are absent is itself a reference to fees.
+
+All of them were removed. The pages now state what is there and explain nothing.
+Whether any wording near fees is permitted at all is one of the two questions
+open with the ethics committee.
+
+One instance remains and was **not** edited: the migrated terms of service says
+a defective document "יתוקן ללא תשלום נוסף". It sits in a binding legal document
+rather than in advertising copy, and it is the founder's own drafting. The
+checker reports it as REVIEW on every run.
 
 ## Defects in the live site, verified against the response
 
@@ -194,19 +257,21 @@ dash is used.**
 
 ## Open — blocking or shaping work
 
-**Content the founder must supply.** All of it is marked `[[חסר: …]]` and
-visible in the mockups:
+**Content the founder must supply.** All of it renders as a visible
+`[[חסר: …]]` marker on the built pages:
 
-- Full street address, licence number, opening hours
-- Biography, education, admission date, languages, previous roles — this is the
-  largest hole on the site, for positioning and for E-E-A-T
-- Per service: what is included, what is explicitly out of scope, the steps,
-  the expected timeline, what the client must supply, what happens in the first
-  meeting
-- Physical accessibility of the office: parking, approach, entrance, lift,
-  accessible toilets, meeting rooms
+- **Education** — degree, institution, year. Permitted to publish and a real
+  E-E-A-T signal; it was not in the LinkedIn content supplied.
+- **Per service:** what is included in the engagement, what is explicitly out of
+  scope, how many rounds of comments, the expected timeline, and what the client
+  must bring. This is the substance of the transparency that replaces a price
+  list, and it is the largest remaining hole.
+- **What happens in the first meeting**, and how long it takes.
+- **Physical accessibility of the office:** parking, approach, entrance, lift,
+  accessible toilets, meeting rooms. Required by the regulation.
 - Whether the logo is redesigned. The current one is
-  `cropped-Google-Gemini-Image-Preview.png`
+  `cropped-Google-Gemini-Image-Preview.png`.
+- An `og:image` at 1200×630. None exists.
 
 **Two questions for the Bar's ethics committee, in writing, before anything is
 built around them:**
