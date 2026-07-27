@@ -1,12 +1,9 @@
-# Prompt for generating the site's graphic elements
+# TASK: generate nine SVG graphics for this website
 
-Copy everything below the line into Antigravity, with this repository open.
-
-The prompt is in English on purpose: the deliverables are SVG files, not Hebrew
-copy, and coding agents follow English instructions more reliably. Nothing it
-produces should contain text in any language — see the constraints.
-
----
+**This file is a work order. Execute it. Do not summarise it, do not document
+it, and do not write about the tool you are running in. The only acceptable
+output is nine SVG files in `public/graphics/` and a short report of what you
+made.**
 
 You are producing a small set of original SVG graphics for a Hebrew,
 right-to-left website belonging to a boutique commercial-law firm in Tel Aviv.
