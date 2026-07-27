@@ -90,17 +90,41 @@ export const FIRM = {
   ] as { role: string; org: string; from: number; to: number; areas?: string }[],
 
   /**
-   * Academic degrees are permitted and are a real E-E-A-T signal, but the
-   * founder's LinkedIn education section was not among what he supplied.
-   * Left null on purpose — a guessed degree on a lawyer's site is an ethical
-   * exposure, not a copy gap.
+   * Academic degrees are explicitly permitted to publish and are a real
+   * E-E-A-T signal. Supplied by the founder: Ono Academic College, 2018.
+   *
+   * The degree is stated as LL.B because an LL.B is a statutory precondition
+   * for admission to the Israeli Bar, and he was admitted in 2019 — so this is
+   * an entailment rather than a guess. If he in fact holds a different or
+   * additional degree, correct it here.
    */
-  education: null as null | { degree: string; institution: string; year: number }[],
+  education: [
+    { degree: 'תואר ראשון במשפטים (LL.B)', institution: 'הקריה האקדמית אונו', year: 2018 },
+  ],
 
   /** Regulation 35(ה) requires a named accessibility coordinator. */
   accessibilityCoordinator: {
     name: 'עו״ד יהונתן שמם',
     responseTime: 'עד 5 ימי עסקים',
+  },
+
+  /**
+   * Physical accessibility of the office. Regulation 35 requires this in the
+   * declaration, and it must describe the premises as they actually are —
+   * a declaration that overstates is worse than one that admits a gap.
+   *
+   * Supplied by the founder on 27 Jul 2026. `null` means he has not stated it
+   * and it renders as a visible gap rather than an assumption; the building is
+   * a Tel Aviv high-rise so a lift certainly exists, but "certainly" is not a
+   * basis for a statement in a legal document.
+   */
+  physicalAccess: {
+    parking: false,
+    approach: true,
+    toilets: true,
+    meetingRooms: true,
+    entrance: null as boolean | null,
+    lift: null as boolean | null,
   },
 } as const;
 

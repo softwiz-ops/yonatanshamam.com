@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { FIRM } from '../data/firm.ts';
-import { Content, frontmatter } from '../content/pages/legal.md';
+import { compiledContent, frontmatter } from '../content/pages/legal.md';
 
 /*
  * Four binding documents on one page, migrated from the live site by
@@ -34,6 +34,50 @@ const sections = [
   { id: 'accessibility', label: 'הצהרת נגישות' },
   { id: 'cookies', label: 'מדיניות Cookies' },
 ];
+
+/**
+ * The migrated declaration says only "משרדנו ממוקם בתל אביב. הנחיות גישה פיזית
+ * יסופקו בתיאום מוקדם", which does not meet what Regulation 35 expects: the
+ * declaration has to describe the premises as they are.
+ *
+ * The detail is injected into that section rather than appended as a separate
+ * block, because splitting an accessibility declaration across two places is
+ * exactly the findability problem the regulation is aimed at. It is injected
+ * at build time rather than written into the Markdown because
+ * migrate-legal.py overwrites that file on every run.
+ */
+const A = FIRM.physicalAccess;
+const yesNo = (v: boolean | null, yes: string, no: string) =>
+  v === null
+    ? '<span class="todo">[[חסר: טרם נמסר]]</span>'
+    : v
+      ? yes
+      : no;
+
+const physicalAccess = `
+<ul class="access">
+  <li>${yesNo(A.parking, 'חניה נגישה זמינה במקום.', '<strong>אין חניה במקום.</strong>')}</li>
+  <li>${yesNo(A.approach, 'קיימת דרך גישה נגישה אל המשרד.', 'אין דרך גישה נגישה.')}</li>
+  <li>כניסה לבניין: ${yesNo(A.entrance, 'נגישה.', 'אינה נגישה.')}</li>
+  <li>מעלית: ${yesNo(A.lift, 'קיימת ונגישה.', 'אין מעלית.')}</li>
+  <li>${yesNo(A.toilets, 'קיימים שירותים נגישים.', 'אין שירותים נגישים.')}</li>
+  <li>${yesNo(A.meetingRooms, 'חדרי הפגישות נגישים.', 'חדרי הפגישות אינם נגישים.')}</li>
+</ul>
+<p>ניתן לתאם מראש פגישה בסביבה נגישה, שירות בכתב או פגישה מרחוק.</p>
+`;
+
+const ANCHOR = 'הנחיות גישה פיזית יסופקו בתיאום מוקדם.';
+let html = await compiledContent();
+if (html.includes(ANCHOR)) {
+  html = html.replace(ANCHOR, ANCHOR + '</p>' + physicalAccess + '<p>');
+} else {
+  // Fail loudly rather than silently shipping a declaration missing the
+  // premises detail the regulation requires.
+  throw new Error(
+    'legal.md no longer contains the physical-access anchor sentence; ' +
+      'the accessibility detail would be dropped. Re-check migrate-legal.py output.'
+  );
+}
 ---
 <Base title={`${frontmatter.title} | ${FIRM.name}`} description={frontmatter.description}>
   <div class="wrap lede">
@@ -71,9 +115,7 @@ const sections = [
     </nav>
   </div>
 
-  <div class="wrap doc">
-    <Content />
-  </div>
+  <div class="wrap doc" set:html={html} />
 </Base>
 
 <style>
@@ -137,4 +179,6 @@ const sections = [
      minimum. Padding lifts them without disturbing the paragraph rhythm. */
   .doc :global(a) { color: var(--accent); display: inline-block; padding-block: 3px; }
   .doc :global(strong) { font-weight: 600; }
+  .doc :global(.access) { margin-block-end: var(--s5); padding-inline-start: var(--s5); }
+  .doc :global(.access li) { list-style: disc; margin-block-end: var(--s2); }
 </style>

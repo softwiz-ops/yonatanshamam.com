@@ -101,6 +101,17 @@ def visible_text(markup: str) -> str:
     return html.unescape(TAGS.sub(" ", STRIP.sub(" ", markup)))
 
 
+def scope_approved() -> bool:
+    """Has the founder signed off the scope and timeline commitments?
+
+    They were drafted to market norms on his instruction, but they are still
+    statements about how HIS practice works — a turnaround he cannot meet is
+    misleading advertising. The site must not go public until he has read them.
+    """
+    src = (ROOT / "src" / "data" / "services.ts").read_text(encoding="utf-8")
+    return bool(re.search(r"SCOPE_APPROVED\s*=\s*true", src))
+
+
 def main() -> None:
     if not DIST.exists():
         sys.exit(f"{DIST} not found — run `npm run build` first.")
@@ -132,6 +143,17 @@ def main() -> None:
                 hits += 1
 
     print(f"scanned {len(pages)} page(s)")
+
+    if not scope_approved():
+        print()
+        print("BLOCKING  the scope and timeline commitments on the nine service")
+        print("          pages were drafted to market norms and have NOT been")
+        print("          approved by the founder. He must read every `scope` and")
+        print("          `timeline` in src/data/services.ts, correct anything he")
+        print("          cannot stand behind, then set SCOPE_APPROVED = true.")
+        print("          Do not publish until then.")
+        hits += 1
+
     if reviews:
         print(f"{reviews} item(s) awaiting the founder's decision (not blocking).")
     if hits:

@@ -107,15 +107,30 @@ const schema = {
       <section class="block">
         <h2>היקף העבודה מול המשרד</h2>
         {service.scope ? (
-          <ul class="covers">
-            {service.scope.included.map((i) => <li><span>{i}</span></li>)}
-          </ul>
+          <div class="scope">
+            <div>
+              <h3>מה כלול</h3>
+              <ul class="ticks">
+                {service.scope.included.map((i) => (
+                  <li>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12l6 6L20 6"/></svg>
+                    <span>{i}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>מה אינו כלול</h3>
+              {/* Stating the boundary is the part clients actually remember,
+                  and it is what stops a scope dispute later. */}
+              <ul class="crosses">
+                {service.scope.excluded.map((i) => <li><span>{i}</span></li>)}
+              </ul>
+            </div>
+          </div>
         ) : (
           <p class="gap">
-            <span class="todo">[[חסר: מה כלול בהתקשרות, מה מחוץ להיקף, כמה סבבי הערות, ומה נדרש מהלקוח]]</span>
-            <span class="gap-note">
-              הפרטים האלה הם התחייבות של המשרד ולכן אינם נכתבים על סמך אתרים אחרים.
-            </span>
+            <span class="todo">[[חסר: מה כלול בהתקשרות, מה מחוץ להיקף, כמה סבבי הערות]]</span>
           </p>
         )}
       </section>
@@ -225,6 +240,18 @@ const schema = {
   .covers b { font-weight: 600; }
   .covers span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: 2px; }
 
+  .scope { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); }
+  .scope h3 { font-size: var(--fs-small); font-weight: 600; color: var(--muted); margin-block-end: var(--s3); }
+  .ticks li, .crosses li {
+    display: flex; gap: var(--s3); align-items: flex-start;
+    font-size: var(--fs-small); padding-block: var(--s2);
+  }
+  .ticks svg { flex: none; color: var(--accent); margin-block-start: 4px; }
+  /* Not-included items are set in muted ink with an en-rule marker rather than
+     a red cross: a boundary is information, not a warning. */
+  .crosses li { color: var(--muted); padding-inline-start: var(--s4); position: relative; }
+  .crosses li::before { content: '–'; position: absolute; inset-inline-start: 0; }
+
   .gap {
     border: 1px dashed var(--line-control);
     border-radius: var(--r-md);
@@ -273,6 +300,7 @@ const schema = {
     .body-grid { grid-template-columns: 1fr; gap: var(--s7); }
     .aside { position: static; }
     .related { grid-template-columns: 1fr; }
+    .scope { grid-template-columns: 1fr; gap: var(--s6); }
   }
   @media (max-width: 700px) {
     .cta-row { flex-direction: column; align-items: stretch; }

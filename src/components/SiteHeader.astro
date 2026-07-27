@@ -4,8 +4,28 @@ import { FIRM } from '../data/firm.ts';
 <header class="site-head">
   <div class="wrap head-in">
     <a class="brand" href="/">
-      {FIRM.name}
-      <span>{FIRM.tagline}</span>
+      {/*
+        The mark is gold line art and stays gold — WCAG exempts logotypes from
+        contrast. Measured for the record: this gold is 1.6:1-2.5:1 on the page
+        background, so it must never be borrowed for text, icons or controls.
+        The single interactive accent on this site is the green.
+
+        alt="" because the wordmark beside it already names the firm; giving
+        both the same name makes a screen reader say it twice.
+      */}
+      <img
+        src="/logo-shield.png"
+        srcset="/logo-shield.png 1x, /logo-shield@2x.png 2x, /logo-shield@3x.png 3x"
+        width="26"
+        height="34"
+        alt=""
+        class="mark"
+        decoding="async"
+      />
+      <span class="words">
+        {FIRM.name}
+        <span class="tag">{FIRM.tagline}</span>
+      </span>
     </a>
     <nav class="nav" aria-label="ניווט ראשי">
       <a href="/practice-areas/">תחומי עיסוק</a>
@@ -29,13 +49,18 @@ import { FIRM } from '../data/firm.ts';
   .head-in { display: flex; align-items: center; gap: var(--s5); min-height: 72px; }
 
   .brand {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
     font-weight: 600;
     white-space: nowrap;
     text-decoration: none;
     line-height: 1.25;
     padding-block: var(--s2);
   }
-  .brand span {
+  .mark { flex: none; width: 26px; height: 34px; }
+  .words { display: block; }
+  .brand .tag {
     display: block;
     font-size: var(--fs-micro);
     font-weight: 400;

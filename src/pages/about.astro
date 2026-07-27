@@ -28,6 +28,10 @@ const schema = {
   worksFor: { '@id': `${Astro.site}#attorney` },
   knowsLanguage: FIRM.languages,
   sameAs: [FIRM.linkedin],
+  alumniOf: FIRM.education?.map((e) => ({
+    '@type': 'CollegeOrUniversity',
+    name: e.institution,
+  })),
   address: {
     '@type': 'PostalAddress',
     streetAddress: `${FIRM.address.building}, ${FIRM.address.street}`,
@@ -90,13 +94,14 @@ const schema = {
       </p>
 
       <h2>השכלה</h2>
-      <p>
-        <span class="todo">[[חסר: תואר, מוסד ושנה]]</span>
-        <span class="gap-note">
-          תארים אקדמיים מותרים בפרסום ומחזקים את העמוד. הם לא הופיעו במידע
-          שהתקבל, ולכן לא הושלמו כאן.
-        </span>
-      </p>
+      <ul class="edu">
+        {FIRM.education?.map((e) => (
+          <li>
+            <b>{e.degree}</b>
+            <span>{e.institution} · <bdi dir="ltr">{e.year}</bdi></span>
+          </li>
+        ))}
+      </ul>
     </div>
 
     <aside class="aside">
@@ -157,7 +162,9 @@ const schema = {
     font-weight: 600;
     margin-block: var(--s7) var(--s4);
   }
-  .gap-note { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
+  .edu li { margin-block-end: var(--s3); }
+  .edu b { display: block; font-weight: 600; }
+  .edu span { color: var(--muted); font-size: var(--fs-small); }
 
   .aside { position: sticky; top: 96px; display: grid; gap: var(--s4); }
   .panel {

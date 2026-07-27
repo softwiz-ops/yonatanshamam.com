@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import ProcessRail from '../components/ProcessRail.astro';
 import { FIRM, whatsappLink } from '../data/firm.ts';
+import { FIRST_MEETING } from '../data/services.ts';
 
 /*
  * This page exists because there cannot be a pricing page.
@@ -48,16 +49,25 @@ const steps = [
 
   <div class="wrap blocks">
     <section class="block">
-      <h2>מה נדרש מכם</h2>
-      <p class="gap">
-        <span class="todo">[[חסר: אילו פרטים ומסמכים הלקוח צריך להביא, ומתי]]</span>
-      </p>
+      <h2>מה קורה בשיחה הראשונה</h2>
+      <p>שיחת אפיון של {FIRST_MEETING.length}. מה עולה בה:</p>
+      <ul class="ticks">
+        {FIRST_MEETING.covers.map((c) => (
+          <li>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12l6 6L20 6"/></svg>
+            <span>{c}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="outcome">{FIRST_MEETING.outcome}</p>
     </section>
 
     <section class="block">
-      <h2>מה קורה בפגישה הראשונה</h2>
-      <p class="gap">
-        <span class="todo">[[חסר: אורך הפגישה, מה עולה בה, ומה יוצאים איתו]]</span>
+      <h2>מה נדרש מכם</h2>
+      <p>
+        זה משתנה לפי השירות, ומופיע בעמוד של כל אחד מהם תחת ״היקף העבודה מול
+        המשרד״. ככלל: הפרטים שהמסמך צריך נאספים בשאלון, ומסמכים קיימים שרלוונטיים
+        לעניין — הסכם קודם, נסח, התכתבות — כדאי לשלוח מראש.
       </p>
     </section>
 
@@ -98,7 +108,10 @@ const steps = [
   .blocks { padding-block: var(--s8) var(--s9); max-width: var(--measure); }
   .block { margin-block-end: var(--s7); }
   .block h2 { font-size: var(--fs-title); font-weight: 600; margin-block-end: var(--s4); }
-  .gap { border: 1px dashed var(--line-control); border-radius: var(--r-md); padding: var(--s5); }
+  .ticks { margin-block: var(--s4); }
+  .ticks li { display: flex; gap: var(--s3); align-items: flex-start; padding-block: var(--s2); }
+  .ticks svg { flex: none; color: var(--accent); margin-block-start: 5px; }
+  .outcome { font-weight: 600; margin-block-start: var(--s4); }
 
   .cta-block {
     background: var(--surface);

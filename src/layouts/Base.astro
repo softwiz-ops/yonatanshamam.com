@@ -74,7 +74,17 @@ const attorney = {
   <meta property="og:url" content={canonical} />
   <meta property="og:locale" content="he_IL" />
   <meta property="og:site_name" content={FIRM.legalName} />
+  {/* 1200x630. The live site serves a 197x246 image, which is why its share
+      cards render as a thumbnail instead of a card. */}
+  <meta property="og:image" content={new URL('/og-image.jpg', Astro.site).href} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content={`הלוגו של ${FIRM.legalName}`} />
   <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="theme-color" content="#fbfaf8" />
 
   <!-- Preloaded because the Hebrew subset is on the critical path for every
        glyph above the fold. 7.3KB. -->

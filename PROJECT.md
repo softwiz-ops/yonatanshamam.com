@@ -115,6 +115,26 @@ which is biography. The rule that follows from it:
 > as a combined offering. No link to the technology company, no shared contact
 > form, no cross-selling, no wording implying the two are bought together.
 
+## The logo, and why it is a mark and not an accent
+
+The founder supplied a gold shield monogram plus a full lockup. Measured against
+the page background: **the logo gold is 1.6:1 to 2.5:1**, and reaching the 4.5:1
+that text needs requires darkening it 36% in lightness, which lands on
+`#80681e` — olive, with the gold gone entirely.
+
+So gold cannot be an accent. WCAG exempts logotypes from contrast requirements,
+so the mark is fine as a mark; the single interactive accent stays green. Gold
+must never be borrowed for text, icons or controls.
+
+Note also that the brief explicitly ruled out the dark-gold "venerable
+institution" idiom for this site. Keeping the gold confined to the mark is what
+lets the logo coexist with that positioning instead of overriding it.
+
+Only the two 677×369 preview PNGs have real transparency; the 2816px masters are
+flat on cream and cannot be keyed cleanly, since the shield is line art with
+light highlights inside it. The build script uses the preview for the mark and
+the high-res lockup for the share card, where a background is wanted anyway.
+
 ## Identity facts, and where they came from
 
 Supplied by the founder or taken from the LinkedIn profile he provided:
@@ -280,18 +300,25 @@ dash is used.**
 **Content the founder must supply.** All of it renders as a visible
 `[[חסר: …]]` marker on the built pages:
 
-- **Education** — degree, institution, year. Permitted to publish and a real
-  E-E-A-T signal; it was not in the LinkedIn content supplied.
-- **Per service:** what is included in the engagement, what is explicitly out of
-  scope, how many rounds of comments, the expected timeline, and what the client
-  must bring. This is the substance of the transparency that replaces a price
-  list, and it is the largest remaining hole.
-- **What happens in the first meeting**, and how long it takes.
-- **Physical accessibility of the office:** parking, approach, entrance, lift,
-  accessible toilets, meeting rooms. Required by the regulation.
-- Whether the logo is redesigned. The current one is
-  `cropped-Google-Gemini-Image-Preview.png`.
-- An `og:image` at 1200×630. None exists.
+- **Sign off the scope and timelines.** They were drafted to market norms on the
+  founder's instruction of 27 Jul 2026 and are NOT approved. He must read every
+  `scope` and `timeline` in `src/data/services.ts`, correct anything he cannot
+  stand behind, and set `SCOPE_APPROVED = true`. `scripts/check-ethics.py`
+  blocks while it is false. A turnaround he cannot meet is misleading
+  advertising, which is exactly what the rules forbid.
+- **Entrance and lift accessibility.** He supplied parking (none), approach,
+  toilets and meeting rooms; these two were not stated and render as gaps in the
+  declaration. Also worth confirming whether the building has accessible parking
+  even if the office does not — the distinction matters in the declaration.
+
+Supplied since:
+
+- Education: הקריה האקדמית אונו, 2018. Stated as LL.B, which is an entailment of
+  admission rather than a guess — correct it if he holds something else.
+- Physical accessibility, in part (above).
+- Logo masters, in `brand-assets/`. `scripts/build-brand-assets.py` derives the
+  header mark, favicons and a 1200×630 share card from them.
+- `og:image` now exists at 1200×630, 54KB.
 
 **Two questions for the Bar's ethics committee, in writing, before anything is
 built around them:**
