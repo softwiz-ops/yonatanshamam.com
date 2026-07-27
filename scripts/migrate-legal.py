@@ -17,7 +17,8 @@ are thrown away. We want the second. The split point is found by locating the
 second DOCTYPE rather than hard-coding the offset, since the wrapper's weight
 changes whenever a plugin updates.
 
-Re-runnable, and it overwrites. Hand-edits to the generated Markdown are lost.
+Re-runnable. Writes to reference/legal-original.md for comparison only — the
+live documents are authored in src/content/pages/legal.md and are NOT generated.
 
     python3 scripts/migrate-legal.py
 """
@@ -33,7 +34,13 @@ from pathlib import Path
 SOURCE = "https://yonatanshamam.com/privacy-policy/"
 ROOT = Path(__file__).resolve().parent.parent
 CACHE = ROOT / "reference" / "scrape" / "privacy.html"
-OUT = ROOT / "src" / "content" / "pages" / "legal.md"
+# Writes to reference/, NOT to src/. The legal documents were re-authored on
+# 27 Jul 2026 to match what this build actually does — the migrated text
+# declared pixels and tracking the site does not use, and its accessibility
+# section was thinner than Regulation 35 expects. src/content/pages/legal.md is
+# now a source document under version control. This script exists to reproduce
+# the ORIGINAL for comparison, and must never overwrite the authored version.
+OUT = ROOT / "reference" / "legal-original.md"
 
 # The four sections, keyed by the anchor id the live page already uses. These
 # anchors are kept verbatim in the rebuild: the footer links point at them, and
