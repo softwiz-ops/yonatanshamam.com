@@ -487,6 +487,46 @@ rule meaning exactly what it meant before.
 
 Measured after the change: 230×288 CSS, aspect 0.8, unchanged from before.
 
+### display:contents was the wrong fix, and it broke the about page
+
+The first attempt promoted the `<img>` back into the layout with
+`picture { display: contents }`. **Grid and flex blockify their items**, so the
+two `<source>` elements inside `<picture>` became real layout items too. On the
+about page they took the first two grid tracks, pushed the portrait into the
+third, and forced the facts and roles onto a second row — a large empty gap
+where the founder expected content. On the home page they were two extra flex
+items.
+
+Measured, not guessed: `grid-template-rows` read `300px 516.5px` — two rows for
+a one-row layout — and the `<source>` elements reported `display: block`.
+
+The right fix is to size the `<picture>` itself (`.firm-in > picture`, and the
+200px grid track on the about page) and let the `<img>` fill it with
+`width: 100%`. Never reach for `display: contents` on a `<picture>` inside a
+grid or flex container.
+
+Fixed while there: below 1000px the about grid drops to two tracks with three
+items, so the roles list wrapped into the 170px portrait column. It now sits
+under the facts.
+
+### The photograph is soft, and downscaling made it softer
+
+With the pipeline correct the founder still saw it as smeared, and he was right.
+The remaining softness is in the photograph — visible at native 640×800 before
+any code touches it.
+
+`scripts/build-portrait.py` resamples to the delivered width and *then* applies
+an unsharp mask, in that order: sharpening the 640px original and then resizing
+to 460 throws most of the benefit away, because the resample removes exactly the
+frequencies the mask just raised. Parameters were chosen by measurement (the
+table is in the script) — radius 0.8 / 80% / threshold 3 lifts high-frequency
+energy 25% for 30% more edge overshoot, where the next step up buys 1% more
+sharpness for 10% more overshoot.
+
+`src/assets/yonatan-portrait.jpg` is therefore **generated**, 460×575.
+`reference/photos/yonatan-portrait-original.jpg` is the untouched 640×800.
+Re-run the script after changing the parameters or the original.
+
 **The ceiling is the source.** 640×800 is the largest original in the repo —
 `yonatan-wide.jpg` is 1024×683, and a 4:5 crop from it would be 546 wide, i.e.
 worse. Displaying the portrait any larger than 230 CSS px needs a

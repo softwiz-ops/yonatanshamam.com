@@ -287,15 +287,15 @@ const groups = ORDER.map((key) => {
   .firm :global(.rail-label) { color: #8d938f; }
   .firm :global(.numeral) { color: #666d68; }  /* 3.18:1 on the ink band */
   .firm-in { display: flex; gap: var(--s7); align-items: center; }
-  /* <Picture> wraps the <img>, which would otherwise make the <picture> the
-     flex item and leave `flex: none` below applying to a child that no longer
-     controls its own track. display:contents removes the wrapper from layout
-     so the <img> is the flex item again and every rule here means what it
-     meant before the image moved into the pipeline. */
-  .firm-in picture { display: contents; }
+  /* <Picture> wraps the <img>, so the <picture> is the flex item and the
+     sizing belongs here. Do NOT use display:contents to promote the <img>
+     instead — flex and grid blockify their items, so the two <source> elements
+     inside <picture> become real flex items as well. On the about page that
+     took two grid tracks and pushed the content onto a second row. */
+  .firm-in > picture { flex: none; width: clamp(150px, 20vw, 230px); }
   .portrait {
-    flex: none;
-    width: clamp(150px, 20vw, 230px);
+    display: block;
+    width: 100%;
     height: auto;
     border-radius: var(--r-md);
   }
@@ -364,7 +364,7 @@ const groups = ORDER.map((key) => {
   }
   @media (max-width: 760px) {
     .firm-in { flex-direction: column; align-items: flex-start; gap: var(--s5); }
-    .portrait { width: 140px; }
+    .firm-in > picture { width: 140px; }
     .forks { grid-template-columns: 1fr; }
     .fork { padding-inline: 0; }
     .fork + .fork { border-inline-start: 0; padding-inline-start: 0; }

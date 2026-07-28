@@ -179,10 +179,13 @@ const schema = {
   .lead { font-size: var(--fs-lead); color: var(--muted); line-height: 1.6; }
 
   .facts-grid { display: grid; grid-template-columns: 200px 1fr 240px; gap: var(--s7); align-items: start; }
-  /* Same reason as index.astro: keep the <img> as the grid item, so the 200px
-     track sizes the image and not a wrapper around it. */
-  .facts-grid picture { display: contents; }
-  .portrait { width: 100%; height: auto; border-radius: var(--r-md); }
+  /* The <picture> is the grid item and fills the 200px track; the <img> fills
+     it in turn. Do NOT reach for display:contents to promote the <img> into
+     the grid instead — grid and flex blockify their items, so the two <source>
+     elements inside <picture> become real grid items too, take the first two
+     tracks, and push everything else onto a second row. That is exactly what
+     broke this page. */
+  .portrait { display: block; width: 100%; height: auto; border-radius: var(--r-md); }
 
   .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0 var(--s5); font-size: var(--fs-small); }
   .facts dt {
@@ -210,7 +213,13 @@ const schema = {
   .closing p { color: var(--muted); margin-block-start: var(--s3); }
   .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s5); }
 
-  @media (max-width: 1000px) { .facts-grid { grid-template-columns: 170px 1fr; } }
+  /* Two tracks, three items: the roles list wraps to a second row and would
+     land in the 170px portrait column. Put it under the facts instead, where
+     it has the width to be read. */
+  @media (max-width: 1000px) {
+    .facts-grid { grid-template-columns: 170px 1fr; }
+    .roles { grid-column: 2; }
+  }
   @media (max-width: 700px) {
     .facts-grid { grid-template-columns: 1fr; gap: var(--s6); }
     .portrait { max-width: 200px; }
