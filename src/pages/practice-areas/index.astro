@@ -45,12 +45,12 @@ const schema = {
 </Base>
 
 <style>
-  .lede { padding-block: var(--s7) var(--s6); }
+  .lede { padding-block: var(--s8); border-block-end: 1px solid var(--ink); }
   h1 {
-    font-size: clamp(30px, 4.4vw, 48px);
-    font-weight: 400;
-    letter-spacing: -0.015em;
-    line-height: var(--lh-tight);
+    font-size: clamp(38px, 6.6vw, 78px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
     margin-block-start: var(--s4);
   }
   .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 58ch; margin-block-start: var(--s5); }
@@ -59,7 +59,7 @@ const schema = {
   .cat { margin-block-start: var(--s8); scroll-margin-top: 96px; }
   .cat-head { display: flex; align-items: center; gap: var(--s5); margin-block-end: var(--s5); }
   .cat-head .n { display: block; margin-block-end: var(--s1); }
-  .cat-head h2 { font-size: var(--fs-title); font-weight: 600; }
+  .cat-head h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; }
   .cat-head p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s1); }
   .cat-head .n { font-size: var(--fs-caption); color: var(--faint); font-variant-numeric: tabular-nums; }
 

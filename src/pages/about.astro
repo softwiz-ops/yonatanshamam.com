@@ -1,23 +1,21 @@
 ---
 import Base from '../layouts/Base.astro';
-import { FIRM } from '../data/firm.ts';
+import { FIRM, whatsappLink } from '../data/firm.ts';
 
 /*
- * Everything on this page was checked against the Bar's closed list of what a
- * lawyer may publish. Permitted and used here: being a lawyer, date of
- * admission, PREVIOUS LEGAL POSITIONS, languages, areas of practice, address
- * and contact details, office hours.
+ * Everything here was checked against the Bar's closed list of what a lawyer
+ * may publish. Used, and permitted: being a lawyer, date of admission, academic
+ * degree, PREVIOUS LEGAL POSITIONS, languages, areas of practice, address and
+ * contact details, office hours.
  *
- * Deliberately absent, from a LinkedIn profile that contains all of it:
- * partner tier badges ("Elite Circle Platinum"), client counts ("dozens of
- * SMBs"), and self-praise ("we punch above our weight"). The first would be
- * advertising for another business on a lawyer's site, which the rules forbid
- * outright; the others are unverifiable claims and self-aggrandisement.
+ * THE TECHNOLOGY BACKGROUND IS GONE — removed 28 Jul 2026 at the founder's
+ * instruction: "לא חושב שהרקע הטכנולוגי שלי שייך". It is also the consistent
+ * position, since he confirmed the two activities are unconnected. Do not
+ * reintroduce it, and do not name the technology company anywhere on this site.
  *
- * The technology work is mentioned as background only, with no company name,
- * no link and no promotional framing. The founder confirmed on 27 Jul 2026
- * that the two activities are unconnected, so nothing here may present them as
- * a combined offering — see PROJECT.md.
+ * Never present here, though all of it sits on his LinkedIn: partner tier
+ * badges, client counts, and self-praise. The first would be advertising for
+ * another business on a lawyer's site, which the rules forbid outright.
  */
 
 const schema = {
@@ -45,151 +43,164 @@ const schema = {
   description="עו״ד יהונתן שמם — משרד עורכי דין בתל אביב לעסקים ולאנשים פרטיים. הוסמך ב-2019, עבד בגולדפרב זליגמן, ועוסק בחוזים, צוואות וירושה, נדל״ן וליווי עסקי."
   schema={schema}
 >
-  <div class="wrap lede">
+  <header class="wrap lede">
     <p class="eyebrow">אודות</p>
-    <h1>עורך דין שמסביר לפני שממליץ</h1>
+    <h1>עורך דין שמסביר<br /><strong>לפני שממליץ</strong></h1>
+  </header>
+
+  <div class="wrap body">
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">01</span>המשרד</div>
+      <div class="prose">
+        <p class="lead">
+          משרד עורכי דין בתל אביב, לעסקים ולאנשים פרטיים. העבודה מתחילה בהסבר:
+          מה המסמך עושה, מה הוא לא עושה, ואיפה הסיכון האמיתי — בשפה שאפשר להבין
+          בלי רקע משפטי.
+        </p>
+        <p>
+          עו״ד יהונתן שמם הוסמך כעורך דין בשנת <bdi dir="ltr">{FIRM.admittedYear}</bdi>.
+          את שנותיו הראשונות במקצוע עשה כעורך דין במשרד גולדפרב זליגמן, ולפני כן
+          התמחה במשרד ש. הררי בתחומי הנדל״ן ודיני החברות.
+        </p>
+        <p>
+          המשרד מלווה שני קהלים. מצד אחד עסקים ומיזמים: הקמת חברה, הסדרת יחסים
+          בין שותפים, והתקשרויות מול ספקים ולקוחות. מצד שני אנשים פרטיים: צוואות
+          וירושה, חוזי שכירות, עסקאות דירה, ובדיקה של חוזה שהגיע מהצד השני.
+        </p>
+      </div>
+    </section>
+
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">02</span>שיטת העבודה</div>
+      <div class="prose">
+        <p class="pull">עדיף לקוח שהבין למה שילם, מלקוח שחזר בלי לדעת מה קיבל.</p>
+        <p>
+          לפני שאני ממליץ על משהו, אני מסביר מה עומד על הפרק. הרבה פעמים ההסבר
+          עצמו הוא מה שמשנה את ההחלטה. ולפעמים המסקנה היא שאין צורך בעורך דין
+          בכלל — ואז אני אומר את זה, גם כשזה אומר שאין כאן עבודה.
+        </p>
+        <p>
+          אותו כלל חל על התאמה: אם הנושא אינו בתחומי העיסוק של המשרד, אומר זאת
+          מיד ואפנה הלאה, במקום לקחת תיק שמישהו אחר יטפל בו טוב יותר.
+        </p>
+      </div>
+    </section>
+
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">03</span>פרטים</div>
+      <div class="facts-grid">
+        <dl class="facts">
+          <dt>הסמכה</dt>
+          <dd><bdi dir="ltr">{FIRM.admittedYear}</bdi></dd>
+          <dt>השכלה</dt>
+          <dd>
+            {FIRM.education?.map((e) => (
+              <span class="edu">{e.degree}, {e.institution}, <bdi dir="ltr">{e.year}</bdi></span>
+            ))}
+          </dd>
+          <dt>שפות</dt>
+          <dd>{FIRM.languages.join(', ')}</dd>
+          <dt>כתובת</dt>
+          <dd>{FIRM.address.full}</dd>
+          <dt>שעות</dt>
+          <dd>{FIRM.hours.days}, <bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></dd>
+          <dt>טלפון</dt>
+          <dd><bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi></dd>
+          <dt>דוא״ל</dt>
+          <dd><bdi><a href={`mailto:${FIRM.email}`} dir="ltr">{FIRM.email}</a></bdi></dd>
+          <dt>LinkedIn</dt>
+          <dd><a href={FIRM.linkedin} rel="me">פרופיל</a></dd>
+        </dl>
+
+        <div class="roles">
+          <h2>תפקידים משפטיים קודמים</h2>
+          <ul>
+            {FIRM.previousRoles.map((r) => (
+              <li>
+                <b>{r.org}</b>
+                <span>
+                  {r.role} · <bdi dir="ltr">{r.from}–{r.to}</bdi>
+                  {r.areas && <><br />{r.areas}</>}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
   </div>
 
-  <div class="wrap grid">
-    <div class="prose">
-      <p class="lead">
-        משרד עורכי דין בתל אביב, לעסקים ולאנשים פרטיים. העבודה מתחילה בהסבר:
-        מה המסמך עושה, מה הוא לא עושה, ואיפה הסיכון האמיתי — בשפה שאפשר להבין
-        בלי רקע משפטי.
-      </p>
-
-      <p>
-        עו״ד יהונתן שמם הוסמך כעורך דין בשנת <bdi dir="ltr">{FIRM.admittedYear}</bdi>.
-        את שנותיו הראשונות במקצוע עשה כעורך דין במשרד גולדפרב זליגמן, ולפני כן
-        התמחה במשרד ש. הררי בתחומי הנדל״ן ודיני החברות.
-      </p>
-
-      {/*
-        This paragraph describes a BACKGROUND, not a combined offering.
-        The founder confirmed on 27 Jul 2026 that the law practice and the
-        technology consultancy are unconnected activities. An earlier draft
-        called the combination "נקודת המוצא של המשרד", which asserts a link
-        between the two services that he says does not exist — and on a
-        lawyer's site an inaccurate claim is an exposure, not a copy nit.
-        Keep this about how he works, never about what is sold together.
-      */}
-      <p>
-        מחוץ לעיסוקו המשפטי הוא עוסק גם בעולם הטכנולוגיה. הרקע הזה ניכר באופן
-        שבו המשרד עובד: לקוח שמנהל עסק דיגיטלי לא צריך להסביר מהי מערכת, מה
-        עושה אינטגרציה, או למה מדיניות פרטיות שאינה תואמת את מה שהאתר באמת אוסף
-        היא חשיפה ולא פורמליות.
-      </p>
-
-      <p>
-        המשרד מלווה שני קהלים. מצד אחד עסקים ומיזמים: הקמת חברה, הסדרת יחסים בין
-        שותפים, והתקשרויות מול ספקים ולקוחות. מצד שני אנשים פרטיים: צוואות
-        וירושה, חוזי שכירות, עסקאות דירה, ובדיקה של חוזה שהגיע מהצד השני.
-      </p>
-
-      <h2>שיטת העבודה</h2>
-      <p>
-        לפני שממליץ על משהו, אני מסביר מה עומד על הפרק. הרבה פעמים ההסבר עצמו
-        הוא מה שמשנה את ההחלטה — ולפעמים המסקנה היא שאין צורך בעורך דין בכלל,
-        ואז אני אומר את זה. עדיף לקוח שחזר מאשר לקוח שלא הבין למה שילם.
-      </p>
-
-      <h2>השכלה</h2>
-      <ul class="edu">
-        {FIRM.education?.map((e) => (
-          <li>
-            <b>{e.degree}</b>
-            <span>{e.institution} · <bdi dir="ltr">{e.year}</bdi></span>
-          </li>
-        ))}
-      </ul>
+  <aside class="closing">
+    <div class="wrap spread">
+      <div class="rail-label"><span class="numeral">04</span></div>
+      <div>
+        <h2>נדבר?</h2>
+        <p>משפט אחד על מה שאתם צריכים מספיק כדי להתחיל.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={whatsappLink('שלום, הגעתי מעמוד האודות')}>כתיבה בוואטסאפ</a>
+          <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+        </div>
+      </div>
     </div>
-
-    <aside class="aside">
-      <div class="panel">
-        <h2>פרטי המשרד</h2>
-        <ul class="facts">
-          <li><span class="k">הסמכה</span><span class="v"><bdi dir="ltr">{FIRM.admittedYear}</bdi></span></li>
-          <li><span class="k">שפות</span><span class="v">{FIRM.languages.join(', ')}</span></li>
-          <li><span class="k">כתובת</span><span class="v">{FIRM.address.full}</span></li>
-          <li><span class="k">שעות</span><span class="v">{FIRM.hours.days}<br /><bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></span></li>
-          <li><span class="k">טלפון</span><span class="v"><bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi></span></li>
-          <li><span class="k">LinkedIn</span><span class="v"><a href={FIRM.linkedin} rel="me">פרופיל</a></span></li>
-        </ul>
-      </div>
-
-      <div class="panel">
-        <h2>תפקידים משפטיים קודמים</h2>
-        <ul class="roles">
-          {FIRM.previousRoles.map((r) => (
-            <li>
-              <b>{r.org}</b>
-              <span>
-                {r.role} · <bdi dir="ltr">{r.from}–{r.to}</bdi>
-                {r.areas && <><br />{r.areas}</>}
-              </span>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </aside>
-  </div>
+  </aside>
 </Base>
 
 <style>
-  .lede { padding-block: var(--s7) var(--s6); }
+  .lede { padding-block: var(--s8); border-block-end: 1px solid var(--ink); }
   h1 {
-    font-size: clamp(30px, 4.4vw, 48px);
-    font-weight: 400;
-    letter-spacing: -0.015em;
-    line-height: var(--lh-tight);
+    font-size: clamp(38px, 6.6vw, 78px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
     margin-block-start: var(--s4);
-    max-width: 20ch;
   }
+  h1 strong { font-weight: 700; }
 
-  .grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
-    gap: var(--s8);
-    align-items: start;
-    padding-block-end: var(--s9);
-  }
+  .body { padding-block: var(--s8) var(--s9); }
+  .body > .spread { padding-block-end: var(--s8); }
+  .body > .spread + .spread { border-block-start: 1px solid var(--rule); padding-block-start: var(--s8); }
 
   .prose { max-width: var(--measure); }
-  .prose p { margin-block-end: var(--s5); }
-  .lead { font-size: var(--fs-lead); color: var(--muted); }
-  .prose h2 {
+  .prose p + p { margin-block-start: var(--s5); }
+  .lead { font-size: var(--fs-lead); color: var(--muted); line-height: 1.6; }
+  .pull {
     font-size: var(--fs-title);
-    font-weight: 600;
-    margin-block: var(--s7) var(--s4);
+    font-weight: 300;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    padding-inline-start: var(--s5);
+    border-inline-start: 2px solid var(--accent);
+    margin-block-end: var(--s5);
   }
-  .edu li { margin-block-end: var(--s3); }
-  .edu b { display: block; font-weight: 600; }
-  .edu span { color: var(--muted); font-size: var(--fs-small); }
 
-  .aside { position: sticky; top: 96px; display: grid; gap: var(--s4); }
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--r-lg);
-    padding: var(--s5);
-    box-shadow: var(--shadow-card);
-  }
-  .panel h2 { font-size: var(--fs-small); font-weight: 600; margin-block-end: var(--s4); }
-  .facts li, .roles li {
-    font-size: var(--fs-small);
+  .facts-grid { display: grid; grid-template-columns: 1fr 260px; gap: var(--s7); align-items: start; }
+
+  .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0 var(--s5); font-size: var(--fs-small); }
+  .facts dt {
+    color: var(--muted);
     padding-block: var(--s3);
-    border-block-end: 1px solid var(--rule);
+    border-block-start: 1px solid var(--rule);
   }
-  .facts li { display: flex; justify-content: space-between; gap: var(--s4); }
-  .facts li:last-child, .roles li:last-child { border-block-end: 0; }
-  .facts .k { color: var(--muted); flex: none; }
-  .facts .v { font-weight: 600; text-align: end; }
-  .facts a { display: inline-block; padding-block: 4px; }
-  .roles b { display: block; font-weight: 600; }
+  .facts dd {
+    margin: 0;
+    padding-block: var(--s3);
+    border-block-start: 1px solid var(--rule);
+    font-weight: 500;
+  }
+  .facts a { color: var(--accent); display: inline-block; padding-block: 4px; }
+  .edu { display: block; }
+
+  .roles h2 { font-size: var(--fs-caption); color: var(--muted); font-weight: 600; margin-block-end: var(--s3); }
+  .roles li { padding-block: var(--s3); border-block-start: 1px solid var(--rule); }
+  .roles b { display: block; font-weight: 600; font-size: var(--fs-small); }
   .roles span { display: block; color: var(--muted); font-size: var(--fs-caption); margin-block-start: 2px; }
 
-  @media (max-width: 940px) {
-    .grid { grid-template-columns: 1fr; gap: var(--s7); }
-    .aside { position: static; }
-  }
+  .closing { background: var(--surface); border-block-start: 1px solid var(--rule); }
+  .closing :global(.wrap) { padding-block: var(--s8); }
+  .closing h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; }
+  .closing p { color: var(--muted); margin-block-start: var(--s3); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s5); }
+
+  @media (max-width: 860px) { .facts-grid { grid-template-columns: 1fr; gap: var(--s6); } }
+  @media (max-width: 700px) { .cta-row { flex-direction: column; align-items: stretch; } }
 </style>

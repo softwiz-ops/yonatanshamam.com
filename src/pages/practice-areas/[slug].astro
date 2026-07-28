@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Faq from '../../components/Faq.astro';
+import Icon from '../../components/Icon.astro';
 import { FIRM, whatsappLink } from '../../data/firm.ts';
 import { SERVICES, CATEGORIES, byCategory } from '../../data/services.ts';
 
@@ -19,13 +20,10 @@ const primaryHref =
 const AUDIENCE = { private: 'אנשים פרטיים', business: 'עסקים וחברות', both: 'עסקים ואנשים פרטיים' };
 
 /*
- * Service + FAQPage + BreadcrumbList.
- *
- * No `offers`, no priceRange, no aggregateRating. The first two are barred by
- * the Bar's rules on fees, which apply to structured data exactly as they do to
- * visible copy; the third would be a testimonial claim, which the founder ruled
- * out. There is also no turnaround anywhere — that is deliberate, not an
- * omission.
+ * Service + FAQPage + BreadcrumbList. No `offers`, no priceRange, no
+ * aggregateRating: the first two are barred by the Bar's rules on fees, which
+ * apply to structured data exactly as to visible copy, and the third would be a
+ * testimonial claim the founder ruled out. No turnaround anywhere, deliberately.
  */
 const schema = {
   '@context': 'https://schema.org',
@@ -76,7 +74,7 @@ const schema = {
     </nav>
   </div>
 
-  <div class="wrap lede">
+  <header class="wrap lede">
     <p class="eyebrow">{category.title}</p>
     <h1>{service.title}</h1>
     <p class="summary">{service.summary}</p>
@@ -84,84 +82,91 @@ const schema = {
       <a class="btn btn-primary" href={primaryHref}>{service.primaryCta.label}</a>
       <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
     </div>
-  </div>
+  </header>
 
-  <div class="wrap body-grid">
-    <div>
-      <section class="block">
-        <h2>מה חשוב לדעת</h2>
-        {service.intro.map((p) => <p>{p}</p>)}
-      </section>
+  <div class="wrap body">
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">01</span>מה חשוב לדעת</div>
+      <div class="prose">{service.intro.map((p) => <p>{p}</p>)}</div>
+    </section>
 
-      <section class="block">
-        <h2>מה המסמך מסדיר</h2>
-        {/* "What the instrument regulates" — general legal knowledge. Not
-            "what the service includes", which would be a firm commitment. */}
-        <ul class="covers">
-          {service.covers.map((c) => (
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">02</span>מה המסמך מסדיר</div>
+      {/* "What the instrument regulates" — general legal knowledge. Not "what
+          the service includes", which would be a commitment by the firm. */}
+      <ul class="covers">
+        {service.covers.map((c) => (
+          <li>
+            <b>{c.title}</b>
+            <span>{c.detail}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">03</span>למה זה משנה</div>
+      <p class="matters">{service.whyItMatters}</p>
+    </section>
+
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">04</span>מה כדאי לשים לב אליו</div>
+      {/* The section people actually read, and the one a generative engine is
+          most likely to quote. Concrete mistakes, not reassurance. */}
+      <ul class="watch">
+        {service.watchFor.map((w) => (
+          <li>
+            <Icon name="warning-circle" class="watch-ico" />
+            <div><b>{w.title}</b><span>{w.detail}</span></div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">05</span>שאלות נפוצות</div>
+      <Faq items={service.faqs} />
+    </section>
+
+    {related.length > 0 && (
+      <section class="spread">
+        <div class="rail-label"><span class="numeral">06</span>נושאים קרובים</div>
+        <ul class="related">
+          {related.map((r) => (
             <li>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M4 12l6 6L20 6"/></svg>
-              <div><b>{c.title}</b><span>{c.detail}</span></div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="block">
-        <h2>למה זה משנה</h2>
-        <p class="matters">{service.whyItMatters}</p>
-      </section>
-
-      <section class="block">
-        <h2>מה כדאי לשים לב אליו</h2>
-        {/* The section people actually read, and the one a generative engine
-            is most likely to quote. Concrete mistakes, not reassurance. */}
-        <ul class="watch">
-          {service.watchFor.map((w) => (
-            <li>
-              <b>{w.title}</b>
-              <span>{w.detail}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section class="block">
-        <h2>שאלות נפוצות</h2>
-        <Faq items={service.faqs} />
-      </section>
-
-      {related.length > 0 && (
-        <section class="block">
-          <h2>נושאים קרובים</h2>
-          <div class="related">
-            {related.map((r) => (
-              <a class="rel" href={`/practice-areas/${r.slug}/`}>
+              <a href={`/practice-areas/${r.slug}/`}>
                 <b>{r.shortTitle ?? r.title}</b>
                 <span>{r.summary}</span>
+                <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
-            ))}
-          </div>
-        </section>
-      )}
-    </div>
-
-    <aside class="aside">
-      <div class="panel">
-        <h2>יש שאלה?</h2>
-        <p class="panel-lead">
-          אפשר לכתוב בוואטסאפ ולתאר במשפט אחד מה העניין. אם זה מתאים למשרד נמשיך
-          משם, ואם לא — אפנה אתכם הלאה.
-        </p>
-        <a class="btn btn-primary panel-btn" href={whatsappLink(waMessage)}>כתיבה בוואטסאפ</a>
-        <a class="btn btn-ghost panel-btn" href={FIRM.calendar}>תיאום פגישה ביומן</a>
-        <ul class="facts">
-          <li><span class="k">טלפון</span><span class="v"><bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi></span></li>
-          <li><span class="k">שעות</span><span class="v">{FIRM.hours.days} <bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></span></li>
+            </li>
+          ))}
         </ul>
-      </div>
-    </aside>
+      </section>
+    )}
   </div>
+
+  <aside class="closing">
+    <div class="wrap spread">
+      <div class="rail-label"><span class="numeral">07</span></div>
+      <div>
+        <h2>יש שאלה על {service.shortTitle ?? service.title}?</h2>
+        <p>
+          כתבו במשפט אחד מה העניין. אם זה מתאים למשרד נמשיך משם, ואם לא —
+          אפנה אתכם הלאה.
+        </p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={whatsappLink(waMessage)}>כתיבה בוואטסאפ</a>
+          <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+        </div>
+        <p class="closing-meta">
+          <bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi>
+          <span class="dot">·</span>
+          {FIRM.hours.days} <bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi>
+        </p>
+      </div>
+    </div>
+  </aside>
 </Base>
 
 <style>
@@ -170,105 +175,83 @@ const schema = {
   .crumbs a:hover { text-decoration: underline; }
   .sep { display: inline-block; margin-inline: var(--s2); }
 
-  .lede { padding-block-end: var(--s7); }
+  .lede { padding-block-end: var(--s8); border-block-end: 1px solid var(--ink); }
   h1 {
-    font-size: clamp(30px, 4.4vw, 48px);
-    font-weight: 400;
-    letter-spacing: -0.015em;
-    line-height: var(--lh-tight);
+    font-size: clamp(38px, 6.4vw, 76px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
     margin-block-start: var(--s4);
-    max-width: 18ch;
+    max-width: 16ch;
   }
-  .summary { font-size: var(--fs-lead); color: var(--muted); max-width: 54ch; margin-block-start: var(--s5); }
+  .summary {
+    font-size: var(--fs-lead);
+    color: var(--muted);
+    max-width: 52ch;
+    margin-block-start: var(--s6);
+    line-height: 1.6;
+  }
   .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s6); }
 
-  .body-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 320px;
-    gap: var(--s8);
-    align-items: start;
-    padding-block: var(--s7) var(--s9);
-  }
-  .block { margin-block-end: var(--s8); }
-  .block:last-child { margin-block-end: 0; }
-  .block > h2 {
-    font-size: var(--fs-section);
-    font-weight: 400;
-    letter-spacing: -0.01em;
-    margin-block-end: var(--s5);
-  }
-  .block > p { max-width: var(--measure); }
-  .block > p + p { margin-block-start: var(--s4); }
-  .matters {
-    padding-inline-start: var(--s5);
-    border-inline-start: 3px solid var(--accent);
-    font-size: var(--fs-lead);
-  }
+  .body { padding-block: var(--s8) var(--s9); }
+  .body > .spread { padding-block-end: var(--s8); }
+  .body > .spread + .spread { border-block-start: 1px solid var(--rule); padding-block-start: var(--s8); }
 
-  .covers { display: grid; gap: var(--s3); }
+  .prose { max-width: var(--measure); }
+  .prose p + p { margin-block-start: var(--s5); }
+
+  /* Ruled rows, not cards. */
   .covers li {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--r-md);
-    padding: var(--s4) var(--s5);
-    display: flex;
-    gap: var(--s4);
-    align-items: flex-start;
+    padding-block: var(--s4);
+    border-block-end: 1px solid var(--rule);
+    max-width: var(--measure);
   }
-  /* A check mark is not directional and must never be mirrored. */
-  .covers svg { flex: none; color: var(--accent); margin-block-start: 6px; }
+  .covers li:first-child { border-block-start: 1px solid var(--rule); }
   .covers b { font-weight: 600; }
-  .covers span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: 2px; }
+  .covers span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s1); }
 
-  .watch { display: grid; gap: var(--s4); max-width: var(--measure); }
-  .watch li {
+  .matters {
+    font-size: var(--fs-title);
+    font-weight: 300;
+    line-height: 1.45;
+    letter-spacing: -0.01em;
+    max-width: 46ch;
     padding-inline-start: var(--s5);
-    border-inline-start: 2px solid var(--rule);
+    border-inline-start: 2px solid var(--accent);
   }
+
+  .watch { display: grid; gap: var(--s5); max-width: var(--measure); }
+  .watch li { display: flex; gap: var(--s4); align-items: flex-start; }
+  .watch-ico { width: 22px; height: 22px; color: var(--accent); margin-block-start: 2px; }
   .watch b { display: block; font-weight: 600; }
   .watch span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s1); }
 
-  .related { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s3); }
-  .rel {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--r-md);
-    padding: var(--s5);
+  .related { border-block-start: 1px solid var(--rule); max-width: var(--measure); }
+  .related li { border-block-end: 1px solid var(--rule); }
+  .related a {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s4);
+    padding-block: var(--s4);
     text-decoration: none;
   }
-  .rel:hover { border-color: var(--accent); }
-  .rel b { display: block; }
-  .rel span { display: block; font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s2); }
+  .related b { font-weight: 500; font-size: var(--fs-body); }
+  .related span { display: block; font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s1); }
+  .related a:hover b { color: var(--accent); }
+  .related .chev { color: var(--line-control); }
+  .related a:hover .chev { color: var(--accent); }
 
-  .aside { position: sticky; top: 96px; display: grid; gap: var(--s4); }
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--rule);
-    border-radius: var(--r-lg);
-    padding: var(--s5);
-    box-shadow: var(--shadow-card);
-  }
-  .panel h2 { font-size: var(--fs-title); font-weight: 600; }
-  .panel-lead { font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s3); }
-  .panel-btn { width: 100%; margin-block-start: var(--s3); }
-  .facts { margin-block-start: var(--s5); }
-  .facts li {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--s3);
-    font-size: var(--fs-small);
-    padding-block: var(--s3);
-    border-block-start: 1px solid var(--rule);
-  }
-  .facts .k { color: var(--muted); }
-  .facts .v { font-weight: 600; font-variant-numeric: tabular-nums; text-align: end; }
-  .facts a { display: inline-block; padding-block: 4px; }
+  .closing { background: var(--surface); border-block-start: 1px solid var(--rule); }
+  .closing :global(.wrap) { padding-block: var(--s8); }
+  .closing h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; line-height: 1.1; }
+  .closing p { color: var(--muted); max-width: 46ch; margin-block-start: var(--s4); }
+  .closing-meta { font-size: var(--fs-small); margin-block-start: var(--s5); }
+  .closing-meta a { color: var(--accent); display: inline-block; padding-block: 4px; }
+  /* --line-control is 3.29:1, which is the floor for a UI border but not for
+     15px text. A visible separator is text. */
+  .dot { color: var(--muted); margin-inline: var(--s2); }  /* 6.33:1 */
 
-  @media (max-width: 940px) {
-    .body-grid { grid-template-columns: 1fr; gap: var(--s7); }
-    .aside { position: static; }
-    .related { grid-template-columns: 1fr; }
-  }
   @media (max-width: 700px) {
     .cta-row { flex-direction: column; align-items: stretch; }
   }

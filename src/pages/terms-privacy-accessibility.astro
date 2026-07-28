@@ -72,8 +72,13 @@ const sections = [
 </Base>
 
 <style>
-  .lede { padding-block: var(--s7) var(--s6); border-block-end: 1px solid var(--rule); }
-  h1 { font-size: clamp(28px, 4vw, 42px); font-weight: 400; letter-spacing: -0.015em; }
+  .lede { padding-block: var(--s8) var(--s6); border-block-end: 1px solid var(--ink); }
+  h1 {
+    font-size: clamp(34px, 5.6vw, 64px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.06;
+  }
   .updated { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
 
   .operator {
@@ -115,8 +120,8 @@ const sections = [
   .doc :global(span[id]) { display: block; scroll-margin-top: 96px; }
   .doc :global(h2) {
     font-size: var(--fs-section);
-    font-weight: 400;
-    letter-spacing: -0.01em;
+    font-weight: 200;
+    letter-spacing: -0.025em;
     margin-block: var(--s8) var(--s5);
     padding-block-end: var(--s3);
     border-block-end: 1px solid var(--rule);
