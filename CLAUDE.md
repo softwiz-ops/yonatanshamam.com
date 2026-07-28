@@ -59,6 +59,18 @@ the live response.
 - The Hebrew is the founder's voice. When he supplies wording, **correct only
   punctuation, spelling and grammar** — do not rewrite his phrasing.
 - **No em dashes (—) in user-facing content.** They read as machine-written.
+- **No invented slogans.** "עדיף לקוח שהבין למה שילם", "רוב האנשים לא חותמים על
+  מה שהם לא מבינים" — both were written here, both were rejected, and both were
+  right to reject. They sound clever and say nothing, and the first one strayed
+  towards fees. Section labels are literal: `השירותים שלנו`, `תחומי עיסוק`,
+  `אודות המשרד` — never `מה אפשר לעשות כאן`.
+- **Headings carry the keyword.** The Israeli law-firm pages that rank first use
+  literal, question-shaped H2s that repeat the search term: `מהו הסכם מייסדים
+  ולמה הוא קריטי`, `טעויות נפוצות בחוזי שכירות`. A generic `מה חשוב לדעת`
+  carries no keyword and gives a generative engine nothing to match.
+- **First person plural** (`אנו`, `המשרד`), decided 28 Jul 2026.
+- Note when reading competitors: several top-ranking firm sites use `מומחים`,
+  which the Bar's rules forbid. Ranking is not permission.
 
 ## The Bar's advertising rules — these define what may appear on screen
 

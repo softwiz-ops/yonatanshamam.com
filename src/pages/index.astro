@@ -95,10 +95,10 @@ const groups = ORDER.map((key) => {
           תחומי עיסוק
         </div>
         <div>
-          <h2 class="section-title">מה אפשר לעשות כאן</h2>
+          <h2 class="section-title">השירותים שלנו</h2>
           <p class="section-lead">
-            לכל נושא עמוד שמסביר מה המסמך מסדיר, מה קורה בלעדיו, ומה כדאי לשים
-            לב אליו — גם אם בסוף תחליטו לא לפנות.
+            המשרד מטפל בחוזים והסכמים, בצוואות וירושה, בעסקאות נדל״ן ובליווי
+            שוטף של חברות ועסקים. לכל נושא עמוד ייעודי עם הסבר מפורט.
           </p>
 
           {/* Five compact groups, not sixteen equal rows. The full index
@@ -127,16 +127,33 @@ const groups = ORDER.map((key) => {
     </div>
   </section>
 
-  <section class="diff">
-    <div class="wrap">
-      <div class="spread">
-        <div class="rail-label"><span class="numeral">02</span></div>
-        <div>
-          <q>רוב האנשים לא חותמים על מה שהם לא מבינים.<br />הם חותמים על מה שלא הוסבר להם.</q>
-          <p class="diff-note">
-            העבודה מתחילה בהסבר: מה המסמך עושה, מה הוא לא עושה, ואיפה הסיכון
-            האמיתי. אחרי זה קל יותר להחליט.
+  <section class="firm">
+    <div class="wrap spread">
+      <div class="rail-label"><span class="numeral">02</span>המשרד</div>
+      <div class="firm-in">
+        <img
+          class="portrait"
+          src="/yonatan-portrait.jpg"
+          width="640"
+          height="800"
+          alt="עו״ד יהונתן שמם"
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="firm-copy">
+          <h2>עו״ד יהונתן שמם</h2>
+          <p>
+            הוסמך כעורך דין בשנת <bdi dir="ltr">2019</bdi>. את שנותיו הראשונות
+            במקצוע עשה כעורך דין במשרד גולדפרב זליגמן, ולפני כן התמחה במשרד
+            ש. הררי בתחומי הנדל״ן ודיני החברות.
           </p>
+          <p>
+            המשרד מלווה עסקים ואנשים פרטיים בתל אביב ובמרכז, בעברית ובאנגלית.
+          </p>
+          <a class="firm-link" href="/about/">
+            אודות המשרד
+            <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
       </div>
     </div>
@@ -258,24 +275,51 @@ const groups = ORDER.map((key) => {
   .topics a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
   /* ---------- differentiator ---------- */
-  .diff { background: var(--ink); color: #fff; }
-  .diff :global(.wrap) { padding-block: var(--s9); }
-  .diff :global(.rail-label) { color: #8d938f; }
-  /* #3a3f3c measured 1.57:1 on the ink band. 3:1 is the floor for text at
-     this size, and #666d68 is the lightest step that clears it. */
-  .diff :global(.numeral) { color: #666d68; }  /* 3.18:1 */
-  .diff q {
-    display: block;
-    quotes: none;
-    font-size: clamp(26px, 4vw, 52px);
-    font-weight: 200;
-    line-height: 1.22;
-    letter-spacing: -0.025em;
+  .firm { background: var(--ink); color: #fff; }
+  .firm :global(.wrap) { padding-block: var(--s9); }
+  .firm :global(.rail-label) { color: #8d938f; }
+  .firm :global(.numeral) { color: #666d68; }  /* 3.18:1 on the ink band */
+  .firm-in { display: flex; gap: var(--s7); align-items: center; }
+  .portrait {
+    flex: none;
+    width: clamp(150px, 20vw, 230px);
+    height: auto;
+    border-radius: var(--r-md);
   }
-  /* #b9beba on #1b1d1f measures 8.9:1 */
-  .diff-note { color: #b9beba; margin-block-start: var(--s6); max-width: 48ch; font-size: var(--fs-small); }
+  .firm-copy h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; }
+  /* #c3c8c5 on #1b1d1f measures 10.1:1 */
+  .firm-copy p { color: #c3c8c5; margin-block-start: var(--s4); max-width: 48ch; }
+  .firm-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    margin-block-start: var(--s5);
+    color: #fff;
+    font-weight: 600;
+    font-size: var(--fs-small);
+    text-decoration: none;
+    padding-block: 6px;
+    border-block-end: 1px solid rgba(255, 255, 255, .4);
+  }
+  .firm-link:hover { border-block-end-color: #fff; }
 
-  /* ---------- forks ---------- */
+
+
+  .divider { width: 240px; color: var(--line-control); margin-block-end: var(--s6); }
+
+  .all-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s2);
+    margin-block-start: var(--s7);
+    color: var(--accent);
+    font-weight: 600;
+    font-size: var(--fs-small);
+    text-decoration: none;
+    padding-block: 6px;
+  }
+  .all-link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
   .forks { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
   .fork {
     padding: var(--s6) var(--s6) var(--s6) 0;
@@ -287,7 +331,7 @@ const groups = ORDER.map((key) => {
     padding-inline-start: var(--s6);
     padding-inline-end: 0;
   }
-  .fork-ico { width: 24px; height: 24px; color: var(--accent); }
+  .fork-ico { color: var(--accent); margin-block-end: var(--s4); }
   .fork h3 { font-size: var(--fs-title); font-weight: 500; letter-spacing: -0.015em; margin-block-start: var(--s4); }
   .fork p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
   .fork:hover h3 { color: var(--accent); }
@@ -304,6 +348,10 @@ const groups = ORDER.map((key) => {
   @media (max-width: 860px) {
     .hero-in { flex-direction: column-reverse; align-items: flex-start; gap: var(--s6); }
     .hero-mark { width: 96px; }
+  }
+  @media (max-width: 760px) {
+    .firm-in { flex-direction: column; align-items: flex-start; gap: var(--s5); }
+    .portrait { width: 140px; }
     .forks { grid-template-columns: 1fr; }
     .fork { padding-inline: 0; }
     .fork + .fork { border-inline-start: 0; padding-inline-start: 0; }

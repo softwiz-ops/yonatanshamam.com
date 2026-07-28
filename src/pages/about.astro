@@ -73,15 +73,15 @@ const schema = {
     <section class="spread">
       <div class="rail-label"><span class="numeral">02</span>שיטת העבודה</div>
       <div class="prose">
-        <p class="pull">עדיף לקוח שהבין למה שילם, מלקוח שחזר בלי לדעת מה קיבל.</p>
         <p>
-          לפני שאני ממליץ על משהו, אני מסביר מה עומד על הפרק. הרבה פעמים ההסבר
-          עצמו הוא מה שמשנה את ההחלטה. ולפעמים המסקנה היא שאין צורך בעורך דין
-          בכלל — ואז אני אומר את זה, גם כשזה אומר שאין כאן עבודה.
+          לפני מתן המלצה אנו מציגים ללקוח את התמונה המלאה: מה המסמך מסדיר, מה
+          הוא אינו מסדיר, ומה החשיפה המעשית בכל אפשרות. במקרים לא מעטים ההסבר
+          עצמו הוא מה שמשנה את ההחלטה.
         </p>
         <p>
-          אותו כלל חל על התאמה: אם הנושא אינו בתחומי העיסוק של המשרד, אומר זאת
-          מיד ואפנה הלאה, במקום לקחת תיק שמישהו אחר יטפל בו טוב יותר.
+          כאשר הנושא אינו בתחומי העיסוק של המשרד, אנו אומרים זאת מיד ומפנים
+          לגורם המתאים. גם כאשר המסקנה היא שאין צורך בליווי משפטי, זו התשובה
+          שתינתן.
         </p>
       </div>
     </section>
@@ -89,6 +89,15 @@ const schema = {
     <section class="spread">
       <div class="rail-label"><span class="numeral">03</span>פרטים</div>
       <div class="facts-grid">
+        <img
+          class="portrait"
+          src="/yonatan-portrait.jpg"
+          width="640"
+          height="800"
+          alt="עו״ד יהונתן שמם"
+          loading="lazy"
+          decoding="async"
+        />
         <dl class="facts">
           <dt>הסמכה</dt>
           <dd><bdi dir="ltr">{FIRM.admittedYear}</bdi></dd>
@@ -163,17 +172,9 @@ const schema = {
   .prose { max-width: var(--measure); }
   .prose p + p { margin-block-start: var(--s5); }
   .lead { font-size: var(--fs-lead); color: var(--muted); line-height: 1.6; }
-  .pull {
-    font-size: var(--fs-title);
-    font-weight: 300;
-    line-height: 1.45;
-    letter-spacing: -0.01em;
-    padding-inline-start: var(--s5);
-    border-inline-start: 2px solid var(--accent);
-    margin-block-end: var(--s5);
-  }
 
-  .facts-grid { display: grid; grid-template-columns: 1fr 260px; gap: var(--s7); align-items: start; }
+  .facts-grid { display: grid; grid-template-columns: 200px 1fr 240px; gap: var(--s7); align-items: start; }
+  .portrait { width: 100%; height: auto; border-radius: var(--r-md); }
 
   .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0 var(--s5); font-size: var(--fs-small); }
   .facts dt {
@@ -201,6 +202,10 @@ const schema = {
   .closing p { color: var(--muted); margin-block-start: var(--s3); }
   .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s5); }
 
-  @media (max-width: 860px) { .facts-grid { grid-template-columns: 1fr; gap: var(--s6); } }
+  @media (max-width: 1000px) { .facts-grid { grid-template-columns: 170px 1fr; } }
+  @media (max-width: 700px) {
+    .facts-grid { grid-template-columns: 1fr; gap: var(--s6); }
+    .portrait { max-width: 200px; }
+  }
   @media (max-width: 700px) { .cta-row { flex-direction: column; align-items: stretch; } }
 </style>

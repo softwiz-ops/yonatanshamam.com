@@ -86,22 +86,28 @@ const schema = {
 
   <div class="wrap body">
     <section class="spread">
-      <div class="rail-label"><span class="numeral">01</span>מה חשוב לדעת</div>
-      <div class="prose">{service.intro.map((p) => <p>{p}</p>)}</div>
+      <div class="rail-label"><span class="numeral">01</span>רקע</div>
+      <div class="prose">
+        <h2>{service.headings.intro}</h2>
+        {service.intro.map((p) => <p>{p}</p>)}
+      </div>
     </section>
 
     <section class="spread">
-      <div class="rail-label"><span class="numeral">02</span>מה המסמך מסדיר</div>
+      <div class="rail-label"><span class="numeral">02</span>תוכן</div>
       {/* "What the instrument regulates" — general legal knowledge. Not "what
           the service includes", which would be a commitment by the firm. */}
-      <ul class="covers">
+      <div>
+        <h2>{service.headings.covers}</h2>
+        <ul class="covers">
         {service.covers.map((c) => (
           <li>
             <b>{c.title}</b>
             <span>{c.detail}</span>
           </li>
         ))}
-      </ul>
+        </ul>
+      </div>
     </section>
 
     <section class="spread">
@@ -110,27 +116,35 @@ const schema = {
     </section>
 
     <section class="spread">
-      <div class="rail-label"><span class="numeral">04</span>מה כדאי לשים לב אליו</div>
+      <div class="rail-label"><span class="numeral">04</span>אזהרות</div>
       {/* The section people actually read, and the one a generative engine is
           most likely to quote. Concrete mistakes, not reassurance. */}
-      <ul class="watch">
+      <div>
+        <h2>{service.headings.watch}</h2>
+        <ul class="watch">
         {service.watchFor.map((w) => (
           <li>
             <Icon name="warning-circle" size={17} class="watch-ico" />
             <div><b>{w.title}</b><span>{w.detail}</span></div>
           </li>
         ))}
-      </ul>
+        </ul>
+      </div>
     </section>
 
     <section class="spread">
-      <div class="rail-label"><span class="numeral">05</span>שאלות נפוצות</div>
-      <Faq items={service.faqs} />
+      <div class="rail-label"><span class="numeral">05</span>שאלות</div>
+      <div>
+        <h2>שאלות נפוצות על {service.shortTitle ?? service.title}</h2>
+        <Faq items={service.faqs} />
+      </div>
     </section>
 
     {related.length > 0 && (
       <section class="spread">
-        <div class="rail-label"><span class="numeral">06</span>נושאים קרובים</div>
+        <div class="rail-label"><span class="numeral">06</span>קשור</div>
+        <div>
+        <h2>נושאים קרובים</h2>
         <ul class="related">
           {related.map((r) => (
             <li>
@@ -142,6 +156,7 @@ const schema = {
             </li>
           ))}
         </ul>
+        </div>
       </section>
     )}
   </div>
@@ -197,6 +212,13 @@ const schema = {
   .body > .spread { padding-block-end: var(--s8); }
   .body > .spread + .spread { border-block-start: 1px solid var(--rule); padding-block-start: var(--s8); }
 
+  .body h2 {
+    font-size: var(--fs-title);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-block-end: var(--s5);
+    max-width: var(--measure);
+  }
   .prose { max-width: var(--measure); }
   .prose p + p { margin-block-start: var(--s5); }
 
