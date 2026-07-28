@@ -28,7 +28,7 @@ const schema = {
 };
 ---
 <Base
-  title="צור קשר | עו״ד יהונתן שמם"
+  title="צור קשר — עו״ד יהונתן שמם | משרד עורכי דין בתל אביב"
   description={`יצירת קשר עם משרד עו״ד יהונתן שמם: וואטסאפ, טלפון ${FIRM.phone.display}, תיאום פגישה ביומן. ${FIRM.address.full}.`}
   schema={schema}
 >
@@ -47,28 +47,28 @@ const schema = {
       <ul class="routes">
         <li>
           <a href={whatsappLink('שלום, הגעתי מהאתר ורציתי לשאול לגבי')}>
-            <Icon name="whatsapp-logo" class="route-ico" />
+            <Icon name="whatsapp-logo" size={20} class="route-ico" />
             <div><b>וואטסאפ</b><span>ההודעה נפתחת מוכנה. מספיק להשלים במה מדובר.</span></div>
             <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </li>
         <li>
           <a href={FIRM.calendar}>
-            <Icon name="calendar-blank" class="route-ico" />
+            <Icon name="calendar-blank" size={20} class="route-ico" />
             <div><b>פגישה ביומן</b><span>בחירת מועד ישירות ביומן המשרד, בלי תיאום הלוך ושוב.</span></div>
             <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </li>
         <li>
           <a href={`tel:${FIRM.phone.tel}`}>
-            <Icon name="phone" class="route-ico" />
+            <Icon name="phone" size={20} class="route-ico" />
             <div><b>טלפון</b><span><bdi dir="ltr">{FIRM.phone.display}</bdi></span></div>
             <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </li>
         <li>
           <a href={`mailto:${FIRM.email}`}>
-            <Icon name="envelope-simple" class="route-ico" />
+            <Icon name="envelope-simple" size={20} class="route-ico" />
             <div><b>דוא״ל</b><span><bdi dir="ltr">{FIRM.email}</bdi></span></div>
             <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
@@ -119,7 +119,7 @@ const schema = {
   .routes li { border-block-end: 1px solid var(--rule); }
   .routes a {
     display: grid;
-    grid-template-columns: 26px minmax(0, 1fr) auto;
+    grid-template-columns: 20px minmax(0, 1fr) auto;
     align-items: center;
     gap: var(--s4);
     padding-block: var(--s5);
@@ -127,7 +127,7 @@ const schema = {
     transition: background-color .16s;
   }
   .routes a:hover { background: var(--surface); }
-  .route-ico { width: 26px; height: 26px; color: var(--muted); }
+  .route-ico { color: var(--muted); }
   .routes a:hover .route-ico { color: var(--accent); }
   .routes b { font-size: var(--fs-title); font-weight: 500; letter-spacing: -0.015em; }
   .routes a:hover b { color: var(--accent); }

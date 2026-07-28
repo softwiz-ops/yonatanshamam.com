@@ -60,10 +60,15 @@
   --rule: #e6e4df;
   --line-control: #8a8f8b; /* 3.15:1 / 3.29:1 */
 
-  --accent: #1a5e4a;       /* 7.34:1 / 7.65:1 */
-  --accent-ink: #ffffff;   /* 7.65:1 on accent */
-  --accent-hover: #144b3b;
-  --accent-wash: #edf5f1;
+  /* Deep navy, chosen 28 Jul 2026 over the previous green.
+     Gold was ruled out as an accent by measurement, not taste: the logo gold
+     sits at 1.6-2.5:1 on this background, and reaching the 4.5:1 text needs
+     takes a 36% darkening that lands on olive with the gold gone. Navy is the
+     classic pairing with a gold mark and clears AA several times over. */
+  --accent: #1b3a6b;       /* 10.80:1 on page / 11.27:1 on surface */
+  --accent-ink: #ffffff;   /* 11.27:1 on accent */
+  --accent-hover: #142c52; /* 13.32:1 */
+  --accent-wash: #edf1f8;  /* ink on it 14.92:1, accent on it 9.94:1 */
 
   /* The scale was too timid — every step sat within a few pixels of the next,
      which is what made the page read as generic. Hebrew has no capitals, no
@@ -199,8 +204,8 @@
   --faint: #2c302e;
   --rule: #595f5c;
   --line-control: #3d4340;
-  --accent: #0f4234;
-  --accent-hover: #0a2e24;
+  --accent: #0c2247;       /* 15.73:1 on white */
+  --accent-hover: #071733;
   --accent-wash: #ffffff;
   --shadow-card: none;
 }

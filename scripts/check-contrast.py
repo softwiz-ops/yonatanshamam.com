@@ -56,7 +56,7 @@ DIRECTIONS: dict[str, dict[str, str]] = {
         "faint": "#6C716E",
         "rule": "#E6E4DF",
         "line-control": "#8A8F8B",
-        "accent": "#1A5E4A",
+        "accent": "#1B3A6B",
         "accent-ink": "#FFFFFF",
         "surface": "#FFFFFF",
     },

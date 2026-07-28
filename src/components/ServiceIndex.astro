@@ -1,5 +1,4 @@
 ---
-import Icon from './Icon.astro';
 import type { Service } from '../data/services.ts';
 
 /**
@@ -19,39 +18,12 @@ interface Props {
 }
 const { services, offset = 0 } = Astro.props;
 
-/** Phosphor names, chosen per topic. Decorative — every row is named in text. */
-const ICONS: Record<string, string> = {
-  'lease-agreement': 'key',
-  'employment-agreement': 'briefcase',
-  'freelancer-agreement': 'handshake',
-  nda: 'lock-simple',
-  'contract-review': 'magnifying-glass',
-  will: 'scroll',
-  'inheritance-order': 'stamp',
-  'estate-division': 'users-three',
-  'apartment-purchase': 'house-line',
-  'apartment-sale': 'house-line',
-  'company-registration': 'buildings',
-  'founders-agreement': 'graph',
-  'website-terms-and-privacy': 'shield-check',
-  'accessibility-statement': 'wheelchair',
-  'termination-hearing': 'gavel',
-  'demand-letter': 'envelope-simple',
-  affidavit: 'signature',
-};
-
-const AUDIENCE: Record<Service['audience'], string> = {
-  private: 'לאדם הפרטי',
-  business: 'לעסק',
-  both: 'לעסק ולפרט',
-};
 ---
 <ol class="index">
   {services.map((s, i) => (
     <li>
       <a href={`/practice-areas/${s.slug}/`}>
         <span class="num"><bdi dir="ltr">{String(offset + i + 1).padStart(2, '0')}</bdi></span>
-        <span class="ico"><Icon name={ICONS[s.slug] ?? 'file-text'} /></span>
         <span class="body">
           <span class="head">
             <span class="title">{s.shortTitle ?? s.title}</span>
@@ -59,8 +31,6 @@ const AUDIENCE: Record<Service['audience'], string> = {
           </span>
           <span class="sum">{s.summary}</span>
         </span>
-        <span class="aud">{AUDIENCE[s.audience]}</span>
-        <svg class="chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </li>
   ))}
@@ -72,10 +42,10 @@ const AUDIENCE: Record<Service['audience'], string> = {
 
   a {
     display: grid;
-    grid-template-columns: 3.5rem 2rem minmax(0, 1fr) auto auto;
-    align-items: center;
-    gap: var(--s5);
-    padding-block: var(--s5);
+    grid-template-columns: 3rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--s4);
+    padding-block: var(--s4);
     text-decoration: none;
     transition: background-color .16s, padding-inline .16s;
   }
@@ -83,7 +53,7 @@ const AUDIENCE: Record<Service['audience'], string> = {
   @media (prefers-reduced-motion: reduce) { a:hover { padding-inline: 0; } }
 
   .num {
-    font-size: var(--fs-title);
+    font-size: var(--fs-small);
     font-weight: 200;
     /* 3.15:1 — see the note on .numeral in global.css. */
     color: var(--line-control);
@@ -92,15 +62,13 @@ const AUDIENCE: Record<Service['audience'], string> = {
   }
   a:hover .num { color: var(--accent); }
 
-  .ico { width: 28px; height: 28px; color: var(--muted); }
-  a:hover .ico { color: var(--accent); }
 
   .head { display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap; }
   .title {
-    font-size: var(--fs-title);
-    font-weight: 500;
-    letter-spacing: -0.015em;
-    line-height: 1.25;
+    font-size: var(--fs-body);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
   }
   a:hover .title { color: var(--accent); }
   .sum {
@@ -127,13 +95,8 @@ const AUDIENCE: Record<Service['audience'], string> = {
     border-color: color-mix(in srgb, var(--accent) 25%, transparent);
   }
 
-  .aud { font-size: var(--fs-caption); color: var(--faint); white-space: nowrap; }
-  /* Directional glyph — .chev in global.css flips it under RTL. */
-  .chev { color: var(--line-control); }
-  a:hover .chev { color: var(--accent); }
 
-  @media (max-width: 900px) {
-    a { grid-template-columns: 2.5rem minmax(0, 1fr) auto; gap: var(--s4); }
-    .ico, .aud { display: none; }
+  @media (max-width: 700px) {
+    a { grid-template-columns: 2.2rem minmax(0, 1fr); gap: var(--s3); }
   }
 </style>

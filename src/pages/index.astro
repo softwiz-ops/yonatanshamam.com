@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import ServiceIndex from '../components/ServiceIndex.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
 import { FIRM, whatsappLink } from '../data/firm.ts';
@@ -102,15 +101,27 @@ const groups = ORDER.map((key) => {
             לב אליו — גם אם בסוף תחליטו לא לפנות.
           </p>
 
-          {groups.map(({ key, items, offset }) => (
-            <div class="group">
-              <h3 class="group-title">
-                {CATEGORIES[key].title}
-                <span class="group-blurb">{CATEGORIES[key].blurb}</span>
-              </h3>
-              <ServiceIndex services={items} offset={offset} />
-            </div>
-          ))}
+          {/* Five compact groups, not sixteen equal rows. The full index
+              lives on /practice-areas/ — showing everything here read as a
+              grocery list, which is exactly what it was. */}
+          <div class="groups">
+            {groups.map(({ key, items }) => (
+              <section class="group">
+                <h3>{CATEGORIES[key].title}</h3>
+                <p class="blurb">{CATEGORIES[key].blurb}</p>
+                <ul class="topics">
+                  {items.map((s) => (
+                    <li><a href={`/practice-areas/${s.slug}/`}>{s.shortTitle ?? s.title}</a></li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+
+          <a class="all-link" href="/practice-areas/">
+            כל תחומי העיסוק, עם הסבר על כל אחד
+            <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
       </div>
     </div>
@@ -140,13 +151,13 @@ const groups = ORDER.map((key) => {
         </div>
         <div class="forks">
           <a class="fork" href="/practice-areas/#estate">
-            <Icon name="scroll" class="fork-ico" />
+            <Icon name="scroll" size={24} class="fork-ico" />
             <h3>עניין אישי</h3>
             <p>צוואה, ירושה, חוזה שכירות, עסקת דירה, או חוזה שקיבלתם וצריך לקרוא לפני שחותמים.</p>
             <span class="go">לנושאים האישיים <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
           </a>
           <a class="fork" href="/practice-areas/#business">
-            <Icon name="buildings" class="fork-ico" />
+            <Icon name="buildings" size={24} class="fork-ico" />
             <h3>עסק, חברה או מיזם</h3>
             <p>הקמת חברה, הסכם בין שותפים, התקשרויות מול ספקים ולקוחות, ותקנוני אתר ופרטיות.</p>
             <span class="go">לנושאים העסקיים <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
@@ -216,22 +227,35 @@ const groups = ORDER.map((key) => {
     line-height: 1.6;
   }
 
-  .group { margin-block-end: var(--s8); }
-  .group:last-child { margin-block-end: 0; }
-  .group-title {
+  .groups { display: grid; gap: 0; }
+  .group { padding-block: var(--s5); border-block-start: 1px solid var(--rule); }
+  .group:first-child { border-block-start: 1px solid var(--ink); }
+  .group h3 { font-size: var(--fs-title); font-weight: 500; letter-spacing: -0.015em; }
+  .blurb { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s2); max-width: 60ch; }
+
+  /* Topic names as inline links. Compact enough that five categories read as
+     a table of contents rather than a menu of sixteen things to buy. */
+  .topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s2) 0;
+    margin-block-start: var(--s4);
+  }
+  .topics li { display: flex; align-items: center; }
+  .topics li + li::before {
+    content: '';
+    width: 1px;
+    height: 12px;
+    background: var(--rule);
+    margin-inline: var(--s3);
+  }
+  .topics a {
     font-size: var(--fs-small);
-    font-weight: 700;
-    letter-spacing: .02em;
-    margin-block-end: var(--s4);
+    text-decoration: none;
+    color: var(--ink);
+    padding-block: 4px;
   }
-  .group-blurb {
-    display: block;
-    font-size: var(--fs-caption);
-    font-weight: 400;
-    color: var(--muted);
-    letter-spacing: 0;
-    margin-block-start: var(--s1);
-  }
+  .topics a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 
   /* ---------- differentiator ---------- */
   .diff { background: var(--ink); color: #fff; }
@@ -263,7 +287,7 @@ const groups = ORDER.map((key) => {
     padding-inline-start: var(--s6);
     padding-inline-end: 0;
   }
-  .fork-ico { width: 34px; height: 34px; color: var(--accent); }
+  .fork-ico { width: 24px; height: 24px; color: var(--accent); }
   .fork h3 { font-size: var(--fs-title); font-weight: 500; letter-spacing: -0.015em; margin-block-start: var(--s4); }
   .fork p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); }
   .fork:hover h3 { color: var(--accent); }

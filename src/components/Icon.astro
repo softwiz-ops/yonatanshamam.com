@@ -31,6 +31,16 @@ interface Props {
   /** Phosphor name, kebab-case, without the weight suffix. e.g. "scroll". */
   name: string;
   weight?: 'light' | 'thin';
+  /**
+   * Rendered size in px. Set here rather than from the calling page's CSS.
+   *
+   * A scoped class from the parent does NOT reach this component's root: the
+   * span carries Icon's own data-astro-cid, so a parent rule compiled as
+   * `.watch-ico[data-astro-cid-PARENT]` never matches. Every icon on the site
+   * silently rendered at its intrinsic 300px because of exactly that. Sizing
+   * through a prop cannot be defeated by scoping.
+   */
+  size?: number;
   class?: string;
   /**
    * Decorative by default. Pass a label only when the icon is the sole carrier
@@ -39,7 +49,7 @@ interface Props {
   label?: string;
 }
 
-const { name, weight = 'light', class: className, label } = Astro.props;
+const { name, weight = 'light', size = 20, class: className, label } = Astro.props;
 
 const set = weight === 'thin' ? THIN : LIGHT;
 const key = `../../node_modules/@phosphor-icons/core/assets/${weight}/${name}-${weight}.svg`;
@@ -58,9 +68,14 @@ const svg = source
     ? `<svg role="img" aria-label="${label}"`
     : '<svg aria-hidden="true" focusable="false"');
 ---
-<span class:list={['icon', className]} set:html={svg} />
+<span class:list={['icon', className]} style={`--icon-size:${size}px`} set:html={svg} />
 
 <style>
-  .icon { display: inline-flex; flex: none; }
+  .icon {
+    display: inline-flex;
+    flex: none;
+    width: var(--icon-size);
+    height: var(--icon-size);
+  }
   .icon :global(svg) { width: 100%; height: 100%; display: block; fill: currentColor; }
 </style>
