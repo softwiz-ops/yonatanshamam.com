@@ -42,6 +42,11 @@ import { FIRM } from '../data/firm.ts';
     position: sticky;
     top: 0;
     z-index: 40;
+    /* Opaque first, translucent second. A browser that does not know
+       color-mix() (Safari <16.2, Firefox <113) drops that declaration and
+       keeps this one; without it the sticky header loses its background
+       entirely and page text scrolls through the navigation. */
+    background: var(--page);
     background: color-mix(in srgb, var(--page) 90%, transparent);
     backdrop-filter: blur(10px);
     border-block-end: 1px solid var(--rule);

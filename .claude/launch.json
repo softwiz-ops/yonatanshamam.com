@@ -2,6 +2,18 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "built-output",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4340", "--directory", "dist/client"],
+      "port": 4340
+    },
+    {
+      "name": "site",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["astro", "dev", "--port", "4321"],
+      "port": 4321
+    },
+    {
       "name": "design-mockups",
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "4330"],

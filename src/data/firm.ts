@@ -54,20 +54,26 @@ export const FIRM = {
   },
 
   /**
-   * THE MAILBOX DOES NOT EXIST YET.
+   * Live since 28 Jul 2026. Verified by an SMTP probe against the MX
+   * (`RCPT TO` answered 250) and by a real message delivered end to end.
    *
    * yonatan@shamam.net was removed on 28 Jul 2026 — it is a personal address
-   * and does not belong on a firm site. This is the address the firm will use
-   * once the mailbox is created on the yonatanshamam.com domain.
+   * and does not belong on a firm site.
    *
-   * `pending` blocks the pre-launch check. Publishing an address that bounces
-   * is worse than publishing none, and this one also appears in the privacy
-   * policy as the route for the statutory access and correction rights, and in
-   * the accessibility declaration as the coordinator's contact — both of which
-   * the regulations require to actually work.
+   * Receive-only. Cloudflare Email Routing accepts mail for this address and
+   * forwards it; nothing can be sent *from* it. Replies leave from the
+   * destination mailbox under its own address, which is why the privacy policy
+   * names Google as the processor that stores enquiries.
+   *
+   * `emailPending` blocks the pre-launch check. Publishing an address that
+   * bounces is worse than publishing none, and this one also appears in the
+   * privacy policy as the route for the statutory access and correction rights,
+   * and in the accessibility declaration as the coordinator's contact — both of
+   * which the regulations require to actually work. Set it back to true if the
+   * routing is ever torn down.
    */
   email: 'office@yonatanshamam.com',
-  emailPending: true,
+  emailPending: false,
   calendar: 'https://calendar.app.google/LU3N8tPLz71vscQ68',
   linkedin: 'https://www.linkedin.com/in/yonatan-shamam-5b1892192/',
 

@@ -403,6 +403,26 @@ failure. Two findings worth keeping:
   It measured 4.43:1. Both palettes' faint tokens were darkened to clear 4.5:1
   on both surfaces, so the token is safe wherever it is used.
 
+## The sticky header would have broken outside Chromium
+
+Found while auditing the shipped CSS for the accessibility declaration, not by
+looking at the page — in Chromium it looked perfect.
+
+`.site-head` set its background **only** through `color-mix()`. A browser that
+does not know the function does not approximate it; it discards the whole
+declaration. The header would have had no background at all, and page text
+would have scrolled straight through the navigation. Safari below 16.2 and
+Firefox below 113.
+
+Fixed by declaring the opaque colour first and the `color-mix()` second, so the
+cascade keeps the fallback where the function is unknown. The two other
+`color-mix()` uses — both `border-color` on tags — need no fallback, because
+each inherits a visible `1px solid var(--rule)` from the rule above it. That
+was checked, not assumed.
+
+The audit found no `:dir()`, `:has()`, `@container` or `subgrid` anywhere in the
+output. The one `text-wrap: balance` degrades to ordinary line breaking.
+
 ## The en dash defect — the one that would have shipped silently
 
 A numeric range written with a typographically correct en dash renders
@@ -426,21 +446,38 @@ dash is used.**
 
 ---
 
+## The mailbox — 28 Jul 2026
+
+`office@yonatanshamam.com` is live. Cloudflare Email Routing accepts it and
+forwards to a Google mailbox. **It is receive-only** — nothing can be sent
+*from* the address, so replies leave from the destination mailbox under its own
+name. Deciding whether that is acceptable for a firm address is the founder's
+call; making it send would mean adding a mail provider, and that provider would
+have to be added to the processor list in the same change.
+
+Getting there cost two false alarms, both worth not repeating:
+
+- Enabling refused with **"Non-Cloudflare MX records exist"**. Five
+  `eforward*.registrar-servers.com` MX records and a Namecheap SPF TXT survived
+  the nameserver move. They were already dead — the service stopped the moment
+  the nameservers changed — but Cloudflare will not enable routing alongside
+  them. A single leftover MX at priority 10 is enough, and would also have
+  outranked one of Cloudflare's own three.
+- The first test message **did not arrive, then arrived ~30 minutes later**.
+  Not a fault: the sender had cached "this domain has no MX" from an attempt
+  made before the records existed. Negative caching here is bounded by the SOA
+  minimum, 1800s. Wait it out rather than changing anything.
+
+Verified by SMTP probe against `route3.mx.cloudflare.net` (`RCPT TO` answered
+`250 2.1.0 Ok`) and by a real message delivered end to end. The dashboard
+showing *Enabled* is not evidence — it showed that while mail was still
+vanishing.
+
+**The privacy policy names both legs:** Cloudflare routes, Google stores. Naming
+only Cloudflare would be false, because the enquiries come to rest in a Google
+mailbox and that is the processor a data subject needs to know about.
+
 ## Open — blocking or shaping work
-
-**Content the founder must supply.** All of it renders as a visible
-`[[חסר: …]]` marker on the built pages:
-
-- **Sign off the scope and timelines.** They were drafted to market norms on the
-  founder's instruction of 27 Jul 2026 and are NOT approved. He must read every
-  `scope` and `timeline` in `src/data/services.ts`, correct anything he cannot
-  stand behind, and set `SCOPE_APPROVED = true`. `scripts/check-ethics.py`
-  blocks while it is false. A turnaround he cannot meet is misleading
-  advertising, which is exactly what the rules forbid.
-- **Entrance and lift accessibility.** He supplied parking (none), approach,
-  toilets and meeting rooms; these two were not stated and render as gaps in the
-  declaration. Also worth confirming whether the building has accessible parking
-  even if the office does not — the distinction matters in the declaration.
 
 Supplied since:
 
