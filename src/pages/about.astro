@@ -1,5 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
+import { Picture } from 'astro:assets';
+import portrait from '../assets/yonatan-portrait.jpg';
 import { FIRM, whatsappLink } from '../data/firm.ts';
 
 /*
@@ -89,11 +91,14 @@ const schema = {
     <section class="spread">
       <div class="rail-label"><span class="numeral">03</span>פרטים</div>
       <div class="facts-grid">
-        <img
+        {/* Sits in a 200px grid column, so 400px covers a 2x display. See the
+            note on the same image in index.astro. */}
+        <Picture
           class="portrait"
-          src="/yonatan-portrait.jpg"
-          width="640"
-          height="800"
+          src={portrait}
+          formats={['avif', 'webp']}
+          widths={[200, 400]}
+          sizes="200px"
           alt="עו״ד יהונתן שמם"
           loading="lazy"
           decoding="async"
@@ -174,6 +179,9 @@ const schema = {
   .lead { font-size: var(--fs-lead); color: var(--muted); line-height: 1.6; }
 
   .facts-grid { display: grid; grid-template-columns: 200px 1fr 240px; gap: var(--s7); align-items: start; }
+  /* Same reason as index.astro: keep the <img> as the grid item, so the 200px
+     track sizes the image and not a wrapper around it. */
+  .facts-grid picture { display: contents; }
   .portrait { width: 100%; height: auto; border-radius: var(--r-md); }
 
   .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0 var(--s5); font-size: var(--fs-small); }

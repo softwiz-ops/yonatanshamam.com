@@ -2,6 +2,8 @@
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
+import { Picture } from 'astro:assets';
+import portrait from '../assets/yonatan-portrait.jpg';
 import { FIRM, whatsappLink } from '../data/firm.ts';
 import { SERVICES, CATEGORIES, byCategory, type Category } from '../data/services.ts';
 
@@ -131,11 +133,16 @@ const groups = ORDER.map((key) => {
     <div class="wrap spread">
       <div class="rail-label"><span class="numeral">02</span>המשרד</div>
       <div class="firm-in">
-        <img
+        {/* The source is 640x800 and displays at 230 CSS px at most, so there
+            were always enough pixels — the softness came from the browser
+            resampling 640 down to 460 with its cheap filter. sharp does that
+            resize at build time instead, and AVIF/WebP hold the detail. */}
+        <Picture
           class="portrait"
-          src="/yonatan-portrait.jpg"
-          width="640"
-          height="800"
+          src={portrait}
+          formats={['avif', 'webp']}
+          widths={[140, 230, 280, 460]}
+          sizes="(max-width: 760px) 140px, (max-width: 1150px) 20vw, 230px"
           alt="עו״ד יהונתן שמם"
           loading="lazy"
           decoding="async"
@@ -280,6 +287,12 @@ const groups = ORDER.map((key) => {
   .firm :global(.rail-label) { color: #8d938f; }
   .firm :global(.numeral) { color: #666d68; }  /* 3.18:1 on the ink band */
   .firm-in { display: flex; gap: var(--s7); align-items: center; }
+  /* <Picture> wraps the <img>, which would otherwise make the <picture> the
+     flex item and leave `flex: none` below applying to a child that no longer
+     controls its own track. display:contents removes the wrapper from layout
+     so the <img> is the flex item again and every rule here means what it
+     meant before the image moved into the pipeline. */
+  .firm-in picture { display: contents; }
   .portrait {
     flex: none;
     width: clamp(150px, 20vw, 230px);

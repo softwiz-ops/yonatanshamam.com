@@ -403,6 +403,44 @@ failure. Two findings worth keeping:
   It measured 4.43:1. Both palettes' faint tokens were darkened to clear 4.5:1
   on both surfaces, so the token is safe wherever it is used.
 
+## The portrait looked smeared, and the obvious diagnoses were all wrong
+
+The founder reported it on 28 Jul 2026. Three plausible causes were measured
+and each was excluded:
+
+- **Upscaling?** No. It renders at 230 CSS px at most (`clamp(150px, 20vw,
+  230px)`), so a 2× display needs 460 physical pixels and the source has 640.
+- **Bad JPEG?** No. The quantisation table starts `[4,3,3,4,…]`, which is
+  roughly q95.
+- **Was the source itself upscaled from something smaller?** No. Laplacian
+  variance 351 and a healthy 0.22 high-to-mid frequency ratio; an upscaled
+  image has almost nothing left near Nyquist. `yonatan-wide.jpg` measured 0.26,
+  the same photo from the same original.
+
+The actual cause: **the browser was resampling 640 → 460 with its own cheap
+filter**, because the file sat in `public/` and was therefore handed over
+untouched, at one size, in one format.
+
+Fixed by moving it to `src/assets/` and rendering it through `<Picture>`, which
+makes sharp do the resize at build time and emits AVIF and WebP at 140/230/280/
+460 (and 200/400 for the about page). The 460-wide AVIF is **12KB against the
+original single 64KB JPEG**, and no resampling happens in the browser at all.
+
+**`display: contents` on the `<picture>` is load-bearing.** `<Picture>` wraps
+the `<img>`, which would otherwise become the flex/grid item and leave
+`flex: none` and the `clamp()` width applying to an element that no longer
+controls its own track. Removing the wrapper from layout keeps every existing
+rule meaning exactly what it meant before.
+
+Measured after the change: 230×288 CSS, aspect 0.8, unchanged from before.
+
+**The ceiling is the source.** 640×800 is the largest original in the repo —
+`yonatan-wide.jpg` is 1024×683, and a 4:5 crop from it would be 546 wide, i.e.
+worse. Displaying the portrait any larger than 230 CSS px needs a
+higher-resolution original from the founder; nothing in the pipeline can invent
+detail. `yonatan-wide.jpg` was unused and has been moved to `reference/photos/`
+so it is not served.
+
 ## The sticky header would have broken outside Chromium
 
 Found while auditing the shipped CSS for the accessibility declaration, not by
