@@ -1,0 +1,33 @@
+# robots.txt for yonatanshamam.com
+#
+# This file exists because Cloudflare serves a managed robots.txt when a site
+# ships none, and that default did two things nobody chose: it omitted the
+# Sitemap directive, and it blocked every AI crawler — GPTBot, ClaudeBot,
+# Google-Extended, PerplexityBot and the rest.
+#
+# Blocking them works directly against being found in generative answers, which
+# is a stated goal for this site. The position below is deliberate and splits
+# the two questions that the Cloudflare default conflated:
+#
+#   search=yes     index the pages and link to them
+#   ai-input=yes   read them to answer a question, with attribution
+#   ai-train=no    do NOT use them as training data
+#
+# Being cited in an answer sends a potential client here. Being absorbed into a
+# training corpus does not. A law firm wants the first and gains nothing from
+# the second, so the reservation of rights stays.
+#
+# Content-Signal is honoured by some crawlers and ignored by others; it is a
+# statement of terms, not an enforcement mechanism. The paragraph below is the
+# express reservation under Article 4 of EU Directive 2019/790, kept from
+# Cloudflare's managed text because it is the part with legal weight.
+#
+# ANY RESTRICTIONS EXPRESSED VIA CONTENT SIGNALS ARE EXPRESS RESERVATIONS OF
+# RIGHTS UNDER ARTICLE 4 OF THE EUROPEAN UNION DIRECTIVE 2019/790 ON COPYRIGHT
+# AND RELATED RIGHTS IN THE DIGITAL SINGLE MARKET.
+
+User-agent: *
+Content-Signal: search=yes,ai-input=yes,ai-train=no,use=reference
+Allow: /
+
+Sitemap: https://yonatanshamam.com/sitemap-index.xml
