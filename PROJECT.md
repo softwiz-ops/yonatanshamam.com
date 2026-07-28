@@ -403,6 +403,59 @@ failure. Two findings worth keeping:
   It measured 4.43:1. Both palettes' faint tokens were darkened to clear 4.5:1
   on both surfaces, so the token is safe wherever it is used.
 
+## Live — 28 Jul 2026
+
+`https://yonatanshamam.com` and `https://www.yonatanshamam.com`, both attached
+to the `yonatanshamam-site` Worker as custom domains. 30 pages, all 200.
+
+Three things had to be true before it would deploy, and none was obvious:
+
+- **The Worker had nowhere to land.** The adapter-generated config carries no
+  routes, and `wrangler deploy` refuses to guess — it asks you to register a
+  workers.dev subdomain instead. A root `wrangler.jsonc` supplies the routes and
+  is merged into the generated config on every build, so it cannot drift. No
+  workers.dev subdomain was registered; a law firm site does not need a second
+  public URL serving the same pages.
+- **Custom domains will not displace hand-made DNS.** The attach failed with
+  `100117 — Hostname already has externally managed DNS records`. The two A
+  records still pointed at the deleted Cloudways box, `206.81.21.82`. They had
+  to be deleted by hand first; the OAuth token wrangler gets has `zone (read)`
+  only, so this cannot be automated from here. MX and TXT are untouched by the
+  attach — the mailbox survived it.
+- **Both hostnames are attached deliberately.** www already resolved publicly,
+  and a www that fails to resolve is worse than one serving the same pages under
+  a canonical pointing at the apex.
+
+**When verifying DNS from this machine, always query the authoritative server**
+(`dig … @emely.ns.cloudflare.com`). The local resolver held the pre-migration
+answers — the Cloudways IP and all five dead `eforward` MX records — long after
+the zone was correct, which reads exactly like a catastrophic regression.
+
+## The Hebrew 301 was dead on arrival, and only the live site said so
+
+`_redirects` is matched against the **percent-encoded** request path. Astro
+writes the source exactly as it appears in `redirects.json`, which for the one
+URL that matters is raw UTF-8 Hebrew, so the rule could never match: every
+browser and crawler encodes the path before sending it.
+
+This was invisible everywhere except the live response. The build was clean,
+preflight passed, the file was present and correctly formatted, and the two
+ASCII rules beside it worked. It is also the single most costly thing on the
+site to get wrong — `/מכתב-התראה…/` is the only URL moving off WordPress that
+carries real ranking, and a 404 there discards it instead of passing it to the
+article written to replace it.
+
+`scripts/encode-redirects.py` runs as part of `npm run build`, so `npm run
+deploy` cannot ship without it. `redirects.json` keeps the readable form on
+purpose: the sitemap filter in `astro.config.mjs` compares against a *decoded*
+pathname, so encoding at the source would quietly let redirect sources back into
+the sitemap.
+
+**A trap worth remembering when testing this:** `curl` sends a raw UTF-8 path
+verbatim, which no browser ever does. Testing the raw form reports 404 on a
+redirect that is working perfectly. Encode the path in the test, or the test
+lies in both directions.
+
 ## The portrait looked smeared, and the obvious diagnoses were all wrong
 
 The founder reported it on 28 Jul 2026. Three plausible causes were measured
