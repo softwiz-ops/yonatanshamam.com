@@ -431,6 +431,37 @@ Three things had to be true before it would deploy, and none was obvious:
 answers — the Cloudways IP and all five dead `eforward` MX records — long after
 the zone was correct, which reads exactly like a catastrophic regression.
 
+## Cloudflare answers for you when you ship no robots.txt
+
+With none in the project, Cloudflare served a managed robots.txt. It omitted the
+`Sitemap:` directive and blocked every AI crawler — GPTBot, ClaudeBot,
+Google-Extended and others. Neither was a decision made here, and the second
+works directly against wanting to appear in generative answers.
+
+Shipping `public/robots.txt` fixes the Sitemap directive immediately, because
+that directive is global rather than group-scoped. **It does not lift the
+crawler blocks.** Cloudflare *prepends* its managed text, and a per-agent group
+(`User-agent: GPTBot`) is more specific than `User-agent: *`, so the block wins
+no matter what the project file says. Turning it off is a dashboard action:
+**AI Crawl Control → managed robots.txt**. Done 28 Jul 2026.
+
+The file separates two things the default conflated: `ai-input=yes` so pages can
+be read and cited in an answer, `ai-train=no` so they are not absorbed as
+training data. A citation sends a potential client here; a training corpus does
+not. The Article 4 reservation is kept because it is the part with legal weight.
+
+## Search Console — 28 Jul 2026
+
+Verified as a **Domain** property (DNS TXT), which covers apex, www, http and
+https in one go rather than four separate properties. The verification TXT sits
+alongside the SPF record; multiple TXT records at the apex are normal, and there
+is still exactly one SPF, which is the rule that matters.
+
+Sitemap submitted: `https://yonatanshamam.com/sitemap-index.xml`, 30 URLs.
+Verified that no redirect source leaks into it — the filter in
+`astro.config.mjs` compares against a decoded pathname, which is why
+`redirects.json` must keep its readable Hebrew form.
+
 ## The Hebrew 301 was dead on arrival, and only the live site said so
 
 `_redirects` is matched against the **percent-encoded** request path. Astro
