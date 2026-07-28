@@ -38,7 +38,21 @@ npx astro dev --port 4321
 
 ```bash
 npx astro check && npm run build && python3 scripts/check-contrast.py
+python3 scripts/check-hebrew.py && python3 scripts/check-ethics.py
 ```
+
+## Before launch
+
+```bash
+npm run build && python3 scripts/preflight.py
+```
+
+Checks the BUILT output, not the source, because that is what ships: every page
+has one h1, a title, a description, a canonical and an og:image; every internal
+link and in-page anchor resolves; every redirect points at a real page; no
+stale contact details; every article links to a service and the service links
+back; every referenced asset exists; the sitemap covers everything. It also
+lists remaining `[[חסר]]` markers and blocks while `emailPending` is true.
 
 `scripts/audit-a11y.js` is pasted into the browser console (or run through the
 browser tooling) on any page that changed visually. It checks heading order,

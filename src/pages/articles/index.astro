@@ -1,0 +1,126 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { FIRM, whatsappLink } from '../../data/firm.ts';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.published.valueOf() - a.data.published.valueOf()
+);
+
+const AUDIENCE = { private: 'לאדם הפרטי', business: 'לעסק', both: 'לעסק ולפרט' };
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Blog',
+  name: 'מאמרים',
+  publisher: { '@id': `${Astro.site}#attorney` },
+  blogPost: articles.map((a) => ({
+    '@type': 'BlogPosting',
+    headline: a.data.title,
+    description: a.data.summary,
+    datePublished: a.data.published.toISOString().slice(0, 10),
+    url: `${Astro.site}articles/${a.id}/`,
+  })),
+};
+
+/** DD/MM/YYYY, the Israeli convention. */
+const fmt = (d: Date) =>
+  `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+---
+<Base
+  title="מאמרים משפטיים — חוזים, צוואות ונדל״ן | עו״ד יהונתן שמם"
+  description="מאמרים והסברים בנושאים משפטיים שחוזרים על עצמם: מה לבדוק בחוזה שכירות, מתי צוואה בכתב יד נופלת, מה עושים עם מכתב התראה, ובדיקות לפני רכישת דירה."
+  schema={schema}
+>
+  <header class="wrap lede">
+    <p class="eyebrow">מאמרים</p>
+    <h1>הסברים בנושאים<br /><strong>שחוזרים על עצמם</strong></h1>
+    <p class="sub">
+      השאלות שמגיעות למשרד שוב ושוב, כתובות במלואן. אם התשובה כאן מספיקה לכם,
+      זה בסדר גמור.
+    </p>
+  </header>
+
+  <div class="wrap body">
+    <ol class="index">
+      {articles.map((a, i) => (
+        <li>
+          <a href={`/articles/${a.id}/`}>
+            <span class="num"><bdi dir="ltr">{String(i + 1).padStart(2, '0')}</bdi></span>
+            <span class="body-col">
+              <span class="title">{a.data.title}</span>
+              <span class="sum">{a.data.summary}</span>
+              <span class="meta">
+                <bdi dir="ltr">{fmt(a.data.published)}</bdi>
+                <span class="dot">·</span>
+                {AUDIENCE[a.data.audience]}
+              </span>
+            </span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+  <aside class="closing">
+    <div class="wrap spread">
+      <div class="rail-label"><span class="numeral">01</span></div>
+      <div>
+        <h2>שאלה שלא נענתה כאן?</h2>
+        <p>אפשר לכתוב בוואטסאפ. אם זה מתאים למשרד נמשיך משם, ואם לא — נפנה אתכם הלאה.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={whatsappLink('שלום, קראתי מאמר באתר ורציתי לשאול לגבי')}>כתיבה בוואטסאפ</a>
+          <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+        </div>
+      </div>
+    </div>
+  </aside>
+</Base>
+
+<style>
+  .lede { padding-block: var(--s8); border-block-end: 1px solid var(--ink); }
+  h1 {
+    font-size: clamp(38px, 6.6vw, 78px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.04;
+    margin-block-start: var(--s4);
+  }
+  h1 strong { font-weight: 700; }
+  .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 50ch; margin-block-start: var(--s5); line-height: 1.6; }
+
+  .body { padding-block: var(--s8) var(--s9); }
+  .index li { border-block-end: 1px solid var(--rule); }
+  .index a {
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    gap: var(--s4);
+    align-items: baseline;
+    padding-block: var(--s5);
+    text-decoration: none;
+    transition: background-color .16s;
+  }
+  .index a:hover { background: var(--surface); }
+  .num {
+    font-size: var(--fs-small);
+    font-weight: 200;
+    color: var(--line-control);  /* 3.15:1 */
+    font-variant-numeric: tabular-nums;
+  }
+  .title { font-size: var(--fs-title); font-weight: 600; letter-spacing: -0.015em; line-height: 1.3; }
+  .index a:hover .title { color: var(--accent); }
+  .sum { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s2); max-width: 66ch; }
+  .meta { display: block; font-size: var(--fs-caption); color: var(--faint); margin-block-start: var(--s3); }
+  .dot { color: var(--line-control); margin-inline: var(--s2); }
+
+  .closing { background: var(--surface); border-block-start: 1px solid var(--rule); }
+  .closing :global(.wrap) { padding-block: var(--s8); }
+  .closing h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; }
+  .closing p { color: var(--muted); margin-block-start: var(--s3); max-width: 46ch; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s5); }
+
+  @media (max-width: 700px) {
+    .index a { grid-template-columns: 2.2rem minmax(0, 1fr); gap: var(--s3); }
+    .cta-row { flex-direction: column; align-items: stretch; }
+  }
+</style>

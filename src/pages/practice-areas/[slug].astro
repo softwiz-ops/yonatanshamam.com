@@ -4,6 +4,7 @@ import Faq from '../../components/Faq.astro';
 import Icon from '../../components/Icon.astro';
 import { FIRM, whatsappLink } from '../../data/firm.ts';
 import { SERVICES, CATEGORIES, byCategory } from '../../data/services.ts';
+import { getCollection } from 'astro:content';
 
 export function getStaticPaths() {
   return SERVICES.map((service) => ({ params: { slug: service.slug }, props: { service } }));
@@ -12,6 +13,13 @@ export function getStaticPaths() {
 const { service } = Astro.props;
 const category = CATEGORIES[service.category];
 const related = byCategory(service.category).filter((s) => s.slug !== service.slug).slice(0, 3);
+
+/* The reverse of the link every article carries. On the old WordPress site the
+   demand-letter post and the demand-letter service had no link between them in
+   either direction; this is the half that is easy to forget. */
+const articles = (await getCollection('articles', ({ data }) => !data.draft))
+  .filter((a) => a.data.relatedServices.includes(service.slug))
+  .sort((a, b) => b.data.published.valueOf() - a.data.published.valueOf());
 
 const waMessage = `שלום, הגעתי מהאתר בנוגע ל${service.title}`;
 const primaryHref =
@@ -140,9 +148,29 @@ const schema = {
       </div>
     </section>
 
+    {articles.length > 0 && (
+      <section class="spread">
+        <div class="rail-label"><span class="numeral">06</span>לקריאה</div>
+        <div>
+          <h2>מאמרים בנושא</h2>
+          <ul class="related">
+            {articles.map((a) => (
+              <li>
+                <a href={`/articles/${a.id}/`}>
+                  <b>{a.data.title}</b>
+                  <span>{a.data.summary}</span>
+                  <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )}
+
     {related.length > 0 && (
       <section class="spread">
-        <div class="rail-label"><span class="numeral">06</span>קשור</div>
+        <div class="rail-label"><span class="numeral">07</span>קשור</div>
         <div>
         <h2>נושאים קרובים</h2>
         <ul class="related">
@@ -163,7 +191,7 @@ const schema = {
 
   <aside class="closing">
     <div class="wrap spread">
-      <div class="rail-label"><span class="numeral">07</span></div>
+      <div class="rail-label"><span class="numeral">08</span></div>
       <div>
         <h2>יש שאלה על {service.shortTitle ?? service.title}?</h2>
         <p>

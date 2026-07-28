@@ -1,0 +1,196 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+import { FIRM, whatsappLink } from '../../data/firm.ts';
+import { bySlug } from '../../data/services.ts';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
+  return articles.map((article) => ({ params: { slug: article.id }, props: { article } }));
+}
+
+const { article } = Astro.props;
+const { Content } = await render(article);
+const d = article.data;
+
+/* Every article links to at least one service page, and the service page links
+   back. On the old WordPress site the demand-letter post and the demand-letter
+   service had no link between them in either direction — the most obvious
+   thing left on the table there. The schema enforces at least one. */
+const related = d.relatedServices.map((s) => bySlug(s)).filter(Boolean);
+
+const iso = (x: Date) => x.toISOString().slice(0, 10);
+const fmt = (x: Date) =>
+  `${String(x.getDate()).padStart(2, '0')}/${String(x.getMonth() + 1).padStart(2, '0')}/${x.getFullYear()}`;
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'BlogPosting',
+      headline: d.title,
+      description: d.seoDescription,
+      datePublished: iso(d.published),
+      ...(d.updated ? { dateModified: iso(d.updated) } : {}),
+      inLanguage: 'he-IL',
+      author: { '@type': 'Person', name: FIRM.name, url: FIRM.linkedin },
+      publisher: { '@id': `${Astro.site}#attorney` },
+      mainEntityOfPage: `${Astro.site}articles/${article.id}/`,
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'ראשי', item: `${Astro.site}` },
+        { '@type': 'ListItem', position: 2, name: 'מאמרים', item: `${Astro.site}articles/` },
+        { '@type': 'ListItem', position: 3, name: d.title },
+      ],
+    },
+  ],
+};
+---
+<Base
+  title={d.seoTitle}
+  description={d.seoDescription}
+  schema={schema}
+  waMessage={`שלום, קראתי את המאמר "${d.title}" ורציתי לשאול`}
+>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="מיקום בעמוד">
+      <a href="/">ראשי</a>
+      <span class="sep chev" aria-hidden="true">›</span>
+      <a href="/articles/">מאמרים</a>
+      <span class="sep chev" aria-hidden="true">›</span>
+      <span>{d.title}</span>
+    </nav>
+  </div>
+
+  <header class="wrap lede">
+    <h1>{d.title}</h1>
+    <p class="standfirst">{d.summary}</p>
+    <p class="meta">
+      <bdi dir="ltr">{fmt(d.published)}</bdi>
+      {d.updated && <><span class="dot">·</span>עודכן <bdi dir="ltr">{fmt(d.updated)}</bdi></>}
+    </p>
+  </header>
+
+  <div class="wrap body">
+    <article class="prose"><Content /></article>
+
+    <aside class="sidenote">
+      <h2>בנושא הזה</h2>
+      <ul>
+        {related.map((s) => (
+          <li>
+            <a href={`/practice-areas/${s!.slug}/`}>
+              <b>{s!.shortTitle ?? s!.title}</b>
+              <span>{s!.summary}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="disclaimer">
+        המאמר הוא מידע כללי ואינו ייעוץ משפטי. הדין משתנה, והנסיבות שלכם
+        עשויות להיות שונות.
+      </p>
+    </aside>
+  </div>
+
+  <aside class="closing">
+    <div class="wrap spread">
+      <div class="rail-label"><span class="numeral">01</span></div>
+      <div>
+        <h2>שאלה על מה שקראתם?</h2>
+        <p>משפט אחד מספיק כדי להתחיל.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href={whatsappLink(`שלום, קראתי את המאמר "${d.title}" ורציתי לשאול`)}>כתיבה בוואטסאפ</a>
+          <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+        </div>
+      </div>
+    </div>
+  </aside>
+</Base>
+
+<style>
+  .crumbs { font-size: var(--fs-caption); color: var(--muted); padding-block: var(--s5); }
+  .crumbs a { text-decoration: none; display: inline-block; padding-block: 4px; }
+  .crumbs a:hover { text-decoration: underline; }
+  .sep { display: inline-block; margin-inline: var(--s2); }
+
+  .lede { padding-block-end: var(--s7); border-block-end: 1px solid var(--ink); }
+  h1 {
+    font-size: clamp(34px, 5.4vw, 64px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.07;
+    max-width: 20ch;
+  }
+  .standfirst {
+    font-size: var(--fs-lead);
+    color: var(--muted);
+    max-width: 54ch;
+    margin-block-start: var(--s5);
+    line-height: 1.6;
+  }
+  .meta { font-size: var(--fs-caption); color: var(--faint); margin-block-start: var(--s5); }
+  .dot { color: var(--line-control); margin-inline: var(--s2); }
+
+  .body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: var(--s8);
+    align-items: start;
+    padding-block: var(--s8) var(--s9);
+  }
+
+  /* Long-form reading column. Hebrew reads denser than Latin, so the measure
+     stays tighter and the leading stays at the top of the RTL range. */
+  .prose { max-width: var(--measure); }
+  .prose :global(p) { margin-block-end: var(--s5); }
+  .prose :global(h2) {
+    font-size: var(--fs-title);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-block: var(--s8) var(--s4);
+  }
+  .prose :global(h2:first-child) { margin-block-start: 0; }
+  .prose :global(h3) { font-size: var(--fs-body); font-weight: 700; margin-block: var(--s6) var(--s3); }
+  .prose :global(ul), .prose :global(ol) { margin-block-end: var(--s5); padding-inline-start: var(--s5); }
+  .prose :global(li) { margin-block-end: var(--s3); list-style: disc; }
+  .prose :global(ol li) { list-style: decimal; }
+  .prose :global(strong) { font-weight: 700; }
+  .prose :global(a) { color: var(--accent); }
+  .prose :global(blockquote) {
+    margin: 0 0 var(--s5);
+    padding-inline-start: var(--s5);
+    border-inline-start: 2px solid var(--rule);
+    color: var(--muted);
+    font-size: var(--fs-small);
+  }
+
+  .sidenote { position: sticky; top: 96px; }
+  .sidenote h2 { font-size: var(--fs-caption); color: var(--muted); font-weight: 600; margin-block-end: var(--s3); }
+  .sidenote li { border-block-start: 1px solid var(--rule); }
+  .sidenote a { display: block; padding-block: var(--s4); text-decoration: none; }
+  .sidenote b { display: block; font-weight: 600; font-size: var(--fs-small); }
+  .sidenote a:hover b { color: var(--accent); }
+  .sidenote span { display: block; color: var(--muted); font-size: var(--fs-caption); margin-block-start: var(--s1); }
+  .disclaimer {
+    margin-block-start: var(--s5);
+    padding-block-start: var(--s4);
+    border-block-start: 1px solid var(--rule);
+    color: var(--faint);
+    font-size: var(--fs-caption);
+  }
+
+  .closing { background: var(--surface); border-block-start: 1px solid var(--rule); }
+  .closing :global(.wrap) { padding-block: var(--s8); }
+  .closing h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; }
+  .closing p { color: var(--muted); margin-block-start: var(--s3); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s5); }
+
+  @media (max-width: 940px) {
+    .body { grid-template-columns: 1fr; gap: var(--s7); }
+    .sidenote { position: static; }
+  }
+  @media (max-width: 700px) { .cta-row { flex-direction: column; align-items: stretch; } }
+</style>

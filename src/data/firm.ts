@@ -46,12 +46,28 @@ export const FIRM = {
   },
 
   phone: {
-    display: '054-244-8885',
-    tel: '+972542448885',
+    // Business line, supplied 28 Jul 2026. Replaces 054-244-8885.
+    display: '055-955-9680',
+    tel: '+972559559680',
     // wa.me wants the number without + or separators
-    whatsapp: '972542448885',
+    whatsapp: '972559559680',
   },
-  email: 'yonatan@shamam.net',
+
+  /**
+   * THE MAILBOX DOES NOT EXIST YET.
+   *
+   * yonatan@shamam.net was removed on 28 Jul 2026 — it is a personal address
+   * and does not belong on a firm site. This is the address the firm will use
+   * once the mailbox is created on the yonatanshamam.com domain.
+   *
+   * `pending` blocks the pre-launch check. Publishing an address that bounces
+   * is worse than publishing none, and this one also appears in the privacy
+   * policy as the route for the statutory access and correction rights, and in
+   * the accessibility declaration as the coordinator's contact — both of which
+   * the regulations require to actually work.
+   */
+  email: 'office@yonatanshamam.com',
+  emailPending: true,
   calendar: 'https://calendar.app.google/LU3N8tPLz71vscQ68',
   linkedin: 'https://www.linkedin.com/in/yonatan-shamam-5b1892192/',
 
