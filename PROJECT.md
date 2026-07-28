@@ -1,6 +1,6 @@
 # PROJECT.md — factual state of yonatanshamam.com
 
-Last updated: 27 July 2026.
+Last updated: 28 July 2026.
 
 ---
 
@@ -13,8 +13,10 @@ Elementor on Cloudways to a static Astro site on Cloudflare Workers.
 Hebrew only, RTL native. The order of priorities the founder set is: **leads
 first, positioning second, SEO third.**
 
-**Status: direction B chosen and built.** 15 pages generate, all checks pass,
-nothing is deployed. The gaps that remain are content the founder owes, not
+**Status: live since 28 July 2026** at `https://yonatanshamam.com` (and www),
+on Cloudflare Workers. 30 pages, all checks pass, mailbox routing, Search
+Console verified with the sitemap submitted. What remains is listed under
+"Open" at the foot of this file, and is content and decisions rather than
 engineering.
 
 ---
