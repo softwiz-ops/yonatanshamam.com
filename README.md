@@ -22,6 +22,18 @@ npm run build
 npm run check
 ```
 
+## When the dev server throws "The file does not exist at … deps_ssr"
+
+Vite's dependency cache has gone stale. It happens after installing or removing
+a package, and the server does not recover on its own — the built site is
+unaffected, so check `npm run build` before suspecting the code.
+
+```bash
+npx astro dev stop
+rm -rf node_modules/.vite .astro
+npx astro dev --port 4321
+```
+
 ## Checks that must pass before any change lands
 
 ```bash
