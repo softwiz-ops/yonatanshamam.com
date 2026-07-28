@@ -9,7 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "dev:host": "astro dev --host",
-    "deploy": "wrangler deploy --config dist/server/wrangler.json"
+    "deploy": "npm run build && wrangler deploy --config dist/client/wrangler.json"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.1.4",

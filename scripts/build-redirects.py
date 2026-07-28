@@ -4,9 +4,17 @@
 Two kinds of entry, and the difference matters:
 
   301  a real page that moved. The rankings and any inbound link follow it.
-  410  template junk that was never meant to be public. There is nowhere
-       honest to send it, and a 301 to the home page would be a soft-404 that
-       Google eventually treats as one anyway. 410 tells it to drop the URL.
+       Emitted into _redirects, which Cloudflare's static assets honour for
+       path rules. Verified present in the build.
+  410  WAS the plan, and is not what ships. Every page here prerenders, so the
+       build produces no Worker at all — dist/server is empty and the generated
+       wrangler config has no `main`. The middleware that served 410 therefore
+       never ran, and gone.json URLs answer 404 instead.
+
+       Left that way deliberately. Forcing a Worker onto an entirely static
+       site to turn 404 into 410 buys days of de-indexing speed on eighteen
+       junk URLs from a site that was barely indexed. gone.json is kept as the
+       record of what was removed and why.
 
 Nineteen of the ~22 URLs in the live sitemap are the second kind: WordPress
 boilerplate, six demo pages carrying English lorem ipsum, four fabricated
