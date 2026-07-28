@@ -133,17 +133,19 @@ const groups = ORDER.map((key) => {
     <div class="wrap spread">
       <div class="rail-label"><span class="numeral">02</span>המשרד</div>
       <div class="firm-in">
-        {/* The source is 640x800 and displays at 230 CSS px at most, so there
-            were always enough pixels — the softness came from the browser
-            resampling 640 down to 460 with its cheap filter. sharp does that
-            resize at build time instead, and AVIF/WebP hold the detail. */}
+        {/* A 160px circle, not a 230px rectangle. The photograph is soft at
+            native resolution and no pipeline setting fixes that, so the display
+            was cut down and cropped to head-and-shoulders: every delivered
+            pixel is now face rather than suit and window, which raises apparent
+            sharpness at the same file size. The square master comes from
+            scripts/build-portrait.py. */}
         <Picture
           class="portrait"
           src={portrait}
           formats={['avif', 'webp']}
           quality={70}
-          widths={[140, 230, 280, 460]}
-          sizes="(max-width: 760px) 140px, (max-width: 1150px) 20vw, 230px"
+          widths={[120, 160, 240, 320]}
+          sizes="(max-width: 760px) 120px, 160px"
           alt="עו״ד יהונתן שמם"
           loading="lazy"
           decoding="async"
@@ -293,12 +295,13 @@ const groups = ORDER.map((key) => {
      instead — flex and grid blockify their items, so the two <source> elements
      inside <picture> become real flex items as well. On the about page that
      took two grid tracks and pushed the content onto a second row. */
-  .firm-in > picture { flex: none; width: clamp(150px, 20vw, 230px); }
+  .firm-in > picture { flex: none; width: 160px; }
   .portrait {
     display: block;
     width: 100%;
     height: auto;
-    border-radius: var(--r-md);
+    /* The master is square, so 50% is a true circle and nothing is squashed. */
+    border-radius: 50%;
   }
   .firm-copy h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; }
   /* #c3c8c5 on #1b1d1f measures 10.1:1 */
@@ -365,7 +368,7 @@ const groups = ORDER.map((key) => {
   }
   @media (max-width: 760px) {
     .firm-in { flex-direction: column; align-items: flex-start; gap: var(--s5); }
-    .firm-in > picture { width: 140px; }
+    .firm-in > picture { width: 120px; }
     .forks { grid-template-columns: 1fr; }
     .fork { padding-inline: 0; }
     .fork + .fork { border-inline-start: 0; padding-inline-start: 0; }

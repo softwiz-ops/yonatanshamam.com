@@ -59,7 +59,17 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / "reference" / "photos" / "yonatan-portrait-original.jpg"
 TARGET = ROOT / "src" / "assets" / "yonatan-portrait.jpg"
 
-MASTER_WIDTH = 460
+# Head-and-shoulders crop, in pixels on the 640x800 original. Chosen by eye
+# against a circular preview — the face sits centred, the crown clears the top
+# edge, and the shoulders reach the bottom. THESE NUMBERS DESCRIBE THIS
+# PHOTOGRAPH ONLY. Replace the original and they are meaningless; re-derive them
+# by previewing the crop through the same circular mask the site applies.
+CROP = (120, 70, 460, 410)
+
+# 2x the 160px slot the circle occupies on both pages. The crop is 340px, so
+# this is a genuine downscale rather than an upscale, and the sharpening below
+# lands at the delivered size.
+MASTER_WIDTH = 320
 UNSHARP = dict(radius=0.8, percent=80, threshold=3)
 QUALITY = 92  # the pipeline re-encodes to AVIF/WebP; this master stays generous
 
@@ -69,14 +79,25 @@ def main() -> None:
         sys.exit(f"missing original: {SOURCE}")
 
     original = Image.open(SOURCE).convert("RGB")
-    if original.width < MASTER_WIDTH:
+
+    left, top, right, bottom = CROP
+    if right > original.width or bottom > original.height:
         sys.exit(
-            f"original is only {original.width}px wide — refusing to upscale to "
-            f"{MASTER_WIDTH}px. Lower MASTER_WIDTH or supply a larger photo."
+            f"CROP {CROP} falls outside the original ({original.width}x"
+            f"{original.height}). The crop describes one specific photograph — "
+            "re-derive it if the original changed."
         )
 
-    height = round(original.height * MASTER_WIDTH / original.width)
-    resized = original.resize((MASTER_WIDTH, height), Image.LANCZOS)
+    cropped = original.crop(CROP)
+    if cropped.width != cropped.height:
+        sys.exit(f"CROP must be square for a circular mask; got {cropped.size}")
+    if cropped.width < MASTER_WIDTH:
+        sys.exit(
+            f"crop is only {cropped.width}px — refusing to upscale to "
+            f"{MASTER_WIDTH}px. Widen CROP or lower MASTER_WIDTH."
+        )
+
+    resized = cropped.resize((MASTER_WIDTH, MASTER_WIDTH), Image.LANCZOS)
     sharpened = resized.filter(ImageFilter.UnsharpMask(**UNSHARP))
 
     TARGET.parent.mkdir(parents=True, exist_ok=True)
@@ -84,7 +105,8 @@ def main() -> None:
 
     print(
         f"{SOURCE.name} {original.width}x{original.height}"
-        f"  ->  {TARGET.name} {MASTER_WIDTH}x{height}"
+        f"  ->  crop {cropped.width}x{cropped.height}"
+        f"  ->  {TARGET.name} {MASTER_WIDTH}x{MASTER_WIDTH}"
         f"  ({TARGET.stat().st_size:,}B, unsharp {UNSHARP['radius']}/"
         f"{UNSHARP['percent']}%/{UNSHARP['threshold']})"
     )

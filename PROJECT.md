@@ -558,6 +558,25 @@ sharpness for 10% more overshoot.
 `reference/photos/yonatan-portrait-original.jpg` is the untouched 640×800.
 Re-run the script after changing the parameters or the original.
 
+### Smaller and circular — 28 Jul 2026
+
+Three rounds of pipeline work did not satisfy the founder, and he was right to
+keep pushing: the photograph is soft and no encoder setting changes that. The
+display was cut instead, on his instruction.
+
+The portrait is now a **160px circle** on both pages, cropped to head and
+shoulders. This is not only hiding the problem. Cropping means every delivered
+pixel is face rather than suit, window and skyline, which raises apparent
+sharpness at the same byte count — the crop is 340px of the original for a
+320px master, so it is a real downscale, not an upscale.
+
+`CROP` in `scripts/build-portrait.py` describes **this photograph only**. Swap
+the original and those four numbers mean nothing; re-derive them by previewing
+through the same circular mask the site applies.
+
+`border-radius: 50%` is a true circle only because the master is square. Never
+apply it to the 4:5 original.
+
 **The ceiling is the source.** 640×800 is the largest original in the repo —
 `yonatan-wide.jpg` is 1024×683, and a 4:5 crop from it would be 546 wide, i.e.
 worse. Displaying the portrait any larger than 230 CSS px needs a
