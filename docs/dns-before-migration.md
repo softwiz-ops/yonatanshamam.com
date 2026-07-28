@@ -42,6 +42,29 @@ rather than to the records alone.
 So Cloudflare Email Routing has to be configured in the same session as the
 nameserver change, not after it. Mail sent in the gap is bounced, not queued.
 
+## The old site is gone — 28 July 2026
+
+The founder deleted the Cloudways account, so `206.81.21.82` refuses
+connections on both 80 and 443. Confirmed from two networks.
+
+What that changes:
+
+- **The two A records point at nothing.** Left proxied, Cloudflare answers 522
+  instead of a connection error. Neither is good; both are temporary. They get
+  replaced when the Worker is deployed.
+- **Email is unaffected for now.** Forwarding runs through Namecheap, not
+  Cloudways, so it keeps working until the nameservers move — at which point
+  the trap described above applies exactly as written.
+- **There is no longer a live site to protect**, so nothing in this migration
+  carries risk to production. The caution below is kept for the record.
+- **Deployment became the urgent item.** A domain answering errors starts
+  losing whatever index position it has.
+
+On that last point, the loss is smaller than it sounds. The research at the
+start of this project found the old site had almost no organic presence:
+searching `"יהונתן שמם" עורך דין` did not return it at all, and only one blog
+post was indexed. There is very little to lose.
+
 ## Order that keeps the live site up
 
 The A record is what keeps the current site reachable. Cloudflare imports it
