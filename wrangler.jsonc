@@ -1,0 +1,28 @@
+{
+  // Read by @astrojs/cloudflare and merged into the generated
+  // dist/client/wrangler.json at build time. Keep `name` and
+  // `compatibility_date` in step with what the adapter emits.
+  //
+  // This file exists for one reason: the routes below. Without them the Worker
+  // has nowhere to go, and `wrangler deploy` stops with "You need to register a
+  // workers.dev subdomain" — it will not guess a destination.
+  //
+  // custom_domain:true attaches the hostname to the Worker and makes Cloudflare
+  // manage its DNS record directly. It replaces any A/AAAA/CNAME on that exact
+  // hostname. It does NOT touch MX or TXT, so Email Routing for
+  // office@yonatanshamam.com is unaffected.
+  //
+  // Both hostnames are attached on purpose. The canonical is the apex — see
+  // `site` in astro.config.mjs — and every page carries a canonical tag saying
+  // so. www is attached anyway because it already resolves publicly, and a www
+  // that fails to resolve is worse than one that serves the same pages under a
+  // canonical. Host-level redirects are deliberately not attempted here:
+  // `_redirects` on Workers static assets honours path rules only and ignores
+  // host rules.
+  "name": "yonatanshamam-site",
+  "compatibility_date": "2026-04-15",
+  "routes": [
+    { "pattern": "yonatanshamam.com", "custom_domain": true },
+    { "pattern": "www.yonatanshamam.com", "custom_domain": true }
+  ]
+}
