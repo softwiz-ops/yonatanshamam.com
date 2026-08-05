@@ -433,6 +433,42 @@ Three things had to be true before it would deploy, and none was obvious:
 answers — the Cloudways IP and all five dead `eforward` MX records — long after
 the zone was correct, which reads exactly like a catastrophic regression.
 
+## The home page was rebuilt — 5 Aug 2026
+
+The founder called the design and content disappointing and told me to look for
+myself. He was right, and the diagnosis mattered more than the apology: **the
+deep pages were fine.** The service pages are substantive and well organised.
+The failure was concentrated in the home page and in one sitewide layout habit.
+
+What he named, when asked: **empty, and generic.** Both were accurate.
+
+**Empty had a measurable cause.** Every `.spread` gives a 936px content track,
+but each section put a single reading-measure column (~540px) inside it, hard
+against the RTL start edge. That left ~400px dead on the left of every section
+on every page. It did not read as deliberate whitespace; it read as a layout
+that had broken. Fixed by giving the wide sections something to do with the
+width: the catalogue is two columns, the dark band is two, and the FAQ carries a
+contact panel beside it.
+
+**The hero was carrying a 250px logo** — the same mark already sitting in the
+header 40px above it. A logo at that size is what goes in when there is no idea.
+It is replaced by the lawyer: portrait, name, and four facts (admission year,
+previous firm, languages, city). Every one of those is on the Bar's permitted
+list, and together they are the only thing on the page a competitor cannot
+reproduce by rewriting their own copy.
+
+**Generic had the same root.** The strongest asset the practice has — three
+years at גולדפרב זליגמן — was buried on the about page. Naming a previous legal
+position is expressly permitted. It is now the second line of the hero card. No
+comparison and no superlative was added with it; the name carries its own weight
+and a comparative claim would breach the advertising rules.
+
+**The dark band stopped repeating the hero.** It held the portrait and the
+biography, both of which now sit a screen above. Repetition is a large part of
+what made the page feel thin. It carries the working method instead — including
+the commitment that when no lawyer is needed, that is the answer given. That is
+a promise rather than a claim, which is why no competitor copies it.
+
 ## Cloudflare answers for you when you ship no robots.txt
 
 With none in the project, Cloudflare served a managed robots.txt. It omitted the

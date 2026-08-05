@@ -75,17 +75,48 @@ const groups = ORDER.map((key) => {
         <p class="eyebrow">משרד עורכי דין · תל אביב</p>
         <h1>משפט<br /><strong>בגובה העיניים</strong></h1>
         <p class="sub">
-          חוזים, צוואות, נדל״ן וליווי עסקי — לעסקים ולאנשים פרטיים.
-          בלי ז׳רגון, ועם הסבר ברור על מה שאתם חותמים עליו.
+          חוזים, צוואות וירושה, נדל״ן וליווי שוטף של חברות — לעסקים ולאנשים
+          פרטיים. העבודה מתחילה בהסבר: מה המסמך עושה, מה הוא לא עושה, ואיפה
+          הסיכון האמיתי.
         </p>
         <div class="cta-row">
           <a class="btn btn-primary" href={whatsappLink('שלום, הגעתי מהאתר ורציתי לשאול לגבי')}>כתבו לי בוואטסאפ</a>
           <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
         </div>
       </div>
-      {/* The mark, at a size where it reads as a mark. Decorative: the firm is
-          named in the header and in the h1 beside it. */}
-      <img class="hero-mark" src="/logo-shield-display.png" width="342" height="440" alt="" decoding="async" />
+
+      {/* The lawyer, not the logo. The mark is already in the header 40px above,
+          and repeating it at 250px was filler. For a solo practice the face and
+          the record are the product, and the three facts below are the only
+          things on this page no competitor can copy — all of them permitted by
+          the Bar's closed list: admission year, previous legal positions,
+          languages. No comparison, no superlative, nothing to defend. */}
+      <aside class="hero-card">
+        <Picture
+          class="hero-portrait"
+          src={portrait}
+          formats={['avif', 'webp']}
+          quality={70}
+          widths={[160, 320]}
+          sizes="160px"
+          alt="עו״ד יהונתן שמם"
+          loading="eager"
+          fetchpriority="high"
+        />
+        <p class="hero-name">עו״ד יהונתן שמם</p>
+        <p class="hero-role">{FIRM.tagline}</p>
+        <dl class="hero-facts">
+          <div><dt>הסמכה</dt><dd><bdi dir="ltr">{FIRM.admittedYear}</bdi></dd></div>
+          {FIRM.previousRoles[0] && (
+            <div>
+              <dt>קודם</dt>
+              <dd>{FIRM.previousRoles[0].org}</dd>
+            </div>
+          )}
+          <div><dt>שפות</dt><dd>{FIRM.languages.join(', ')}</dd></div>
+          <div><dt>משרד</dt><dd>{FIRM.address.city}</dd></div>
+        </dl>
+      </aside>
     </div>
   </section>
 
@@ -132,39 +163,33 @@ const groups = ORDER.map((key) => {
   <section class="firm">
     <div class="wrap spread">
       <div class="rail-label"><span class="numeral">02</span>המשרד</div>
+      {/* This band used to repeat the portrait and the biography, both of which
+          now sit in the hero card a screen above. Repetition is what made the
+          page feel thin. It carries the working method instead — the one thing
+          here a competitor cannot copy by editing their own copy, because it is
+          a commitment rather than a claim. */}
       <div class="firm-in">
-        {/* A 160px circle, not a 230px rectangle. The photograph is soft at
-            native resolution and no pipeline setting fixes that, so the display
-            was cut down and cropped to head-and-shoulders: every delivered
-            pixel is now face rather than suit and window, which raises apparent
-            sharpness at the same file size. The square master comes from
-            scripts/build-portrait.py. */}
-        <Picture
-          class="portrait"
-          src={portrait}
-          formats={['avif', 'webp']}
-          quality={70}
-          widths={[120, 160, 240, 320]}
-          sizes="(max-width: 760px) 120px, 160px"
-          alt="עו״ד יהונתן שמם"
-          loading="lazy"
-          decoding="async"
-        />
         <div class="firm-copy">
-          <h2>עו״ד יהונתן שמם</h2>
-          <p>
-            הוסמך כעורך דין בשנת <bdi dir="ltr">2019</bdi>. את שנותיו הראשונות
-            במקצוע עשה כעורך דין במשרד גולדפרב זליגמן, ולפני כן התמחה במשרד
-            ש. הררי בתחומי הנדל״ן ודיני החברות.
-          </p>
-          <p>
-            המשרד מלווה עסקים ואנשים פרטיים בתל אביב ובמרכז, בעברית ובאנגלית.
+          <h2>מה שאתם מקבלים לפני שאתם מחליטים</h2>
+          <p class="firm-statement">
+            לפני מתן המלצה אנו מציגים את התמונה המלאה: מה המסמך מסדיר, מה הוא
+            אינו מסדיר, ומה החשיפה המעשית בכל אפשרות.
           </p>
           <a class="firm-link" href="/about/">
-            אודות המשרד
+            אודות המשרד ושיטת העבודה
             <svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
         </div>
+        <ul class="firm-points">
+          <li>
+            <b>גם כשהתשובה היא שאין צורך בעורך דין</b>
+            <span>זו התשובה שתינתן. במקרים לא מעטים ההסבר עצמו הוא מה שמייתר את העבודה.</span>
+          </li>
+          <li>
+            <b>וגם כשהנושא לא בתחומי העיסוק</b>
+            <span>נאמר זאת מיד ונפנה לגורם המתאים, במקום ללמוד את התחום על חשבונכם.</span>
+          </li>
+        </ul>
       </div>
     </div>
   </section>
@@ -201,17 +226,63 @@ const groups = ORDER.map((key) => {
           <span class="numeral">04</span>
           שאלות נפוצות
         </div>
-        <Faq items={faqs} />
+        {/* The accordion keeps a reading measure, so on a wide screen it left
+            roughly 400px of the track empty. The contact block fills it and
+            puts a conversion point next to the questions people are still
+            deciding on, which is where it is worth the most. */}
+        <div class="faq-in">
+          <Faq items={faqs} />
+          <aside class="faq-aside">
+            <h2>לא מצאתם את השאלה שלכם?</h2>
+            <p>משפט אחד על מה שאתם צריכים מספיק כדי להתחיל. אם זה לא מתאים למשרד, נגיד את זה מיד.</p>
+            <div class="faq-cta">
+              <a class="btn btn-primary" href={whatsappLink('שלום, יש לי שאלה שלא מופיעה באתר')}>כתבו לי בוואטסאפ</a>
+              <a class="btn btn-ghost" href={FIRM.calendar}>תיאום פגישה ביומן</a>
+            </div>
+            <dl class="faq-facts">
+              <div><dt>טלפון</dt><dd><bdi><a href={`tel:${FIRM.phone.tel}`} dir="ltr">{FIRM.phone.display}</a></bdi></dd></div>
+              <div><dt>שעות</dt><dd>{FIRM.hours.days}, <bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></dd></div>
+              <div><dt>משרד</dt><dd>{FIRM.address.full}</dd></div>
+            </dl>
+          </aside>
+        </div>
       </div>
     </div>
   </section>
 </Base>
 
 <style>
+  /* ---------- faq ---------- */
+  .faq-in { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: var(--s8); align-items: start; }
+  .faq-aside {
+    position: sticky;
+    top: 96px;
+    padding: var(--s6);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+  }
+  .faq-aside h2 { font-size: var(--fs-title); font-weight: 600; letter-spacing: -0.015em; }
+  .faq-aside p { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s3); line-height: 1.6; }
+  .faq-cta { display: grid; gap: var(--s3); margin-block-start: var(--s5); }
+  .faq-facts { margin-block-start: var(--s5); font-size: var(--fs-caption); }
+  .faq-facts > div { padding-block: var(--s3); border-block-start: 1px solid var(--rule); }
+  .faq-facts dt { color: var(--muted); }
+  .faq-facts dd { margin: 0; margin-block-start: 2px; }
+  .faq-facts a { color: var(--accent); }
+
+  @media (max-width: 940px) {
+    .faq-in { grid-template-columns: 1fr; gap: var(--s6); }
+    .faq-aside { position: static; }
+  }
+
   /* ---------- hero ---------- */
-  .hero { padding-block: clamp(48px, 8vw, 112px) var(--s9); }
-  .hero-in { display: flex; align-items: center; gap: var(--s8); }
-  .hero-copy { flex: 1; min-width: 0; }
+  .hero { padding-block: clamp(40px, 6vw, 80px) var(--s8); }
+  .hero-in { display: flex; align-items: stretch; gap: var(--s8); }
+  .hero-copy { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+  /* A column flex container stretches its children, which turned the eyebrow
+     pill into a full-width bar. It sizes to its text. */
+  .hero-copy > .eyebrow { align-self: flex-start; }
 
   h1 {
     font-size: var(--fs-display);
@@ -230,14 +301,50 @@ const groups = ORDER.map((key) => {
   }
   .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s7); }
 
-  .hero-mark {
+  /* The credential card. A bordered panel is used here and almost nowhere else
+     on the site, because this is the one block that has to read as a distinct
+     object rather than as more page. */
+  .hero-card {
     flex: none;
-    width: clamp(120px, 16vw, 210px);
-    height: auto;
-    /* The gold is the logo's alone and is never borrowed for anything else.
-       Held back so it sits behind the type rather than competing with it. */
-    opacity: .9;
+    width: 260px;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--s6);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
   }
+  .hero-card > :global(picture) { width: 160px; }
+  .hero-card :global(.hero-portrait) {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+  }
+  .hero-name {
+    font-size: var(--fs-title);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-block-start: var(--s5);
+  }
+  .hero-role { font-size: var(--fs-caption); color: var(--muted); margin-block-start: var(--s1); }
+
+  .hero-facts {
+    width: 100%;
+    margin-block-start: var(--s5);
+    font-size: var(--fs-caption);
+  }
+  .hero-facts > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s3);
+    padding-block: var(--s3);
+    border-block-start: 1px solid var(--rule);
+  }
+  .hero-facts dt { color: var(--muted); }
+  .hero-facts dd { margin: 0; font-weight: 600; text-align: start; }
 
   /* ---------- sections ---------- */
   .section-title {
@@ -254,58 +361,67 @@ const groups = ORDER.map((key) => {
     line-height: 1.6;
   }
 
-  .groups { display: grid; gap: 0; }
-  .group { padding-block: var(--s5); border-block-start: 1px solid var(--rule); }
-  .group:first-child { border-block-start: 1px solid var(--ink); }
-  .group h3 { font-size: var(--fs-title); font-weight: 500; letter-spacing: -0.015em; }
-  .blurb { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s2); max-width: 60ch; }
+  /* Two columns across the full content track. The previous single stacked
+     column left roughly 400px of the 936px empty on every row, and the topic
+     names ran along one line separated by pipes — which is the grocery list the
+     founder rejected in the navigation, rebuilt here by accident. */
+  .groups {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s6) var(--s7);
+    margin-block-start: var(--s6);
+  }
+  .group { padding-block-start: var(--s5); border-block-start: 1px solid var(--ink); }
+  .group h3 { font-size: var(--fs-title); font-weight: 600; letter-spacing: -0.015em; }
+  .blurb { color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s2); }
 
-  /* Topic names as inline links. Compact enough that five categories read as
-     a table of contents rather than a menu of sixteen things to buy. */
-  .topics {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s2) 0;
-    margin-block-start: var(--s4);
-  }
-  .topics li { display: flex; align-items: center; }
-  .topics li + li::before {
-    content: '';
-    width: 1px;
-    height: 12px;
-    background: var(--rule);
-    margin-inline: var(--s3);
-  }
+  /* One topic per line. A name plus its own row is scannable; sixteen names
+     wrapped inline is not. */
+  .topics { margin-block-start: var(--s4); }
+  .topics li + li { border-block-start: 1px solid var(--rule); }
   .topics a {
+    display: block;
     font-size: var(--fs-small);
     text-decoration: none;
     color: var(--ink);
-    padding-block: 4px;
+    padding-block: var(--s3);
+    transition: color .14s;
   }
-  .topics a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .topics a:hover { color: var(--accent); }
+
+  /* Five categories in two columns leaves the fifth alone with a hole beside
+     it. It spans instead, and lays its topics along a row — which also gives
+     the section an ending rather than stopping mid-grid. */
+  .group:last-child { grid-column: 1 / -1; }
+  .group:last-child .topics { display: flex; flex-wrap: wrap; gap: 0 var(--s6); }
+  .group:last-child .topics li { border-block-start: 0; }
+  .group:last-child .topics a { padding-block: var(--s2); }
+
+  @media (max-width: 860px) {
+    .groups { grid-template-columns: 1fr; }
+    .group:last-child .topics { display: block; }
+    .group:last-child .topics li + li { border-block-start: 1px solid var(--rule); }
+    .group:last-child .topics a { padding-block: var(--s3); }
+  }
 
   /* ---------- differentiator ---------- */
   .firm { background: var(--ink); color: #fff; }
   .firm :global(.wrap) { padding-block: var(--s9); }
   .firm :global(.rail-label) { color: #8d938f; }
   .firm :global(.numeral) { color: #666d68; }  /* 3.18:1 on the ink band */
-  .firm-in { display: flex; gap: var(--s7); align-items: center; }
-  /* <Picture> wraps the <img>, so the <picture> is the flex item and the
-     sizing belongs here. Do NOT use display:contents to promote the <img>
-     instead — flex and grid blockify their items, so the two <source> elements
-     inside <picture> become real flex items as well. On the about page that
-     took two grid tracks and pushed the content onto a second row. */
-  .firm-in > picture { flex: none; width: 160px; }
-  .portrait {
-    display: block;
-    width: 100%;
-    height: auto;
-    /* The master is square, so 50% is a true circle and nothing is squashed. */
-    border-radius: 50%;
-  }
+  /* Two tracks across the full content width. The statement carries the weight;
+     the two commitments sit beside it rather than under it, so the band reads
+     as one idea instead of a stack. */
+  .firm-in { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: var(--s7) var(--s8); align-items: start; }
   .firm-copy h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; }
   /* #c3c8c5 on #1b1d1f measures 10.1:1 */
-  .firm-copy p { color: #c3c8c5; margin-block-start: var(--s4); max-width: 48ch; }
+  .firm-copy p { color: #c3c8c5; margin-block-start: var(--s4); max-width: 46ch; }
+  .firm-statement { font-size: var(--fs-lead); line-height: 1.6; }
+
+  .firm-points { display: grid; gap: var(--s5); padding-block-start: var(--s3); }
+  .firm-points li { border-block-start: 1px solid rgba(255, 255, 255, .18); padding-block-start: var(--s4); }
+  .firm-points b { display: block; font-weight: 600; }
+  .firm-points span { display: block; color: #c3c8c5; font-size: var(--fs-small); margin-block-start: var(--s2); line-height: 1.6; }
   .firm-link {
     display: inline-flex;
     align-items: center;
@@ -363,12 +479,13 @@ const groups = ORDER.map((key) => {
   }
 
   @media (max-width: 860px) {
-    .hero-in { flex-direction: column-reverse; align-items: flex-start; gap: var(--s6); }
-    .hero-mark { width: 96px; }
+    /* Card first on a phone: the face and the record are the fastest trust
+       signal, and they cost one screen of scrolling to reach otherwise. */
+    .hero-in { flex-direction: column-reverse; align-items: stretch; gap: var(--s6); }
+    .hero-card { width: 100%; align-self: auto; }
   }
   @media (max-width: 760px) {
-    .firm-in { flex-direction: column; align-items: flex-start; gap: var(--s5); }
-    .firm-in > picture { width: 120px; }
+    .firm-in { grid-template-columns: 1fr; gap: var(--s6); }
     .forks { grid-template-columns: 1fr; }
     .fork { padding-inline: 0; }
     .fork + .fork { border-inline-start: 0; padding-inline-start: 0; }
