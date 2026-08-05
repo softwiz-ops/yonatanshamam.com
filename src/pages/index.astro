@@ -2,8 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
 import Icon from '../components/Icon.astro';
-import { Picture } from 'astro:assets';
-import portrait from '../assets/yonatan-portrait.jpg';
 import { FIRM, whatsappLink } from '../data/firm.ts';
 import { SERVICES, CATEGORIES, byCategory, type Category } from '../data/services.ts';
 
@@ -85,32 +83,39 @@ const groups = ORDER.map((key) => {
         </div>
       </div>
 
-      {/* The lawyer, not the logo. The mark is already in the header 40px above,
-          and repeating it at 250px was filler. For a solo practice the face and
-          the record are the product, and the three facts below are the only
-          things on this page no competitor can copy — all of them permitted by
+      {/* THE PORTRAIT WAS REMOVED ON 5 AUG 2026, at the founder's decision, and
+          should not be reinstated with the current file. The only original is
+          640x800 and soft at native resolution — the head measures roughly
+          150x200px, which is already 1:1 at a 160px slot on a 2x display, so
+          there is no reserve for a denser screen or any browser zoom. Five
+          rounds of pipeline work (build-time resizing, an unsharp mask at the
+          delivered size, AVIF quality raised off Astro's default 50) each
+          improved it measurably and none of it was enough, because no encoder
+          setting invents detail that was never captured.
+
+          scripts/build-portrait.py and reference/photos/ are kept deliberately:
+          with a full-resolution original this becomes a one-command restore.
+          A site with no photograph reads as composed. One with a soft
+          photograph reads as neglected, which is worse.
+
+          What carries the card instead is the record — every line permitted by
           the Bar's closed list: admission year, previous legal positions,
-          languages. No comparison, no superlative, nothing to defend. */}
+          degree, languages, city. No comparison and no superlative. */}
       <aside class="hero-card">
-        <Picture
-          class="hero-portrait"
-          src={portrait}
-          formats={['avif', 'webp']}
-          quality={70}
-          widths={[160, 320]}
-          sizes="160px"
-          alt="עו״ד יהונתן שמם"
-          loading="eager"
-          fetchpriority="high"
-        />
         <p class="hero-name">עו״ד יהונתן שמם</p>
         <p class="hero-role">{FIRM.tagline}</p>
         <dl class="hero-facts">
           <div><dt>הסמכה</dt><dd><bdi dir="ltr">{FIRM.admittedYear}</bdi></dd></div>
-          {FIRM.previousRoles[0] && (
+          {FIRM.previousRoles.map((r) => (
             <div>
-              <dt>קודם</dt>
-              <dd>{FIRM.previousRoles[0].org}</dd>
+              <dt>{r.role}</dt>
+              <dd>{r.org}</dd>
+            </div>
+          ))}
+          {FIRM.education?.[0] && (
+            <div>
+              <dt>השכלה</dt>
+              <dd>{FIRM.education[0].institution}</dd>
             </div>
           )}
           <div><dt>שפות</dt><dd>{FIRM.languages.join(', ')}</dd></div>
@@ -316,18 +321,10 @@ const groups = ORDER.map((key) => {
     border: 1px solid var(--rule);
     border-radius: var(--r-md);
   }
-  .hero-card > :global(picture) { width: 160px; }
-  .hero-card :global(.hero-portrait) {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
-  }
   .hero-name {
     font-size: var(--fs-title);
     font-weight: 600;
     letter-spacing: -0.015em;
-    margin-block-start: var(--s5);
   }
   .hero-role { font-size: var(--fs-caption); color: var(--muted); margin-block-start: var(--s1); }
 

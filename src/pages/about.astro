@@ -1,7 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import { Picture } from 'astro:assets';
-import portrait from '../assets/yonatan-portrait.jpg';
 import { FIRM, whatsappLink } from '../data/firm.ts';
 
 /*
@@ -91,19 +89,6 @@ const schema = {
     <section class="spread">
       <div class="rail-label"><span class="numeral">03</span>פרטים</div>
       <div class="facts-grid">
-        {/* A 160px circle in a 160px track. See the note on the same image in
-            index.astro for why it shrank and got cropped to the face. */}
-        <Picture
-          class="portrait"
-          src={portrait}
-          formats={['avif', 'webp']}
-          quality={70}
-          widths={[160, 320]}
-          sizes="160px"
-          alt="עו״ד יהונתן שמם"
-          loading="lazy"
-          decoding="async"
-        />
         <dl class="facts">
           <dt>הסמכה</dt>
           <dd><bdi dir="ltr">{FIRM.admittedYear}</bdi></dd>
@@ -179,15 +164,7 @@ const schema = {
   .prose p + p { margin-block-start: var(--s5); }
   .lead { font-size: var(--fs-lead); color: var(--muted); line-height: 1.6; }
 
-  .facts-grid { display: grid; grid-template-columns: 160px 1fr 240px; gap: var(--s7); align-items: start; }
-  /* The <picture> is the grid item and fills the 160px track; the <img> fills
-     it in turn. Do NOT reach for display:contents to promote the <img> into
-     the grid instead — grid and flex blockify their items, so the two <source>
-     elements inside <picture> become real grid items too, take the first two
-     tracks, and push everything else onto a second row. That is exactly what
-     broke this page. */
-  /* The master is square, so 50% is a true circle and nothing is squashed. */
-  .portrait { display: block; width: 100%; height: auto; border-radius: 50%; }
+  .facts-grid { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: var(--s7); align-items: start; }
 
   .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0 var(--s5); font-size: var(--fs-small); }
   .facts dt {
@@ -215,16 +192,10 @@ const schema = {
   .closing p { color: var(--muted); margin-block-start: var(--s3); }
   .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s5); }
 
-  /* Two tracks, three items: the roles list wraps to a second row and would
-     land in the 170px portrait column. Put it under the facts instead, where
-     it has the width to be read. */
-  @media (max-width: 1000px) {
-    .facts-grid { grid-template-columns: 160px 1fr; }
-    .roles { grid-column: 2; }
-  }
-  @media (max-width: 700px) {
+  /* The portrait track is gone — the details table and the roles list are the
+     only two items, and they stack once the pair no longer fits. */
+  @media (max-width: 900px) {
     .facts-grid { grid-template-columns: 1fr; gap: var(--s6); }
-    .portrait { max-width: 160px; }
   }
   @media (max-width: 700px) { .cta-row { flex-direction: column; align-items: stretch; } }
 </style>

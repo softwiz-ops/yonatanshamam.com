@@ -596,6 +596,33 @@ sharpness for 10% more overshoot.
 `reference/photos/yonatan-portrait-original.jpg` is the untouched 640×800.
 Re-run the script after changing the parameters or the original.
 
+### Removed entirely — 5 Aug 2026
+
+The founder's decision, and the right one. **Do not reinstate the portrait with
+the current file.**
+
+Five rounds of work each improved it by measurement and none was enough:
+build-time resizing instead of the browser's, an unsharp mask applied at the
+delivered size, AVIF quality lifted off Astro's silent default of 50, a
+face-centred crop, and finally a smaller circle. Every step was real; the
+ceiling was never the pipeline.
+
+The arithmetic that ends the argument: the head measures roughly 150×200px in
+the only original. At a 160px slot on a 2× display that is already 1:1, so
+there is no reserve for a denser screen or any browser zoom, and no encoder
+setting invents detail that was never captured. 640×800 is a downscaled export —
+a phone shoots 4000×3000 — so a real original exists somewhere.
+
+`scripts/build-portrait.py` and `reference/photos/` are kept on purpose: with a
+full-resolution file this is a one-command restore. `src/assets/` no longer
+holds a generated master, so the script must be run before the import works
+again.
+
+**A site with no photograph reads as composed. One with a soft photograph reads
+as neglected.** The hero card carries the record instead — admission year, both
+previous legal positions, degree, languages, city, every line on the Bar's
+permitted list.
+
 ### Smaller and circular — 28 Jul 2026
 
 Three rounds of pipeline work did not satisfy the founder, and he was right to
