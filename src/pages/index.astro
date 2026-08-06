@@ -104,12 +104,23 @@ const groups = ORDER.map((key) => {
       <aside class="hero-card">
         <p class="hero-name">עו״ד יהונתן שמם</p>
         <p class="hero-role">{FIRM.tagline}</p>
+        {/* PAST ROLES MUST READ AS PAST. Listing the role as the term — "עורך
+            דין: גולדפרב זליגמן" — reads as current employment, which is a
+            misleading impression about professional standing and exactly what
+            the Bar's advertising rules forbid. The label says לשעבר and the
+            years are never omitted; the about page always carried them and
+            dropping them here is what created the problem. */}
         <dl class="hero-facts">
           <div><dt>הסמכה</dt><dd><bdi dir="ltr">{FIRM.admittedYear}</bdi></dd></div>
           {FIRM.previousRoles.map((r) => (
-            <div>
-              <dt>{r.role}</dt>
-              <dd>{r.org}</dd>
+            <div class="is-past">
+              <dt>לשעבר</dt>
+              <dd>
+                {r.org}
+                <span class="fact-note">
+                  {r.role} · <bdi dir="ltr">{r.from}–{r.to}</bdi>
+                </span>
+              </dd>
             </div>
           ))}
           {FIRM.education?.[0] && (
@@ -340,8 +351,20 @@ const groups = ORDER.map((key) => {
     padding-block: var(--s3);
     border-block-start: 1px solid var(--rule);
   }
-  .hero-facts dt { color: var(--muted); }
+  /* לשעבר is the load-bearing word in this list, so it is not allowed to sit
+     quieter than the organisation beside it. Marked with a class rather than
+     :has() — that selector is unsupported in Safari <15.4 and Firefox <121, and
+     the whole point of this rule is that it must never silently not apply. */
+  .hero-facts dt { color: var(--muted); white-space: nowrap; }
+  .hero-facts .is-past dt { color: var(--ink); font-weight: 700; }
   .hero-facts dd { margin: 0; font-weight: 600; text-align: start; }
+  .fact-note {
+    display: block;
+    font-weight: 400;
+    color: var(--muted);
+    font-size: var(--fs-micro);
+    margin-block-start: 2px;
+  }
 
   /* ---------- sections ---------- */
   .section-title {

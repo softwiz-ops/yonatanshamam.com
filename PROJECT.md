@@ -433,6 +433,33 @@ Three things had to be true before it would deploy, and none was obvious:
 answers — the Cloudways IP and all five dead `eforward` MX records — long after
 the zone was correct, which reads exactly like a catastrophic regression.
 
+## A past employer must never read as a current one
+
+Caught by the founder on 6 Aug 2026, and it is a compliance defect rather than a
+design one. The hero card listed his previous positions with the **role** as the
+term:
+
+    עורך דין    גולדפרב זליגמן
+    מתמחה       משרד ש. הררי
+
+With no dates and no past-tense marker that reads as where he works now. Stating
+a previous legal position is expressly permitted; creating the impression that
+it is current is a misleading impression about professional standing, which the
+Bar's advertising rules forbid outright.
+
+The cause was mechanical: the about page has always carried `role · from–to`,
+and moving the facts into the hero card dropped the dates as visual noise. They
+are not noise — they are the only thing distinguishing past from present.
+
+The term is now **לשעבר**, set in ink at weight 700 rather than in muted grey,
+and the years are never omitted. Marked with an `.is-past` class rather than
+`:has()`, because that selector is unsupported in Safari <15.4 and Firefox <121
+and a rule whose entire purpose is to prevent a misleading claim must not fail
+silently on an old browser.
+
+**Any future surface that lists `previousRoles` must carry both the past-tense
+label and the years.**
+
 ## The home page was rebuilt — 5 Aug 2026
 
 The founder called the design and content disappointing and told me to look for
