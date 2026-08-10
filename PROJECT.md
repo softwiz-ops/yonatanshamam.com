@@ -527,6 +527,44 @@ Verified that no redirect source leaks into it — the filter in
 `astro.config.mjs` compares against a decoded pathname, which is why
 `redirects.json` must keep its readable Hebrew form.
 
+## Search Console: "Page with redirect" — 9 Aug 2026
+
+Not the three intentional 301s. The cause was the **trailing slash**.
+
+The site is `trailingSlash: 'always'`. Cloudflare's static-asset router adds the
+slash by itself, which looks fine in a browser — but it answers **307 Temporary
+Redirect**, and there is no setting that changes it. `html_handling:
+"force-trailing-slash"` was set, deployed and measured: still 307.
+
+A 307 tells Google the move is temporary, so it keeps the slashless URL in the
+index and passes no authority to the real page. Every page on the site had a
+slashless twin behaving that way.
+
+Fixed by writing the rules explicitly. `_redirects` entries are matched before
+the router's automatic handling, so a hand-written 301 wins.
+`scripts/postprocess-redirects.py` generates one per page **from the build
+output**, so a new page cannot be forgotten. 29 rules, all verified 301 against
+the live host.
+
+`html_handling: "force-trailing-slash"` is kept in `wrangler.jsonc` anyway: it
+agrees with the Astro setting and is the correct fallback for anything the
+generated rules miss.
+
+**Do not trust a redirect measurement taken immediately after deploy.** Two
+paths in the first sweep still answered 307 from the edge cache and were 301 on
+a cache-busted request minutes later. Re-measure before concluding anything.
+
+## http:// serves the site instead of redirecting
+
+Found in the same sweep. `http://yonatanshamam.com/` answers **200**, not a
+redirect to HTTPS — Cloudflare serves plain HTTP unless **Always Use HTTPS** is
+switched on, and it is off. That leaves an insecure duplicate of every page
+available to be indexed, on a site that publishes a lawyer's contact details.
+
+**This is a dashboard action** (SSL/TLS → Edge Certificates), not something the
+deploy can set: the OAuth token wrangler holds is `zone (read)` only. HSTS lives
+on the same screen and is worth enabling with it.
+
 ## The Hebrew 301 was dead on arrival, and only the live site said so
 
 `_redirects` is matched against the **percent-encoded** request path. Astro

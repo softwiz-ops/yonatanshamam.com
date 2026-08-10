@@ -21,6 +21,15 @@
   // host rules.
   "name": "yonatanshamam-site",
   "compatibility_date": "2026-04-15",
+
+  // Astro is configured trailingSlash:'always', so the asset router must agree.
+  // Left on its default of auto-trailing-slash it answered /about with a 307,
+  // and a 307 tells Google the move is temporary — it keeps the slashless URL
+  // in the index and passes no authority to the real page. That is what
+  // produced the "Page with redirect" notice in Search Console.
+  "assets": {
+    "html_handling": "force-trailing-slash",
+  },
   "routes": [
     { "pattern": "yonatanshamam.com", "custom_domain": true },
     { "pattern": "www.yonatanshamam.com", "custom_domain": true }
