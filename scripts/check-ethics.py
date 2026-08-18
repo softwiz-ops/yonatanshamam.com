@@ -31,6 +31,14 @@ CHECKS: list[tuple[str, str, str]] = [
         # The permitted free text is defined as one "שאינו כולל כל התייחסות
         # לשכר הטרחה" — so any figure, any "from ₪", any free-consultation
         # offer is out, wherever it appears.
+        #
+        # NOT the same thing, and deliberately allowed: sums that are not the
+        # firm's price at all — a court filing fee (אגרה), a statutory ceiling
+        # such as the small-claims limit, a fine. Those are public facts about
+        # the procedure, they are what the reader came to find out, and stating
+        # them says nothing about what this office charges. The exclusion is
+        # narrow: the sum must sit in a sentence that names the statutory thing
+        # it belongs to. Anything else still fails.
         r"₪\s*\d|\d+\s*(?:ש״ח|שח|שקל)|החל מ-?\s*\d|מחירון|הצעת מחיר|"
         r"ללא\s+(?:עלות|תשלום)|בחינם|חינם|שכר\s*טרחה\s*(?:של|מ-|החל)",
         "any reference to fees is forbidden, including 'free consultation'",
@@ -66,6 +74,24 @@ ALLOW: list[dict] = [
         "why": (
             "the statutory accessibility exemption threshold — content about "
             "the CLIENT's obligations under the regulations, not this firm's fee"
+        ),
+        "review": False,
+    },
+    {
+        # The small-claims ceiling and the court filing fee. Neither is this
+        # firm's price: the ceiling is set by statute, and the אגרה is paid to
+        # the court. They are the two facts a reader searching "תביעה קטנה"
+        # actually needs, every competing page states them, and omitting them
+        # would make the page useless without protecting anything — the rule
+        # bars publishing what the LAWYER charges.
+        #
+        # Deliberately narrow: the sum only passes when the sentence around it
+        # names the statutory thing it belongs to. A bare price still fails.
+        "pattern": r"(?:אגרה|התקרה|תקרה|קנס|אגרת)[^.]{0,80}?\d|"
+                   r"\d[^.]{0,80}?(?:אגרה|האגרה|התקרה|משולמת לבית המשפט)",
+        "why": (
+            "a court filing fee or a statutory ceiling, not the firm's fee — "
+            "public facts about the procedure, which the rules do not touch"
         ),
         "review": False,
     },
