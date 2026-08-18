@@ -496,6 +496,27 @@ what made the page feel thin. It carries the working method instead — includin
 the commitment that when no lawyer is needed, that is the answer given. That is
 a promise rather than a claim, which is why no competitor copies it.
 
+## Three grid items in a two-track grid
+
+Reported by the founder as a design bug on 6 Aug 2026: article titles in the
+"מאמרים בנושא" list broke one word per line.
+
+`.related a` is `grid-template-columns: minmax(0, 1fr) auto` with **three**
+children: `<b>`, `<span>`, `<svg>`. The summary took the `auto` track and sized
+it to its own content, leaving the title track at literally **0px**, and the
+chevron wrapped to a second row. Measured: `cols: "0px 524.75px"`, two rows.
+
+Fixed in the markup rather than with a CSS patch — the title and summary are now
+wrapped in one element, so the grid has the two children it was written for. The
+same pattern was present twice on the page, in "מאמרים בנושא" and in "נושאים
+קרובים"; only the first was reported, and the second would have been left.
+
+It predates every change made this week and was invisible until an article title
+grew long enough to wrap visibly. **When a grid misbehaves, read
+`gridTemplateColumns` and `gridTemplateRows` off the live element first** — a
+track reported as 0px names the fault immediately, where staring at the CSS does
+not.
+
 ## The fast-turnover practice — 6 Aug 2026
 
 The founder redirected the site toward quick technical work he can turn around

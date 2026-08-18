@@ -156,9 +156,17 @@ const schema = {
           <ul class="related">
             {articles.map((a) => (
               <li>
+                {/* The text is wrapped so the grid has exactly two children.
+                    Left bare, <b>, <span> and <svg> are three items in a
+                    two-track grid: the summary took the `auto` track and sized
+                    it to its own content, which left the title track at 0px and
+                    broke the heading one word per line, while the chevron
+                    wrapped onto a second row. */}
                 <a href={`/articles/${a.id}/`}>
-                  <b>{a.data.title}</b>
-                  <span>{a.data.summary}</span>
+                  <span class="related-text">
+                    <b>{a.data.title}</b>
+                    <span class="related-sum">{a.data.summary}</span>
+                  </span>
                   <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </a>
               </li>
@@ -177,8 +185,10 @@ const schema = {
           {related.map((r) => (
             <li>
               <a href={`/practice-areas/${r.slug}/`}>
-                <b>{r.shortTitle ?? r.title}</b>
-                <span>{r.summary}</span>
+                <span class="related-text">
+                  <b>{r.shortTitle ?? r.title}</b>
+                  <span class="related-sum">{r.summary}</span>
+                </span>
                 <svg class="chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
               </a>
             </li>
@@ -286,8 +296,9 @@ const schema = {
     padding-block: var(--s4);
     text-decoration: none;
   }
-  .related b { font-weight: 500; font-size: var(--fs-body); }
-  .related span { display: block; font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s1); }
+  .related-text { display: block; min-width: 0; }
+  .related b { display: block; font-weight: 500; font-size: var(--fs-body); }
+  .related-sum { display: block; font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s1); }
   .related a:hover b { color: var(--accent); }
   .related .chev { color: var(--line-control); }
   .related a:hover .chev { color: var(--accent); }
