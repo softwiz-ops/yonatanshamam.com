@@ -496,6 +496,73 @@ what made the page feel thin. It carries the working method instead — includin
 the commitment that when no lawyer is needed, that is the answer given. That is
 a promise rather than a claim, which is why no competitor copies it.
 
+## The fast-turnover practice — 6 Aug 2026
+
+The founder redirected the site toward quick technical work he can turn around
+himself: signature verification, demand letters, collection, agreements, ticket
+cancellation. **This reverses the instruction of 27 Jul** ("לא רוצה להציע
+שירותים מהירים כמו מפעל") and was flagged as such before anything was built. The
+`no_delivery_promises` guard in `check-ethics.py` is deliberately still armed:
+describing a service as simple and technical is fine, committing to a turnaround
+is not, and the founder has not approved any figure.
+
+Confirmed by him, and the content is written to exactly this boundary:
+
+- **Does**: parking and municipal tickets; preparing a small claim.
+- **Does NOT**: traffic offences; execution proceedings (הוצאה לפועל).
+
+Two accuracy constraints that would be misleading advertising if got wrong:
+
+- **Section 63 of the Courts Law**: representation in small claims requires the
+  court's permission, for special reasons recorded. Consultation and preparation
+  are expressly permitted, and that is what the service page offers. It must
+  never read as "we will represent you there".
+- **The notary boundary** on signature verification already stated correctly —
+  he lacks the ten years' standing a notary needs.
+
+Figures verified against sources rather than recalled: small-claims ceiling
+39,900 ₪ from 1 Jan 2026, fee 1% with a 50 ₪ floor, five claims a year per court.
+
+`check-ethics.py` flagged those sums as fee references. They are not the firm's
+price — the ceiling is statutory and the אגרה is paid to the court — so a narrow
+allowance passes a sum only when the sentence names the statutory thing it
+belongs to. A bare price still fails.
+
+**Competitor scan for the target query**: all ten results were "עורך דין גביית
+חובות" service pages selling the same thing in the same words. None was written
+for the reader who has not yet decided. That is the gap the article takes, which
+is also why it opens with what to do without a lawyer and closes by saying when
+not to sue at all.
+
+## Em dashes, and why the fix was not a search and replace
+
+CLAUDE.md forbids em dashes in user-facing copy. The articles complied; the
+templates and `services.ts` did not, and had drifted to 120 in source.
+
+Only 60 of those were copy. The rest were **code comments**, which are not
+user-facing and are where the reasoning behind past defects is recorded. A
+blanket replace over `src/` would have rewritten them — and would have been the
+same shape of mistake as the stem-based spelling pass that once turned
+`analysis` into `analyzis` across twelve files.
+
+`scripts/fix-em-dashes.py` masks comments first, and the result is verified
+against the **built** output, because that is the only thing that defines
+"user-facing": 76 in visible text before, 0 after. The founder's en dash (–) in
+numeric ranges is correct typography and is never touched.
+
+## The disclaimers were already there, and both were wrong
+
+Asked for on 6 Aug 2026. Both already existed, so nothing was added — they were
+corrected instead.
+
+- The **footer** notice described "פנייה דרך טופס יצירת קשר". There is no form
+  on the site. A binding statement should not describe a channel that does not
+  exist; it now names the four that do.
+- The **article** notice sat in the sidebar, which on a phone renders after
+  everything. The reader who finishes the piece never reached it, and that is
+  precisely the reader it is for. It now closes the article body, and the
+  sidebar duplicate was removed rather than left to say it twice.
+
 ## Cloudflare answers for you when you ship no robots.txt
 
 With none in the project, Cloudflare served a managed robots.txt. It omitted the

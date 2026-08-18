@@ -74,7 +74,23 @@ const schema = {
   </header>
 
   <div class="wrap body">
-    <article class="prose"><Content /></article>
+    <article class="prose">
+      <Content />
+      {/* At the foot of the article, not in the sidebar. On a phone the sidebar
+          renders after everything, so the reader who finishes the piece never
+          reaches it — which is precisely the reader the notice is for. */}
+      <aside class="article-disclaimer">
+        <p>
+          <b>מידע כללי, לא ייעוץ משפטי.</b> המאמר נכתב כהסבר כללי ואינו מהווה
+          ייעוץ משפטי, חוות דעת או תחליף להם. אין להסתמך עליו בלא בדיקה פרטנית
+          של הנסיבות שלכם, שכן שינוי בפרט אחד עשוי לשנות את התוצאה.
+        </p>
+        <p>
+          הדין, התקנות והפסיקה משתנים, וייתכן שהאמור אינו מעודכן למועד הקריאה.
+          קריאת המאמר או פנייה בעקבותיו אינה יוצרת יחסי עורך־דין לקוח.
+        </p>
+      </aside>
+    </article>
 
     <aside class="sidenote">
       <h2>בנושא הזה</h2>
@@ -88,10 +104,6 @@ const schema = {
           </li>
         ))}
       </ul>
-      <p class="disclaimer">
-        המאמר הוא מידע כללי ואינו ייעוץ משפטי. הדין משתנה, והנסיבות שלכם
-        עשויות להיות שונות.
-      </p>
     </aside>
   </div>
 
@@ -174,13 +186,20 @@ const schema = {
   .sidenote b { display: block; font-weight: 600; font-size: var(--fs-small); }
   .sidenote a:hover b { color: var(--accent); }
   .sidenote span { display: block; color: var(--muted); font-size: var(--fs-caption); margin-block-start: var(--s1); }
-  .disclaimer {
-    margin-block-start: var(--s5);
-    padding-block-start: var(--s4);
-    border-block-start: 1px solid var(--rule);
-    color: var(--faint);
-    font-size: var(--fs-caption);
+
+  .article-disclaimer {
+    margin-block-start: var(--s8);
+    padding: var(--s5);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-inline-start: 3px solid var(--line-control);
+    border-radius: var(--r-md);
+    color: var(--muted);
+    font-size: var(--fs-small);
+    line-height: 1.6;
   }
+  .article-disclaimer p + p { margin-block-start: var(--s3); }
+  .article-disclaimer b { color: var(--ink); font-weight: 600; }
 
   .closing { background: var(--surface); border-block-start: 1px solid var(--rule); }
   .closing :global(.wrap) { padding-block: var(--s8); }
