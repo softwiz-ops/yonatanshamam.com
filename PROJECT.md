@@ -496,6 +496,52 @@ what made the page feel thin. It carries the working method instead — includin
 the commitment that when no lawyer is needed, that is the answer given. That is
 a promise rather than a claim, which is why no competitor copies it.
 
+## Search Console coverage, 20 Aug 2026 — mostly healthy
+
+24 URLs "not indexed", and **16 of them are `gone.json`** — the WordPress
+template junk: `section-builder/footer-1` through `-5`, `sample-page`, five
+`practice-items` from the theme demo, four testimonial placeholders. They are
+supposed to 404. Nothing to fix. Another 5 are the www canonicals and our own
+301s, also correct.
+
+**The indexed count falling from 39 to 30 is not a loss.** On 5 Aug the site had
+30 pages and 39 indexed URLs; the surplus was old WordPress URLs still sitting in
+the index. They are now dropping out. Impressions went from ~6/day in late July
+to ~28/day in the week to 17 Aug.
+
+Two items were real, and neither was in the report's own wording — the export
+does not list URLs, so both were found by measuring content similarity across
+every page pair, **with boilerplate excluded**. That matters: raw Jaccard puts
+the header, footer, nav and accessibility panel into every comparison and reports
+50% similarity between pages that share nothing. Words appearing on more than 70%
+of pages are dropped first.
+
+### The two apartment pages were competing
+
+`/articles/apartment-due-diligence/` and `/practice-areas/apartment-purchase/`
+measured **36%** on unique content, against 23-26% for every other
+article/service pair. The clearest evidence: the service page's `whyItMatters`
+was word-for-word the article's `summary`, and its covers heading was
+"הבדיקות והשלבים בעסקת רכישה" against the article's "הבדיקות שעושים לפני
+רכישת דירה".
+
+Separated by giving them different jobs rather than by touching canonicals. The
+**article owns the checks** a buyer performs before hiring anyone. The **service
+page owns the accompaniment** — reading the findings, drafting, allocating risk
+between the parties, payment milestones and securities, bank coordination, tax
+filing, registration — and points at the article for the checks instead of
+repeating them. Now 28%, in line with the pairs Google is not flagging.
+
+### /contact/ had 47 unique words
+
+Everything else on it was chrome. Google declining to index that is the correct
+response to a page with nothing to index. It now carries what someone who has
+just decided to make contact actually wants: what to put in the first message,
+how to reach the office and what is accessible there (no parking is the fact
+people need), and an explicit list of what the firm does **not** do, including
+the notary and lasting-power-of-attorney limits. 205 unique words, none of it
+padding and none of it repeated elsewhere.
+
 ## Three grid items in a two-track grid
 
 Reported by the founder as a design bug on 6 Aug 2026: article titles in the

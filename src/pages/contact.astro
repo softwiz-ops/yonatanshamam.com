@@ -76,16 +76,76 @@ const schema = {
       </ul>
     </section>
 
+    {/* Added 20 Aug 2026. The page carried 47 unique words - everything else on
+        it was header, footer and navigation - and Google had left it out of the
+        index, which is the correct response to a page with nothing to index.
+        None of what follows is padding: it is what someone who has just decided
+        to make contact actually wants to know, and it is the only content here
+        that no other page repeats. */}
     <section class="spread">
-      <div class="rail-label"><span class="numeral">02</span>המשרד</div>
-      <dl class="facts">
-        <dt>כתובת</dt>
-        <dd>{FIRM.address.building}, {FIRM.address.street}, {FIRM.address.city}</dd>
-        <dt>שעות פעילות</dt>
-        <dd>{FIRM.hours.days}, <bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></dd>
-        <dt>רכז נגישות</dt>
-        <dd>{FIRM.accessibilityCoordinator.name} · <a href="/terms-privacy-accessibility/#accessibility">להצהרת הנגישות</a></dd>
-      </dl>
+      <div class="rail-label"><span class="numeral">02</span>הפנייה</div>
+      <div class="prose">
+        <h2>מה כדאי לכתוב בהודעה הראשונה</h2>
+        <p>
+          אין צורך בניסוח משפטי ואין צורך בפרטים מלאים. ארבעה דברים חוסכים סבב
+          שאלות ומאפשרים לענות לגופו של עניין כבר בתשובה הראשונה:
+        </p>
+        <ul class="tips">
+          <li><b>במה מדובר</b><span>חוזה שקיבלתם, צוואה, דוח, חוב שלא שולם.</span></li>
+          <li><b>מי הצד השני</b><span>אדם פרטי, חברה, רשות. זה משנה את המסלול.</span></li>
+          <li><b>אם יש מועד</b><span>תאריך חתימה, מועד להגשה, או תאריך שמופיע על מסמך שקיבלתם.</span></li>
+          <li><b>מה חשוב לכם שיקרה</b><span>לפעמים המטרה אינה מה שנראה מהמסמך.</span></li>
+        </ul>
+        <p>
+          אם יש מסמך, אפשר לצרף אותו כבר בהודעה. קריאה של המסמך עצמו מקצרת את
+          הדרך יותר מכל תיאור שלו.
+        </p>
+      </div>
+    </section>
+
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">03</span>המשרד</div>
+      <div class="prose">
+        <dl class="facts">
+          <dt>כתובת</dt>
+          <dd>{FIRM.address.building}, {FIRM.address.street}, {FIRM.address.city}</dd>
+          <dt>שעות פעילות</dt>
+          <dd>{FIRM.hours.days}, <bdi dir="ltr">{FIRM.hours.open}–{FIRM.hours.close}</bdi></dd>
+          <dt>שפות</dt>
+          <dd>{FIRM.languages.join(', ')}</dd>
+          <dt>רכז נגישות</dt>
+          <dd>{FIRM.accessibilityCoordinator.name} · <a href="/terms-privacy-accessibility/#accessibility">להצהרת הנגישות</a></dd>
+        </dl>
+        <h2>הגעה ונגישות</h2>
+        <p>
+          המשרד ממוקם ב{FIRM.address.building} ב{FIRM.address.street}, על ציר
+          יגאל אלון. דרך הגישה למבנה נגישה, וכך גם הכניסה, המעלית, השירותים
+          וחדרי הפגישות. <b>אין חניה בשליטת המשרד</b>, ולכן כדאי לתכנן חניה
+          מראש באחד מהחניונים באזור.
+        </p>
+      </div>
+    </section>
+
+    <section class="spread">
+      <div class="rail-label"><span class="numeral">04</span>גבולות</div>
+      <div class="prose">
+        <h2>מתי המשרד אינו הכתובת</h2>
+        <p>
+          המשרד עוסק בחוזים והסכמים, בצוואות וירושה, בנדל״ן ושכירות, בהקמת
+          חברות ובגבייה, דוחות והתראות. הוא <b>אינו</b> עוסק בדיני משפחה
+          וגירושין, בדין הפלילי, בנזקי גוף ותאונות, בדיני עבודה מצד העובד
+          בהליכים מורכבים, ובהגירה.
+        </p>
+        <p>
+          שתי מגבלות נוספות ששווה לדעת מראש: המשרד <b>אינו מספק שירותי נוטריון</b>,
+          שכן לכך נדרש ותק של עשר שנים, ואינו עורך ייפוי כוח מתמשך, שדורש הסמכה
+          ייעודית מטעם החשב הכללי.
+        </p>
+        <p>
+          אם הנושא שלכם נופל באחד מאלה, אמירה מיידית וההפניה לגורם המתאים היא
+          התשובה שתקבלו. זה חוסך לכם זמן, וזו גם הדרך הנכונה לעבוד.
+        </p>
+      </div>
     </section>
   </div>
 
@@ -136,6 +196,19 @@ const schema = {
   .routes a:hover .chev { color: var(--accent); }
 
   .facts { display: grid; grid-template-columns: max-content 1fr; gap: 0 var(--s5); font-size: var(--fs-small); max-width: var(--measure); }
+  .prose { max-width: var(--measure); }
+  .prose h2 { font-size: var(--fs-title); font-weight: 600; letter-spacing: -0.015em; margin-block: var(--s6) var(--s4); }
+  .prose h2:first-child { margin-block-start: 0; }
+  .prose p { color: var(--muted); line-height: 1.7; }
+  .prose p + p { margin-block-start: var(--s4); }
+  .prose b { color: var(--ink); font-weight: 600; }
+  .prose .facts + h2 { margin-block-start: var(--s7); }
+
+  .tips { margin-block: var(--s5); }
+  .tips li { padding-block: var(--s4); border-block-start: 1px solid var(--rule); }
+  .tips b { display: block; font-weight: 600; font-size: var(--fs-small); }
+  .tips span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s1); }
+
   .facts dt { color: var(--muted); padding-block: var(--s3); border-block-start: 1px solid var(--rule); }
   .facts dd { margin: 0; padding-block: var(--s3); border-block-start: 1px solid var(--rule); font-weight: 500; }
   .facts a { color: var(--accent); display: inline-block; padding-block: 4px; }
