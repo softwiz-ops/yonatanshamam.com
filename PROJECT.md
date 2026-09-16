@@ -523,6 +523,9 @@ someone who has already clicked an ad.
   message is the only attribution the founder has. Every landing page needs its
   own distinct opening line.
 - Not linked from navigation. The only way in is an ad or a sent link.
+- **Live since 16 Sep 2026**, approved by the founder. Verified on the live
+  host: 200, `noindex, follow` present, absent from the sitemap, no robots meta
+  leaked onto the home page, and the slashless URL 301s to the canonical.
 
 ### marketing/
 
