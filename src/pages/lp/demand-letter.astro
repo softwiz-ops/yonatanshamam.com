@@ -1,0 +1,230 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import Icon from '../../components/Icon.astro';
+import { FIRM, whatsappLink } from '../../data/firm.ts';
+
+/*
+ * Campaign landing page for paid traffic on "מכתב התראה" queries. 16 Sep 2026.
+ *
+ * Why it exists next to /practice-areas/demand-letter/: that page is long-form
+ * and written to rank. Someone who clicked an ad has already decided and wants
+ * to know three things - is this for my case, what do I send, how do I start.
+ * This page answers those and puts WhatsApp above the fold.
+ *
+ * noindex, and kept out of the sitemap: indexed, it would compete with the
+ * service page for the same query. Not linked from the navigation either; the
+ * only way here is an ad or a link someone was sent.
+ *
+ * The pre-filled WhatsApp text names the campaign. There is no analytics on the
+ * site, so the opening line of the message is how the founder tells an ad lead
+ * from an organic one. Keep it distinct from every other page's message.
+ *
+ * Bar rules apply exactly as everywhere else: no fee, no turnaround promise, no
+ * outcome promise, no comparison. check-ethics.py scans this page too.
+ */
+
+const WA = 'שלום, הגעתי מהמודעה בנושא מכתב התראה. בקצרה, מדובר ב';
+
+const past = FIRM.previousRoles.find((r) => r.role === 'עורך דין');
+
+const faqs = [
+  {
+    q: 'חובה לשלוח מכתב התראה לפני תביעה?',
+    a: 'אין חובה כללית, אבל זה הנוהג המקובל, ולעיתים ההסכם עצמו דורש פנייה מוקדמת. בית המשפט רשאי להתחשב בכך שלא נשלחה פנייה כזו, גם כשהוא פוסק הוצאות.',
+  },
+  {
+    q: 'ומה אם הצד השני לא עונה?',
+    a: 'אז יש בידיכם תיעוד לכך שקיבל הזדמנות לשלם. עד התקרה של 39,900 ש״ח המסלול הבא הוא בדרך כלל תביעה קטנה, שאת כתב התביעה שלה המשרד יכול להכין. מעל התקרה, תביעה רגילה.',
+  },
+  {
+    q: 'אפשר לשלוח מכתב כזה בעצמי?',
+    a: 'אפשר, ולפעמים זה מספיק. מכתב מעורך דין מאותת שהעניין נבדק משפטית ושיש נכונות להמשיך, ולכן הוא נענה אחרת. אם הסכום קטן והצד השני פשוט שכח, נאמר לכם שאין צורך.',
+  },
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+<Base
+  title="מכתב התראה מעורך דין לפני תביעה | עו״ד יהונתן שמם"
+  description="לקוח, שוכר או ספק לא משלמים? מכתב התראה מעורך דין הוא דרישה רשמית בכתב לפני נקיטת הליכים. שלחו בוואטסאפ במה מדובר, ונבדוק אם זה המסלול הנכון."
+  schema={schema}
+  waMessage={WA}
+  waLabel="מכתב התראה בוואטסאפ"
+  noindex
+>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow">מכתב התראה</p>
+      <h1>חייבים לכם כסף<br /><strong>ולא משלמים?</strong></h1>
+      <p class="sub">
+        מכתב התראה מעורך דין הוא דרישה רשמית בכתב, לפני שפונים לבית משפט. הוא
+        מפרט את החוב, קוצב מועד לתשלום, ומתעד שניתנה הזדמנות לשלם.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={whatsappLink(WA)}>
+          <Icon name="whatsapp-logo" size={20} />
+          שלחו בוואטסאפ במה מדובר
+        </a>
+        <a class="btn btn-ghost" href={`tel:${FIRM.phone.tel}`}>
+          <Icon name="phone" size={18} />
+          <bdi dir="ltr">{FIRM.phone.display}</bdi>
+        </a>
+      </div>
+      {/* לשעבר and the years are mandatory wherever a previous position
+          appears: without them it reads as current employment, which is a
+          misleading claim about professional standing. See PROJECT.md. */}
+      <p class="cred">
+        עו״ד יהונתן שמם · הוסמך ב-<bdi dir="ltr">{FIRM.admittedYear}</bdi>
+        {past && (
+          <> · לשעבר עורך דין ב{past.org}, <bdi dir="ltr">{past.from}–{past.to}</bdi></>
+        )}
+      </p>
+    </div>
+  </section>
+
+  <div class="wrap body">
+    <section class="block">
+      <h2>מתי זה מתאים</h2>
+      <ul class="fits">
+        <li><Icon name="check-circle" size={20} class="ico" /><span>לקוח שקיבל שירות או סחורה ולא שילם</span></li>
+        <li><Icon name="check-circle" size={20} class="ico" /><span>שוכר שעזב והשאיר חוב או נזק</span></li>
+        <li><Icon name="check-circle" size={20} class="ico" /><span>ספק או קבלן שקיבל תשלום ולא סיפק</span></li>
+        <li><Icon name="check-circle" size={20} class="ico" /><span>הלוואה לאדם פרטי שלא הוחזרה</span></li>
+      </ul>
+    </section>
+
+    <section class="block">
+      <h2>מה לשלוח בהודעה הראשונה</h2>
+      <p class="lead">אין צורך בניסוח משפטי. שלושה דברים מספיקים כדי לבדוק אם מכתב הוא הצעד הנכון:</p>
+      <ol class="steps">
+        <li>
+          <Icon name="file-text" size={22} class="ico" />
+          <div><b>במה מדובר</b><span>מה סוכם, מה סופק, כמה נותר לשלם.</span></div>
+        </li>
+        <li>
+          <Icon name="user-circle" size={22} class="ico" />
+          <div><b>מי הצד השני</b><span>שם מלא, או שם החברה. אם יש מספר מזהה או ח״פ, עוד יותר טוב.</span></div>
+        </li>
+        <li>
+          <Icon name="paperclip" size={22} class="ico" />
+          <div><b>מה יש בכתב</b><span>הזמנה, חשבונית, הסכם, התכתבות. אפשר לצרף ישירות בוואטסאפ.</span></div>
+        </li>
+      </ol>
+    </section>
+
+    <section class="block two">
+      <div>
+        <h2>מה המכתב עושה</h2>
+        <ul class="plain">
+          <li>מציג את החוב ואת הבסיס לו בצורה שאפשר לעמוד מאחוריה</li>
+          <li>קוצב מועד סביר לתשלום</li>
+          <li>מתעד את מועד הדרישה, מה שחשוב אם ממשיכים להליך</li>
+          <li>מאותת שהעניין נבדק משפטית ושיש נכונות להמשיך</li>
+        </ul>
+      </div>
+      <div>
+        <h2>ומה הוא לא</h2>
+        <ul class="plain">
+          <li>הוא אינו ערובה לתשלום. הוא משנה את החישוב של הצד השני, לא יותר</li>
+          <li>הוא אינו מתאים לכל מקרה. כשהסכום קטן או שהצד השני פשוט שכח, תזכורת בכתב שלכם עשויה להספיק, ונאמר לכם את זה</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>שאלות נפוצות</h2>
+      <Faq items={faqs} />
+    </section>
+
+    <section class="closing">
+      <h2>שלחו בוואטסאפ במה מדובר</h2>
+      <p>משפט אחד ומסמך אחד מספיקים כדי להתחיל. אם מכתב אינו הצעד הנכון במקרה שלכם, תקבלו גם את התשובה הזו.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href={whatsappLink(WA)}>
+          <Icon name="whatsapp-logo" size={20} />
+          כתבו בוואטסאפ
+        </a>
+        <a class="btn btn-ghost" href={FIRM.calendar}>
+          <Icon name="calendar-blank" size={18} />
+          תיאום פגישה ביומן
+        </a>
+      </div>
+      <p class="more">
+        להסבר המלא: <a href="/practice-areas/demand-letter/">מכתב התראה מעורך דין</a>
+        · <a href="/articles/money-owed-what-to-do/">חייבים לי כסף, מה עושים</a>
+      </p>
+    </section>
+
+    <aside class="note">
+      המידע בעמוד זה הוא כללי ואינו מהווה ייעוץ משפטי. פנייה בוואטסאפ, בטלפון או
+      ביומן אינה יוצרת יחסי עורך־דין לקוח. יחסים אלה נוצרים רק לאחר בדיקת ניגוד
+      עניינים והתקשרות בכתב.
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .hero { padding-block: clamp(32px, 6vw, 72px) var(--s7); border-block-end: 1px solid var(--rule); }
+  h1 {
+    font-size: clamp(36px, 6vw, 68px);
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-block-start: var(--s4);
+  }
+  h1 strong { font-weight: 700; }
+  .sub { font-size: var(--fs-lead); color: var(--muted); max-width: 52ch; line-height: 1.6; margin-block-start: var(--s5); }
+  .cta-row { display: flex; flex-wrap: wrap; gap: var(--s3); margin-block-start: var(--s6); }
+  .cta-row .btn { display: inline-flex; align-items: center; gap: var(--s2); }
+  .cred { font-size: var(--fs-small); color: var(--muted); margin-block-start: var(--s5); }
+
+  .body { padding-block: var(--s7) var(--s9); max-width: 820px; }
+  .block { padding-block: var(--s7); border-block-end: 1px solid var(--rule); }
+  .block h2, .closing h2 { font-size: var(--fs-section); font-weight: 200; letter-spacing: -0.025em; line-height: 1.15; }
+  .lead { color: var(--muted); margin-block-start: var(--s3); }
+
+  .fits { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s3) var(--s6); margin-block-start: var(--s5); }
+  .fits li { display: flex; gap: var(--s3); align-items: flex-start; }
+  .fits :global(.ico), .steps :global(.ico) { color: var(--accent); flex: none; margin-block-start: 2px; }
+
+  .steps { margin-block-start: var(--s5); }
+  .steps li { display: flex; gap: var(--s4); align-items: flex-start; padding-block: var(--s4); border-block-start: 1px solid var(--rule); }
+  .steps b { display: block; font-weight: 600; }
+  .steps span { display: block; color: var(--muted); font-size: var(--fs-small); margin-block-start: var(--s1); }
+
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s7); }
+  .plain { margin-block-start: var(--s4); }
+  .plain li { padding-block: var(--s3); border-block-start: 1px solid var(--rule); color: var(--muted); font-size: var(--fs-small); line-height: 1.6; }
+
+  .closing { padding-block: var(--s8) var(--s6); }
+  .closing p { color: var(--muted); margin-block-start: var(--s3); max-width: 52ch; }
+  .more { font-size: var(--fs-small); margin-block-start: var(--s5); }
+  .more a { color: var(--accent); }
+
+  .note {
+    margin-block-start: var(--s5);
+    padding: var(--s5);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--r-md);
+    color: var(--muted);
+    font-size: var(--fs-caption);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 700px) {
+    .fits, .two { grid-template-columns: 1fr; gap: var(--s4); }
+    .two { gap: var(--s6); }
+    .cta-row { flex-direction: column; align-items: stretch; }
+    .cta-row .btn { justify-content: center; }
+  }
+</style>

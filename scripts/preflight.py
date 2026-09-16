@@ -168,6 +168,8 @@ def main() -> None:
                 path = urlparse(loc).path
                 listed.add(path)
         for url in known:
+            if url.startswith("/lp/"):
+                continue  # noindex campaign pages, deliberately not in the sitemap
             if url not in listed and not any(url in s for s in listed):
                 warn(f"{url} is not in the sitemap")
 

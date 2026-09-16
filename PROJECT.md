@@ -496,6 +496,48 @@ what made the page feel thin. It carries the working method instead — includin
 the commitment that when no lawyer is needed, that is the answer given. That is
 a promise rather than a claim, which is why no competitor copies it.
 
+## Distribution, not the site, is the lead problem — 16 Sep 2026
+
+The founder reported no traffic and asked how to get leads for the simple,
+fast-turnover work. The honest diagnosis recorded here so it is not relitigated:
+**a six-week-old domain at ~28 impressions a day will not produce leads from
+organic search for months.** Keep publishing, but the near-term levers are
+distribution: a Google Business Profile (still does not exist), paid search on
+high-intent queries, and referrals from former colleagues, lawyers in other
+fields and accountants.
+
+### Campaign landing pages live under /lp/
+
+`/lp/demand-letter/` is the first. Short, WhatsApp above the fold, written for
+someone who has already clicked an ad.
+
+- **noindex, and excluded from the sitemap** (`astro.config.mjs` filter, and
+  `preflight.py` skips `/lp/` in its sitemap check). Indexed, a landing page
+  would compete with its own service page for the same query — the problem
+  already fixed once for the apartment pair. A sitemap listing noindex URLs is
+  an error in Search Console, which is why both changes go together.
+- `Base.astro` takes `noindex`; every other page is unaffected (verified: no
+  robots meta on the home page).
+- **The pre-filled WhatsApp text names the campaign** ("הגעתי מהמודעה בנושא
+  מכתב התראה"). There is no analytics on the site, so the first line of the
+  message is the only attribution the founder has. Every landing page needs its
+  own distinct opening line.
+- Not linked from navigation. The only way in is an ad or a sent link.
+
+### marketing/
+
+Paste-ready material the founder executes himself, because each step needs his
+account, his payment method or his name:
+
+- `google-business-profile.md` — name (without keywords, which Google suspends
+  for), categories, description (570 of 750 chars), 12 services, photos,
+  verification, three starter posts, and a note to confirm with the ethics
+  committee before actively soliciting reviews.
+- `outreach-messages.md` — to former colleagues and lawyers in other fields, to
+  accountants, and a short one for tenants in the building. **No referral
+  payment of any kind to non-lawyers**; the messages rely on a professional
+  relationship only.
+
 ## Search Console coverage, 20 Aug 2026 — mostly healthy
 
 24 URLs "not indexed", and **16 of them are `gone.json`** — the WordPress

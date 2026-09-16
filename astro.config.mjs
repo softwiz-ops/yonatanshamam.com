@@ -49,6 +49,10 @@ export default defineConfig({
       // destinations, and listing them invites the old URLs to be re-indexed.
       filter: (page) => {
         const path = decodeURIComponent(new URL(page).pathname);
+        // /lp/ holds noindex campaign landing pages. A sitemap listing URLs the
+        // pages themselves tell Google not to index is a contradiction Search
+        // Console reports as an error.
+        if (path.startsWith('/lp/')) return false;
         return !Object.keys(redirects).includes(path);
       },
     }),

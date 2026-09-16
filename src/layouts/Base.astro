@@ -14,9 +14,16 @@ interface Props {
   /** Pre-filled WhatsApp message for the sticky bar on this page. */
   waMessage?: string;
   waLabel?: string;
+  /**
+   * Campaign landing pages only. They restate a service page in short form for
+   * paid traffic, so letting Google index them would put two URLs from this
+   * site in competition for the same query - the problem already fixed once
+   * for the apartment pair. Also excluded from the sitemap in astro.config.mjs.
+   */
+  noindex?: boolean;
 }
 
-const { title, description, schema, waMessage, waLabel } = Astro.props;
+const { title, description, schema, waMessage, waLabel, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 
 /**
@@ -64,6 +71,7 @@ const attorney = {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="canonical" href={canonical} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
   <title>{title}</title>
   <meta name="description" content={description} />
 
