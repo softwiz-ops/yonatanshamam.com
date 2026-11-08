@@ -169,6 +169,27 @@ it is forbidden.
   that never should have been public gets a **410**, not a 301 — there is
   nowhere honest to send it.
 
+## Local servers listen on 127.0.0.1 only
+
+Anything started on the founder's machine is reachable by every device on the
+same network unless it is told otherwise, and by the internet if that machine
+has a public address. A dev server is not hardened and has no login.
+
+- `python3 -m http.server` listens on `0.0.0.0` by default. Always pass
+  `--bind 127.0.0.1`, and `--directory` pointed at the folder to serve. Never
+  serve the repo root: it holds `.env` and `.git`.
+- No `astro dev --host`, `vite --host`, `host: true`, `host: "::"`, `0.0.0.0`.
+  To see the site on a phone, use the browser's device emulation or deploy a
+  preview.
+- No Docker here. If a container is ever needed, publish with
+  `-p 127.0.0.1:PORT:PORT`. A bare `-p PORT:PORT` binds every interface and
+  Docker's own firewall rules bypass ufw.
+- No tunnels (ngrok, cloudflared, localtunnel) to a dev server.
+
+Verified 8 Nov 2026 by listening-socket inspection and a request from a
+non-loopback address: see PROJECT.md, "Local servers were reachable from the
+network".
+
 ---
 
 ## Keeping the memory current

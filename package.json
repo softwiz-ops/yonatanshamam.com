@@ -8,7 +8,6 @@
     "build": "astro build && python3 scripts/postprocess-redirects.py",
     "preview": "astro preview",
     "check": "astro check",
-    "dev:host": "astro dev --host",
     "deploy": "npm run build && wrangler deploy --config dist/client/wrangler.json"
   },
   "dependencies": {

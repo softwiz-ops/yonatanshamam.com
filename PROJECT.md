@@ -967,6 +967,26 @@ vanishing.
 only Cloudflare would be false, because the enquiries come to rest in a Google
 mailbox and that is the processor a data subject needs to know about.
 
+## Local servers were reachable from the network — 8 Nov 2026
+
+Prompted by a friend of the founder whose machine was broken into through a
+port that a Claude-built Docker container had left open. This project has no
+Docker, but two of its local servers were listening on every interface:
+
+- `design-mockups` in `.claude/launch.json` ran `python3 -m http.server 4330`
+  from the repo root. `http.server` binds `0.0.0.0` unless told otherwise, so
+  anyone on the same Wi-Fi could fetch `/.git/config`, and `/.env` with the
+  email API key once it exists. Confirmed: 200 for both `.git/config` and
+  `.env.example` from a non-loopback address. Now `--bind 127.0.0.1
+  --directory design`; the mockups reference only files inside `design/`, so
+  their URLs lose the `/design/` prefix and nothing else changes.
+- `built-output` served `dist/client` the same way. Less sensitive, same fix.
+- `npm run dev:host` (`astro dev --host`) put the Vite dev server on
+  `0.0.0.0`. Removed; nothing referenced it.
+
+Plain `astro dev` was measured listening on `127.0.0.1` only, so `npm run dev`
+and the `site` launch configuration are unchanged. The rule is in CLAUDE.md.
+
 ## Open — blocking or shaping work
 
 Supplied since:
